@@ -2,22 +2,22 @@ import loginImage from "@/assets/login_image.png";
 
 export default function Login() {
   return (
-    <main className="flex flex-row min-h-screen min-w-full">
-      <aside className="flex-3 p-8">
-        <div className="bg-primary w-full h-full rounded-[100px] px-10 flex flex-col justify-center gap-4">
-          <h1 className="text-9xl text-white">
+    <main className="flex flex-col md:flex-row min-h-screen min-w-full">
+      <aside className="flex-3 md:p-8">
+        <div className="bg-primary w-full h-full md:rounded-[100px] px-10 pt-20 pb-32 md:py-0 flex flex-col justify-center gap-4">
+          <h1 className="text-6xl md:text-9xl text-white">
             Bootcamp <br />
             Platform
           </h1>
-          <p className="text-white text-4xl font-light">
+          <p className="text-white md:text-4xl font-light">
             Platform terpadu untuk mengakses kelas, pertemuan, dan tugas dengan
             efisien.
           </p>
         </div>
       </aside>
 
-      <form className="flex-2 flex flex-col gap-9 items-stretch justify-center px-24">
-        <h1 className="font-semibold text-5xl text-center tracking-[.25em]">
+      <form className="flex-2 flex flex-col gap-9 items-stretch justify-center px-6 md:px-16 max-md:-translate-y-24">
+        <h1 className="font-semibold hidden md:block text-5xl text-center tracking-[.25em]">
           Login
         </h1>
         <img src={loginImage} />
