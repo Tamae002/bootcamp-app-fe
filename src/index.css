@@ -1,22 +1,52 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --font-poppins: "Poppins", sans-serif; 
 
+  --color-grey: var(--grey);
+  --color-black: var(--black);
+  --color-dark-black: var(--dark-black);
+
+  --color-white: var(--white);
+  --color-dark-white: var(--dark-white);
+
+  --color-orange: var(--orange);
+  --color-dark-orange: var(--dark-orange);
+  --color-darker-orange: var(--darker-orange);
+
+  --color-red: var(--red);
+  --color-dark-red: var(--dark-red);
+  --color-darker-red: var(--darker-red);
+
+  --color-green: var(--green);
+  --color-dark-green: var(--dark-green);
+  --color-darker-green: var(--darker-green);
+
+  --color-yellow: var(--yellow);
+  --color-dark-yellow: var(--dark-yellow);
+  --color-darker-yellow: var(--darker-yellow);
+
+  --color-blue: var(--blue);
+  --color-dark-blue: var(--dark-blue);
+  --color-darker-blue: var(--darker-blue);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
 } 
 
 /* Mode default/terang */
 :root {
   /* Palet warna */
   --grey: #6B6B6B;
-  --black: #2A2A2A;
-  --dark-black: #1A1A1A;
-  --darker-black: #181818;
+  --black: #242424;
+  --dark-black: #1F1F1F;
+
+  --white: #F6F6F6;
+  --dark-white: #E0E0E0;
 
   --orange: #FF9900;
   --dark-orange: ##E2A200;
@@ -35,11 +65,13 @@
   --darker-yellow: #C09E04;
 
   --blue: #06A7FF;
-  --dark-blue:
+  --dark-blue: #0386CE;
+  --darker-blue: #016297;
 
   /* Warna berdasarkan fungsi */
   --background: white;
   --foreground: black;
+  --primary: var(--dark-green);
 }
 
 /* Mode gelap */
@@ -47,11 +79,14 @@
   /* Warna berdasarkan fungsi */
   --background: black;
   --foreground: white;
+  --primary: var(--dark-green);
 }
 
 @layer base {
   body {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: Poppins, system-ui, Helvetica, Arial, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
     margin: 0;
     display: flex;
     place-items: center;
@@ -67,10 +102,10 @@
 
 @layer components {
   .text-input {
-    @apply border-black border-1 px-4 py-2 w-full;
+    @apply p-7 w-full rounded-4xl bg-dark-white text-dark-black;
   }
 
   .button {
-    @apply rounded-xl bg-sky-400 w-fit text-white px-8 py-2 font-bold;
+    @apply rounded-xl bg-primary text-white px-8 py-2 font-bold;
   }
 }
