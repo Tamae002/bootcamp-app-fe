@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      allowedHosts: env.ALLOWED_HOSTS.split(","),
+      allowedHosts: env.ALLOWED_HOSTS?.split(","),
     },
   };
 });
