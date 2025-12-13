@@ -6,6 +6,7 @@
     --background: var(--darker-black);
     --foreground: var(--white);
     --primary: var(--purple);
+    --primary-contrast: var(--teal);
     --surface: var(--dark-black);
     --surface-subtle: var(--dark-black);
 }

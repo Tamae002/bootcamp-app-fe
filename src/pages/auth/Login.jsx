@@ -1,14 +1,25 @@
 import LoginImage from "@/assets/images/login_image.png";
 import Logotype from "@/assets/images/logo/logotype.png";
+import LogotypeDark from "@/assets/images/logo/logotype_dark.png";
+import { useTheme } from "@/contexts/theme";
+import { useState } from "react";
 
 export default function Login() {
+  const { theme } = useTheme();
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = () => {
+
+  }
+
   return (
     <>
       <title>Login - Geeksfarm</title>
       <main className="flex flex-col-reverse md:flex-row min-h-screen min-w-full">
         <form className="flex-1 flex flex-col gap-9 items-stretch justify-center px-6 md:px-28 md:py-auto max-md:-translate-y-24">
-          <img className="max-md:hidden" src={Logotype} />
+          <img className="max-md:hidden" src={theme == "dark" ? LogotypeDark : Logotype} />
           <img src={LoginImage} />
+
           <input
             id="email"
             type="email"
@@ -16,6 +27,7 @@ export default function Login() {
             placeholder="Email"
             className="text-input"
           />
+
           <input
             id="password"
             type="password"
@@ -23,14 +35,17 @@ export default function Login() {
             placeholder="Password"
             className="text-input"
           />
-          <div className="text-primary font-semibold flex justify-between text-sm">
+
+          <div className="text-primary-contrast font-semibold flex justify-between text-sm">
             <div className="flex gap-2">
               <input id="remember-me" type="checkbox" name="remember-me" />
               <label htmlFor="remember-me">Ingat saya?</label>
             </div>
             <a href="/forgot-password">Lupa Password?</a>
           </div>
-          <input type="submit" value="Masuk" className="button" />
+
+          <input type="submit" value={loading ? "Memproses..." : "Masuk"} className="button" />
+
         </form>
 
         <aside className="flex-2">

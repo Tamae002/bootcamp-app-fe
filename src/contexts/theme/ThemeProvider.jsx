@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ThemeContext } from "./ThemeContext.js";
 
-export default function ThemeProvider({ children }) {
+export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {

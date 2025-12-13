@@ -41,6 +41,7 @@
     --background: var(--white);
     --foreground: var(--dark-black);
     --primary: var(--purple);
+    --primary-contrast: var(--purple);
     --surface: var(--light-grey);
     --surface-subtle: var(--dark-white);
 }
