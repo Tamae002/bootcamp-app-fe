@@ -1,0 +1,9 @@
+@custom-variant dark (&:is(.dark *));
+
+/* Mode gelap */
+.dark {
+    /* Warna berdasarkan fungsi */
+    --background: black;
+    --foreground: white;
+    --primary: var(--dark-green);
+}

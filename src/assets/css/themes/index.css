@@ -1,3 +1,6 @@
+@import "./light.css";
+@import "./dark.css";
+
 @theme inline {
     --font-poppins: "Poppins", sans-serif;
 
