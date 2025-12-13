@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { AuthContext } from "@/contexts/auth/AuthContext.js";
+import { AuthContext } from "./AuthContext";
 
 // Provider component
-export default function AuthProvider({ children }) {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,4 +48,3 @@ export default function AuthProvider({ children }) {
 
   return <AuthContext value={contextValue}>{children}</AuthContext>;
 };
-

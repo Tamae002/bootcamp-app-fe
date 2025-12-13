@@ -3,9 +3,9 @@ import Logotype from "@/assets/images/logo/logotype.png";
 
 export default function Login() {
   return (
-    <main className="flex flex-col md:flex-row min-h-screen min-w-full">
+    <main className="flex flex-col-reverse md:flex-row min-h-screen min-w-full">
       <form className="flex-1 flex flex-col gap-9 items-stretch justify-center px-6 md:px-28 md:py-auto max-md:-translate-y-24">
-        <img src={Logotype} />
+        <img className="max-md:hidden" src={Logotype} />
         <img src={LoginImage} />
         <input
           id="email"
@@ -21,18 +21,18 @@ export default function Login() {
           placeholder="Password"
           className="text-input"
         />
-        <div class="text-primary font-semibold flex justify-between">
+        <div class="text-primary font-semibold flex justify-between text-sm">
           <div class="flex gap-2">
             <input id="remember-me" type="checkbox" name="remember-me" />
-            <label for="remember-me">Remember me?</label>
+            <label for="remember-me">Ingat saya?</label>
           </div>
-          <a href="/forgot-password">Forgot Password?</a>
+          <a href="/forgot-password">Lupa Password?</a>
         </div>
         <input type="submit" value="Masuk" className="button" />
       </form>
 
       <aside className="flex-2">
-        <div className="bg-primary w-full h-full pt-20 pb-32 md:py-0 md:px-20 flex flex-col justify-center gap-4">
+        <div className="bg-primary w-full h-full pt-20 pb-32 px-5 md:py-0 md:px-20 flex flex-col justify-center gap-4">
           <h1 className="text-6xl md:text-9xl text-white">
             Bootcamp <br />
             Platform
