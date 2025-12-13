@@ -4,108 +4,124 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-poppins: "Poppins", sans-serif; 
+    --font-poppins: "Poppins", sans-serif;
 
-  --color-grey: var(--grey);
-  --color-black: var(--black);
-  --color-dark-black: var(--dark-black);
+    --color-grey: var(--grey);
+    --color-black: var(--black);
+    --color-dark-black: var(--dark-black);
 
-  --color-white: var(--white);
-  --color-dark-white: var(--dark-white);
+    --color-white: var(--white);
+    --color-dark-white: var(--dark-white);
 
-  --color-orange: var(--orange);
-  --color-dark-orange: var(--dark-orange);
-  --color-darker-orange: var(--darker-orange);
+    --color-orange: var(--orange);
+    --color-dark-orange: var(--dark-orange);
+    --color-darker-orange: var(--darker-orange);
 
-  --color-red: var(--red);
-  --color-dark-red: var(--dark-red);
-  --color-darker-red: var(--darker-red);
+    --color-red: var(--red);
+    --color-dark-red: var(--dark-red);
+    --color-darker-red: var(--darker-red);
 
-  --color-green: var(--green);
-  --color-dark-green: var(--dark-green);
-  --color-darker-green: var(--darker-green);
+    --color-green: var(--green);
+    --color-dark-green: var(--dark-green);
+    --color-darker-green: var(--darker-green);
 
-  --color-yellow: var(--yellow);
-  --color-dark-yellow: var(--dark-yellow);
-  --color-darker-yellow: var(--darker-yellow);
+    --color-yellow: var(--yellow);
+    --color-dark-yellow: var(--dark-yellow);
+    --color-darker-yellow: var(--darker-yellow);
 
-  --color-blue: var(--blue);
-  --color-dark-blue: var(--dark-blue);
-  --color-darker-blue: var(--darker-blue);
+    --color-blue: var(--blue);
+    --color-dark-blue: var(--dark-blue);
+    --color-darker-blue: var(--darker-blue);
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-} 
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary: var(--primary);
+}
 
 /* Mode default/terang */
 :root {
-  /* Palet warna */
-  --grey: #6B6B6B;
-  --black: #242424;
-  --dark-black: #1F1F1F;
+    /* Palet warna */
+    --grey: #6B6B6B;
+    --black: #242424;
+    --dark-black: #1F1F1F;
 
-  --white: #F6F6F6;
-  --dark-white: #E0E0E0;
+    --white: #F6F6F6;
+    --dark-white: #E0E0E0;
 
-  --orange: #FF9900;
-  --dark-orange: ##E2A200;
-  --darker-orange: #D28900;
+    --orange: #FF9900;
+    --dark-orange: ##E2A200;
+    --darker-orange: #D28900;
 
-  --red: #E80000;
-  --dark-red: #D40000;
-  --darker-red: #AC0000;
+    --red: #E80000;
+    --dark-red: #D40000;
+    --darker-red: #AC0000;
 
-  --green: #3EEE04;
-  --dark-green: #2B8764;
-  --darker-green: #429E04;
+    --green: #3EEE04;
+    --dark-green: #2B8764;
+    --darker-green: #429E04;
 
-  --yellow: #F4C701;
-  --dark-yellow: #DDB400;
-  --darker-yellow: #C09E04;
+    --yellow: #F4C701;
+    --dark-yellow: #DDB400;
+    --darker-yellow: #C09E04;
 
-  --blue: #06A7FF;
-  --dark-blue: #0386CE;
-  --darker-blue: #016297;
+    --blue: #06A7FF;
+    --dark-blue: #0386CE;
+    --darker-blue: #016297;
 
-  /* Warna berdasarkan fungsi */
-  --background: white;
-  --foreground: black;
-  --primary: var(--dark-green);
+    --light-teal: #04F3D5;
+    --teal: #03B29D;
+    --dark-teal: #03C6AE;
+
+    --light-purple: #9720F3;
+    --purple: #802EC0;
+    --dark-purple: #682E96;
+
+    /* Warna berdasarkan fungsi */
+    --background: white;
+    --foreground: black;
+    --primary: var(--purple);
 }
 
 /* Mode gelap */
 .dark {
-  /* Warna berdasarkan fungsi */
-  --background: black;
-  --foreground: white;
-  --primary: var(--dark-green);
+    /* Warna berdasarkan fungsi */
+    --background: black;
+    --foreground: white;
+    --primary: var(--dark-green);
 }
 
 @layer base {
-  body {
-    font-family: Poppins, system-ui, Helvetica, Arial, sans-serif;
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    margin: 0;
-    display: flex;
-    place-items: center;
-    min-width: 320px;
-    min-height: 100vh;
-  }
+    body {
+        font-family: Poppins, system-ui, Helvetica, Arial, sans-serif;
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        margin: 0;
+        display: flex;
+        place-items: center;
+        min-width: 320px;
+        min-height: 100vh;
+    }
 
-  #root {
-    min-width: 100vw;
-    min-height: 100vh;
-  }
+    #root {
+        min-width: 100vw;
+        min-height: 100vh;
+    }
 }
 
 @layer components {
-  .text-input {
-    @apply p-7 w-full rounded-4xl bg-dark-white text-dark-black;
-  }
+    .text-input {
+        @apply p-7 w-full rounded-4xl bg-dark-white text-dark-black;
+    }
 
-  .button {
-    @apply rounded-xl bg-primary text-white px-8 py-2 font-bold;
-  }
+    .button {
+        @apply rounded-xl bg-primary text-white px-8 py-2 font-bold;
+    }
+}
+
+@layer utilities {
+    .scrollbar-hidden {
+        -webkit-scrollbar: hidden;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }

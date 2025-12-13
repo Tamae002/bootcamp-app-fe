@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router"
 import './ForgotPassword.css'
 
 
@@ -32,7 +32,7 @@ export default function ForgotPassword({ onBack }) {
           <h1 className="forgot-title">Forgot Password?</h1>
 
           <p className="forgot-sub">
-            Remember your password?, 
+            Remember your password?,
             <span className="back-login" onClick={onBack}> Login Here.</span>
           </p>
 

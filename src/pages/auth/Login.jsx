@@ -1,29 +1,15 @@
-import loginImage from "@/assets/login_image.png";
+import LoginImage from "@/assets/images/login_image.png";
+import Logotype from "@/assets/images/logo/logotype.png";
 
 export default function Login() {
   return (
     <main className="flex flex-col md:flex-row min-h-screen min-w-full">
-      <aside className="flex-3 md:p-8">
-        <div className="bg-primary w-full h-full md:rounded-[100px] px-10 pt-20 pb-32 md:py-0 flex flex-col justify-center gap-4">
-          <h1 className="text-6xl md:text-9xl text-white">
-            Bootcamp <br />
-            Platform
-          </h1>
-          <p className="text-white md:text-4xl font-light">
-            Platform terpadu untuk mengakses kelas, pertemuan, dan tugas dengan
-            efisien.
-          </p>
-        </div>
-      </aside>
-
-      <form className="flex-2 flex flex-col gap-9 items-stretch justify-center px-6 md:px-16 max-md:-translate-y-24">
-        <h1 className="font-semibold hidden md:block text-5xl text-center tracking-[.25em]">
-          Login
-        </h1>
-        <img src={loginImage} />
+      <form className="flex-1 flex flex-col gap-9 items-stretch justify-center px-6 md:px-28 md:py-auto max-md:-translate-y-24">
+        <img src={Logotype} />
+        <img src={LoginImage} />
         <input
           id="email"
-          type="text"
+          type="email"
           name="email"
           placeholder="Email"
           className="text-input"
@@ -44,6 +30,19 @@ export default function Login() {
         </div>
         <input type="submit" value="Masuk" className="button" />
       </form>
+
+      <aside className="flex-2">
+        <div className="bg-primary w-full h-full pt-20 pb-32 md:py-0 md:px-20 flex flex-col justify-center gap-4">
+          <h1 className="text-6xl md:text-9xl text-white">
+            Bootcamp <br />
+            Platform
+          </h1>
+          <p className="text-white md:text-4xl font-light">
+            Platform terpadu untuk mengakses kelas, pertemuan, dan tugas dengan
+            efisien.
+          </p>
+        </div>
+      </aside>
     </main>
   );
 }
