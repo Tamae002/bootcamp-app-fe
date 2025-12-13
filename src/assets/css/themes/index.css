@@ -4,12 +4,12 @@
 @theme inline {
     --font-poppins: "Poppins", sans-serif;
 
+    --color-white: var(--white);
+    --color-dark-white: var(--dark-white);
     --color-grey: var(--grey);
     --color-black: var(--black);
     --color-dark-black: var(--dark-black);
-
-    --color-white: var(--white);
-    --color-dark-white: var(--dark-white);
+    --color-darker-black: var(--darker-black);
 
     --color-orange: var(--orange);
     --color-dark-orange: var(--dark-orange);
@@ -42,4 +42,6 @@
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-primary: var(--primary);
+    --color-surface: var(--surface);
+    --color-surface-subtle: var(--surface-subtle);
 }

@@ -1,12 +1,13 @@
 /* Mode default/terang */
 :root {
     /* Palet warna */
+    --white: #F6F6F6;
+    --dark-white: #E0E0E0;
+    --light-grey: #D9D9D9;
     --grey: #6B6B6B;
     --black: #242424;
     --dark-black: #1F1F1F;
-
-    --white: #F6F6F6;
-    --dark-white: #E0E0E0;
+    --darker-black: #1C1C1C;
 
     --orange: #FF9900;
     --dark-orange: ##E2A200;
@@ -36,8 +37,10 @@
     --purple: #802EC0;
     --dark-purple: #682E96;
 
-    /* Warna berdasarkan fungsi */
-    --background: white;
-    --foreground: black;
+    /* Warna berdasarkan fungsi/semantik */
+    --background: var(--white);
+    --foreground: var(--dark-black);
     --primary: var(--purple);
+    --surface: var(--light-grey);
+    --surface-subtle: var(--dark-white);
 }

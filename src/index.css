@@ -30,7 +30,7 @@
 
 @layer components {
     .text-input {
-        @apply p-6 w-full rounded-xl bg-dark-white text-dark-black text-sm;
+        @apply p-6 w-full rounded-xl bg-surface text-foreground text-sm;
     }
 
     .button {

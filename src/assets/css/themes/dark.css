@@ -3,7 +3,9 @@
 /* Mode gelap */
 .dark {
     /* Warna berdasarkan fungsi */
-    --background: black;
-    --foreground: white;
-    --primary: var(--dark-green);
+    --background: var(--darker-black);
+    --foreground: var(--white);
+    --primary: var(--purple);
+    --surface: var(--dark-black);
+    --surface-subtle: var(--dark-black);
 }
