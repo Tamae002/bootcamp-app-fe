@@ -1,8 +1,8 @@
 import { Navigate, Route } from "react-router";
-import Login from "../pages/auth/Login";
-import ForgotPassword from "../pages/ForgotPassword";
-import PendingApproval from "../pages/PendingApproval";
-import ResetPassword from "../pages/ResetPassword";
+import Login from "@/pages/auth/Login";
+import ForgotPassword from "@/pages/auth/ForgotPassword";
+import PendingApproval from "@/pages/auth/PendingApproval";
+import ResetPassword from "@/pages/auth/ResetPassword";
 
 export default function AuthRoutes() {
   return (

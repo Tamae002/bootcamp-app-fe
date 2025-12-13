@@ -8,15 +8,15 @@ export default function Login() {
   const { theme } = useTheme();
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-
+  const handleLogin = (e) => {
+    e.preventDefault();
   }
 
   return (
     <>
       <title>Login - Geeksfarm</title>
       <main className="flex flex-col-reverse md:flex-row min-h-screen min-w-full">
-        <form className="flex-1 flex flex-col gap-9 items-stretch justify-center px-6 md:px-28 md:py-auto max-md:-translate-y-24">
+        <form onSubmit={handleLogin} className="flex-1 flex flex-col gap-9 items-stretch justify-center px-6 md:px-28 md:py-auto max-md:-translate-y-24">
           <img className="max-md:hidden" src={theme == "dark" ? LogotypeDark : Logotype} />
           <img src={LoginImage} />
 

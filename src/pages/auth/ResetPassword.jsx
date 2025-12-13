@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ResetPassword.css";
+import "@/assets/css/auth/ResetPassword.css";
 import { Link } from "react-router";
 
 export default function ResetPassword() {
