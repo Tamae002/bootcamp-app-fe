@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom"
-import './ForgotPassword.css'
+import { useNavigate } from "react-router"
+import '@/assets/css/auth/ForgotPassword.css'
 
 
 export default function ForgotPassword({ onBack }) {

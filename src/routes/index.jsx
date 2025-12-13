@@ -1,9 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Login from "@/pages/auth/Login.jsx";
 import AuthProvider from "@/contexts/auth/AuthProvider.jsx";
-import ForgotPassword from "@/pages/ForgotPassword.jsx";
-import PendingApproval from "@/pages/PendingApproval.jsx";
-import ResetPassword from "@/pages/ResetPassword.jsx";
+import ForgotPassword from "@/pages/auth/ForgotPassword.jsx";
+import PendingApproval from "@/pages/auth/PendingApproval.jsx";
+import ResetPassword from "@/pages/auth/ResetPassword.jsx";
 
 export default function AppRouter() {
   return (

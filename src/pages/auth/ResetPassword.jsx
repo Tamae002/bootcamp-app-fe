@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "./ResetPassword.css";
-import { Link } from "react-router-dom";
+import "@/assets/css/auth/ResetPassword.css";
+import { Link } from "react-router";
 
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
