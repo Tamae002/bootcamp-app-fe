@@ -3,13 +3,17 @@ import Logotype from "@/assets/images/logo/logotype.png";
 import LogotypeDark from "@/assets/images/logo/logotype_dark.png";
 import { useTheme } from "@/contexts/theme";
 import { useState } from "react";
+import api from "@/api/client";
 
 export default function Login() {
   const { theme } = useTheme();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
   }
 
   return (

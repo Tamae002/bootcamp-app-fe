@@ -1,0 +1,21 @@
+const API_ENDPOINTS = {
+  AUTH: {
+    LOGIN: "/auth/login",
+    LOGOUT: "/auth/logout",
+    FORGOT_PASSWORD: "/auth/forgot-password",
+    RESET_PASSWORD: (token) => `/auth/reset-password/${token}`,
+  },
+  USER: {
+    GET_ALL: "/user",
+    GET_BY_ID: (id) => `/user/${id}`,
+    CREATE: "/user",
+    UPDATE: (id) => `/user/${id}`,
+    DELETE: (id) => `/user/${id}`,
+    ME: "/user/me",
+  },
+  ANSWER: {
+    GRADE: (id) => `/jawaban/${id}/nilai`,
+  }
+};
+
+export default API_ENDPOINTS;
