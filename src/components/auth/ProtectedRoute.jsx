@@ -1,3 +1,3 @@
-export default function ProtectedRoute({ children }) {
-  return ({ children });
+export default function ProtectedRoute({ children, role = [] }) {
+  return children;
 }

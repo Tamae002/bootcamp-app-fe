@@ -1,4 +1,3 @@
-import ResetPassword from "@/pages/auth/ResetPassword";
 import api from "./client";
 import API_ENDPOINTS from "./endpoints";
 
@@ -16,8 +15,7 @@ const authApi = {
 
   ResetPassword: async ({ token, newPassword, confirmPassword }) =>
     api.post(API_ENDPOINTS.AUTH.RESET_PASSWORD(token), {
-      newPassword,
-      confirmPassword,
+      newPassword, confirmPassword,
     }),
 };
 

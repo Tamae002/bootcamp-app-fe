@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router"
 import '@/assets/css/auth/ForgotPassword.css'
+import { Link } from 'react-router'
 
 
-export default function ForgotPassword({ onBack }) {
+export default function ForgotPassword() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState(null)
 
@@ -33,7 +34,7 @@ export default function ForgotPassword({ onBack }) {
 
           <p className="forgot-sub">
             Remember your password?,
-            <span className="back-login" onClick={onBack}> Login Here.</span>
+            <Link className="back-login" to="/login"> Login Here.</Link>
           </p>
 
           <form onSubmit={handleSubmit} className="forgot-form">

@@ -29,6 +29,20 @@
 }
 
 @layer components {
+    .sidebar {
+        @apply float-start bg-surface-subtle h-screen w-75;
+
+        &>nav>* {
+            & {
+                @apply py-3 px-4 rounded-2xl text-left;
+            }
+
+            &.active {
+                @apply bg-primary text-white;
+            }
+        }
+    }
+
     .text-input {
         @apply p-6 w-full rounded-xl bg-surface text-foreground text-sm;
     }

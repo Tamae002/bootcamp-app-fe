@@ -5,19 +5,22 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
-    let previousTheme = localStorage.getItem("theme") || "light";
-    switch (theme) {
-      case "dark":
-        document.documentElement.classList.add(theme);
-        break;
-      case "light":
-        document.documentElement.classList.remove(previousTheme);
-        break;
-      default:
-        return console.error("Theme name is not valid:", theme);
+    const previousTheme = localStorage.getItem("theme") || "light";
+
+    if (previousTheme !== theme) {
+      document.documentElement.classList.remove(previousTheme);
+      document.documentElement.classList.add(theme);
+      localStorage.setItem("theme", theme);
     }
-    localStorage.setItem("theme", theme);
   }, [theme]);
 
-  return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>;
+  return (
+    <ThemeContext value={{
+      theme,
+      // @ts-ignore
+      setTheme
+    }}>
+      {children}
+    </ThemeContext>
+  );
 }
