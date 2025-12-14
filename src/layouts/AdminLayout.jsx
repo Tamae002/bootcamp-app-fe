@@ -17,7 +17,7 @@ export default function AdminLayout() {
           <NavLink to="/classes">Manajemen Kelas</NavLink>
           <NavLink to="/users">Manajemen Pengguna</NavLink>
           <NavLink to="/settings">Pengaturan</NavLink>
-          <button>Keluar Pengguna</button>
+          <button>Keluar</button>
         </nav>
       </aside>
 
