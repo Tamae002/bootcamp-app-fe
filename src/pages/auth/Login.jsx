@@ -8,15 +8,13 @@ import formDataToJson from "@/lib/formDataToJson";
 import { loginSchema } from "@/validations/auth.validation";
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
 import { ValidationError } from "yup";
-import Loading from "../misc/Loading";
 
 export default function Login() {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { refetchAuthStatus, isAuthenticated, isLoading } = useAuth();
+  const { refetchAuthStatus } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -55,8 +53,6 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
-
-    console.log("Submitted")
   }
 
   return (
