@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
+import userApi from "@/api/user.api";
 
-// Provider component
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -12,30 +12,27 @@ export function AuthProvider({ children }) {
     setIsLoading(true);
     setError(null);
     try {
-      // const response = await apiGet(GET_USER_ME);
-      //
-      // if (response.status != 200) {
-      //   // Handle non-2xx responses (e.g., 401 Unauthorized)
-      //   throw new Error("Authentication check failed");
-      // }
-      //
-      // setUser(response.data.data);
-      // setIsAuthenticated(true);
+      const response = await userApi.getMyself();
+
+      setUser(response.data);
+      console.log("Fetched user:", response.data);
+      setIsAuthenticated(true);
     } catch (err) {
-      // console.error("Error fetching auth status:", err);
-      // setUser(null);
-      // setIsAuthenticated(false);
-      // setError(err); // Store the error
+      if (import.meta.env.NODE_ENV == "development") console.error(err);
+
+      setUser(null);
+      setIsAuthenticated(false);
+      setError(err);
     } finally {
       setIsLoading(false);
+      console.log("Finishing")
     }
   };
 
   useEffect(() => {
     fetchAuthStatus();
-  }, []); // Run once on component mount
+  }, []);
 
-  // You might want a way to re-fetch auth status, e.g., after login/logout
   const refetchAuthStatus = () => fetchAuthStatus();
 
   const contextValue = {

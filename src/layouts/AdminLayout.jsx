@@ -5,7 +5,7 @@ import LogotypeDark from "@/assets/images/logo/logotype_dark.png";
 import { useTheme } from "@/contexts/theme";
 
 
-export default function AdminLayout() {
+export default function AdminLayout({ children = null }) {
   const { theme } = useTheme();
 
   return (
@@ -13,7 +13,7 @@ export default function AdminLayout() {
       <aside className="sidebar">
         <img src={theme == "dark" ? LogotypeDark : Logotype} className="px-7 pt-7" />
         <nav className="p-7 flex flex-col items-stretch gap-">
-          <NavLink to="/dashboard">Beranda</NavLink>
+          <NavLink to="/">Beranda</NavLink>
           <NavLink to="/classes">Manajemen Kelas</NavLink>
           <NavLink to="/users">Manajemen Pengguna</NavLink>
           <NavLink to="/settings">Pengaturan</NavLink>
@@ -22,6 +22,7 @@ export default function AdminLayout() {
       </aside>
 
       <main className="">
+        {children}
         <Outlet />
       </main>
     </>
