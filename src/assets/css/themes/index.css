@@ -42,7 +42,7 @@
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-primary: var(--primary);
-    --color-primary-contrast: var(--primary-contrast);
+    --color-primary-foreground: var(--primary-foreground);
     --color-surface: var(--surface);
     --color-surface-subtle: var(--surface-subtle);
 }

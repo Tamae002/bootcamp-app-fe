@@ -1,7 +1,7 @@
 import authApi from "@/api/auth.api";
 import LoginImage from "@/assets/images/login_image.png";
-import Logotype from "@/assets/images/logo/logotype.png";
-import LogotypeDark from "@/assets/images/logo/logotype_dark.png";
+import Logo from "@/assets/images/logo/logotype.png";
+import LogoDark from "@/assets/images/logo/logotype_dark.png";
 import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
 import formDataToJson from "@/lib/formDataToJson";
@@ -64,7 +64,7 @@ export default function Login() {
       <title>Login - Geeksfarm</title>
       <main className="flex flex-col-reverse md:flex-row min-h-screen min-w-full">
         <form noValidate onSubmit={handleLogin} className="flex-1 flex flex-col gap-9 items-stretch justify-center px-6 md:px-28 md:py-auto max-md:-translate-y-24">
-          <img className="max-md:hidden" src={theme == "dark" ? LogotypeDark : Logotype} />
+          <img className="max-md:hidden" src={theme == "dark" ? LogoDark : Logo} />
 
           <img src={LoginImage} />
 
@@ -87,7 +87,7 @@ export default function Login() {
             className="text-input"
           />
 
-          <div className="text-primary-contrast font-semibold flex justify-between text-sm">
+          <div className="text-primary-foreground font-semibold flex justify-between text-sm">
             <div className="flex gap-2">
               <input id="remember-me" type="checkbox" name="remember-me" />
               <label htmlFor="remember-me">Ingat saya?</label>

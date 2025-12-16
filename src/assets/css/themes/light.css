@@ -41,7 +41,7 @@
     --background: var(--white);
     --foreground: #0A2540;
     --primary: var(--purple);
-    --primary-contrast: var(--purple);
+    --primary-foreground: var(--white);
     --surface: var(--light-grey);
     --surface-subtle: var(--ice-white);
 }
