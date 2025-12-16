@@ -11,23 +11,20 @@ import { Navigate } from "react-router";
 
 export default function AppRoutes() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {IndexRoute(useAuth())}
-        {AuthRoutes()}
-        {AdminRoutes()}
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      {IndexRoute(useAuth())}
+      {AuthRoutes()}
+      {AdminRoutes()}
+    </Routes>
   );
 }
 
 function IndexRoute(authContext) {
   const { isAuthenticated, isLoading, user } = authContext;
 
-  if (isLoading)
-    return <Route index element={<Loading />} />
+  if (isLoading) return <Route index element={<Loading />} />;
   if (!isAuthenticated)
-    return <Route index element={<Navigate to="/login" replace />} />
+    return <Route index element={<Navigate to="/login" replace />} />;
 
   if (["admin", "mentor"].includes(user.role))
     return (

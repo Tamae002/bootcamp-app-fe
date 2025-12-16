@@ -7,15 +7,16 @@ const api = axios.create({
   headers: { Accept: "application/json" },
 });
 
-api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    const navigate = useNavigate();
-    if (err?.response?.status == 401)
-      if (window.location.pathname != "/login")
-        navigate("/login", { replace: true });
-    return Promise.reject(err);
-  },
-);
+export function setupInterceptor(navigate) {
+  api.interceptors.response.use(
+    (res) => res,
+    (err) => {
+      if (err?.response?.status == 401)
+        if (window.location.pathname != "/login")
+          navigate("/login", { replace: true });
+      return Promise.reject(err);
+    },
+  );
+}
 
 export default api;

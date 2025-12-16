@@ -27,15 +27,15 @@ export default function AdminLayout({ children = null }) {
 
   return (
     <div className="flex">
-      <aside className={`sidebar ${sidebarCollapsed ? "w-16" : "w-75"}`}>
-        <div className="flex h-24 items-center justify-between px-2 pt-7 pb-3">
+      <aside className={`sidebar ${sidebarCollapsed ? "w-14" : "w-63"}`}>
+        <div className="flex w-8/10 items-center justify-between px-2 pt-7 pb-3">
           <img
             src={theme == "dark" ? LogotypeDark : Logotype}
             className={`h-full shrink-0 object-contain ${sidebarCollapsed && "hidden"}`}
           />
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="aspect-square h-12 p-3"
+            className="aspect-square h-10 p-2"
           >
             <ChevronRight
               className={`inline-block aspect-square h-full transition-transform ${!sidebarCollapsed && "rotate-180"}`}
@@ -50,15 +50,19 @@ export default function AdminLayout({ children = null }) {
             </NavLink>
           ))}
         </nav>
-        <section className="flex items-center gap-2 border-t border-grey p-3 text-nowrap text-ellipsis">
+        <section className="border-grey flex items-center gap-2 border-t p-3 text-nowrap text-ellipsis">
           {user.image ? (
             <img src={user.image} className="shrink-0" />
           ) : (
-            <Person className="shrink-0 bg-neutral-400 w-10 h-10 text-white rounded-full" />
+            <Person className="h-8 w-8 shrink-0 rounded-full bg-neutral-400 text-white" />
           )}
-          <div className={`flex flex-col gap-px ${sidebarCollapsed && "hidden"}`}>
-            <span className="text-grey text-sm">Welcome back 👋</span>
-            {user.name}
+          <div
+            className={`min-w-0 gap-px text-ellipsis ${sidebarCollapsed && "hidden"}`}
+          >
+            <p className="text-grey text-xs">Welcome back 👋</p>
+            <p className="text-sm text-ellipsis whitespace-nowrap overflow-hidden">
+              {user.name} lorem ipsum dolor
+            </p>
           </div>
         </section>
       </aside>

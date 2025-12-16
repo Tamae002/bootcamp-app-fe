@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
       setUser(response.data);
       setIsAuthenticated(true);
     } catch (err) {
-      if (import.meta.env.NODE_ENV == "development") console.error(err);
+      if (import.meta.env.VITE_ENV == "development") console.error(err);
 
       setUser(null);
       setIsAuthenticated(false);

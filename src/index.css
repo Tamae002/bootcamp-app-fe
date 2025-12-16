@@ -39,11 +39,12 @@
 
         & > nav > * {
             & {
-                @apply flex items-center gap-2 rounded-2xl p-3 text-left text-nowrap;
+                @apply flex items-center gap-2 rounded-2xl p-2 text-left
+                    text-nowrap text-sm;
             }
 
             & > svg {
-                @apply shrink-0;
+                @apply shrink-0 h-5;
             }
 
             &.active {

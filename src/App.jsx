@@ -1,4 +1,5 @@
-import AppRouter from "@/routes";
+import AppRoutes from "@/routes";
+import { BrowserRouter } from "react-router";
 import { AuthProvider } from "./contexts/auth";
 import { ThemeProvider } from "./contexts/theme";
 
@@ -6,7 +7,9 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <AppRouter />
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
   );

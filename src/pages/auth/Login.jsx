@@ -35,37 +35,41 @@ export default function Login() {
 
       if (response.status == 200) {
         refetchAuthStatus();
-        navigate("/")
+        navigate("/");
       }
     } catch (err) {
-      if (import.meta.env.NODE_ENV == "development") console.error(err);
+      if (import.meta.env.VITE_ENV == "development") console.error(err);
 
       if (err instanceof AxiosError) {
-        if (err.status == 400)
-          setError("Email atau password salah.")
-        else if (err.status)
-          setError(err.response.data.message);
+        if (err.status == 400) setError("Email atau password salah.");
+        else if (err.status) setError(err.response.data.message);
         else setError("Terjadi kesalahan pada server. Mohon coba lagi nanti.");
-
       } else if (err instanceof ValidationError || err instanceof Error) {
         setError(err.message);
       }
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <>
       <title>Login - Geeksfarm</title>
-      <main className="flex flex-col-reverse md:flex-row min-h-screen min-w-full">
-        <form noValidate onSubmit={handleLogin} className="flex-1 flex flex-col gap-9 items-stretch justify-center px-6 md:px-28 md:py-auto max-md:-translate-y-24">
-          <img className="max-md:hidden" src={theme == "dark" ? LogoDark : Logo} />
+      <main className="flex min-h-screen min-w-full flex-col-reverse md:flex-row">
+        <form
+          noValidate
+          onSubmit={handleLogin}
+          className="md:py-auto flex flex-1 flex-col items-stretch justify-center gap-9 px-6 max-md:-translate-y-24 md:px-28"
+        >
+          <img
+            className="max-md:hidden"
+            src={theme == "dark" ? LogoDark : Logo}
+          />
 
           <img src={LoginImage} />
 
           <div>
-            {error && <p className="mb-4 text-sm text-red">{error}</p>}
+            {error && <p className="text-red mb-4 text-sm">{error}</p>}
             <input
               id="email"
               type="email"
@@ -83,7 +87,7 @@ export default function Login() {
             className="text-input"
           />
 
-          <div className="text-primary-foreground font-semibold flex justify-between text-sm">
+          <div className="text-primary-contrast flex justify-between text-sm font-semibold">
             <div className="flex gap-2">
               <input id="remember-me" type="checkbox" name="remember-me" />
               <label htmlFor="remember-me">Ingat saya?</label>
@@ -91,19 +95,22 @@ export default function Login() {
             <a href="/forgot-password">Lupa Password?</a>
           </div>
 
-          <input type="submit" value={loading ? "Memproses..." : "Masuk"} className="button" />
-
+          <input
+            type="submit"
+            value={loading ? "Memproses..." : "Masuk"}
+            className="button"
+          />
         </form>
 
         <aside className="flex-2">
-          <div className="bg-primary w-full h-full pt-20 pb-32 px-5 md:py-0 md:px-20 flex flex-col justify-center gap-4">
-            <h1 className="text-6xl md:text-9xl text-white">
+          <div className="bg-primary flex h-full w-full flex-col justify-center gap-4 px-5 pt-20 pb-32 md:px-20 md:py-0">
+            <h1 className="text-6xl text-white md:text-9xl">
               Bootcamp <br />
               Platform
             </h1>
-            <p className="text-white md:text-4xl font-light">
-              Platform terpadu untuk mengakses kelas, pertemuan, dan tugas dengan
-              efisien.
+            <p className="font-light text-white md:text-4xl">
+              Platform terpadu untuk mengakses kelas, pertemuan, dan tugas
+              dengan efisien.
             </p>
           </div>
         </aside>
