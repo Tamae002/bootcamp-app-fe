@@ -34,7 +34,7 @@
 
 @layer components {
     .sidebar {
-        @apply bg-surface-subtle float-start flex h-screen
+        @apply bg-surface-subtle flex h-screen
             flex-col justify-stretch overflow-x-clip transition-all;
 
         & > nav > * {

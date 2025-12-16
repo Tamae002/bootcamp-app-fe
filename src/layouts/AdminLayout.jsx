@@ -26,7 +26,7 @@ export default function AdminLayout({ children = null }) {
   ];
 
   return (
-    <>
+    <div className="flex">
       <aside className={`sidebar ${sidebarCollapsed ? "w-16" : "w-75"}`}>
         <div className="flex h-24 items-center justify-between px-2 pt-7 pb-3">
           <img
@@ -63,10 +63,10 @@ export default function AdminLayout({ children = null }) {
         </section>
       </aside>
 
-      <main className="">
+      <main className="flex-1">
         {children}
         <Outlet />
       </main>
-    </>
+    </div>
   );
 }
