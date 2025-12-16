@@ -15,7 +15,6 @@ export function AuthProvider({ children }) {
       const response = await userApi.getMyself();
 
       setUser(response.data);
-      console.log("Fetched user:", response.data);
       setIsAuthenticated(true);
     } catch (err) {
       if (import.meta.env.NODE_ENV == "development") console.error(err);
@@ -25,7 +24,6 @@ export function AuthProvider({ children }) {
       setError(err);
     } finally {
       setIsLoading(false);
-      console.log("Finishing")
     }
   };
 
