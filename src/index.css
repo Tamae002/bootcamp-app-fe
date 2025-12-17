@@ -5,20 +5,27 @@
 @import "./assets/css/themes";
 
 @layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     body {
         font-family: Poppins, system-ui, Helvetica, Arial, sans-serif;
         background-color: var(--color-background);
         color: var(--color-foreground);
-        margin: 0;
         display: flex;
         place-items: center;
         min-width: 320px;
-        min-height: 100vh;
+        min-height: 100svh;
+        overflow: hidden;
     }
 
     #root {
-        min-width: 100vw;
-        min-height: 100vh;
+        width: 100vw;
+        height: 100svh;
+        overflow-y: hidden;
     }
 
     button {

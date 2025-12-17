@@ -6,7 +6,7 @@ html, body {
 
 .pending-root {
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   background: var(--primary);
   display: flex;
   justify-content: center;
@@ -81,4 +81,3 @@ html, body {
   cursor: pointer;
   border: none;
 }
-
