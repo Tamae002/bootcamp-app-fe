@@ -41,17 +41,15 @@
 
 @layer components {
     .sidebar {
-        @apply bg-surface-subtle flex h-screen
-            flex-col justify-stretch overflow-x-clip transition-all;
+        @apply bg-surface-subtle flex h-full flex-col justify-stretch overflow-x-clip overflow-y-auto transition-all;
 
         & > nav > * {
             & {
-                @apply flex items-center gap-2 rounded-2xl p-2 text-left
-                    text-nowrap text-sm;
+                @apply flex items-center gap-2 rounded-2xl p-2 text-left text-sm text-nowrap;
             }
 
             & > svg {
-                @apply shrink-0 h-5;
+                @apply h-5 shrink-0;
             }
 
             &.active {
@@ -59,7 +57,7 @@
             }
 
             &:not(.active):hover {
-                @apply bg-[#00000022];
+                @apply bg-black/15;
             }
         }
     }
@@ -69,7 +67,7 @@
     }
 
     .button {
-        @apply bg-primary rounded-xl px-8 py-2 font-bold text-white;
+        @apply bg-primary rounded-xl px-8 py-2 font-bold text-white flex items-center justify-center gap-2;
     }
 }
 

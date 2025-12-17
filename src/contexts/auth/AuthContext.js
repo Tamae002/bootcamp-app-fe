@@ -5,5 +5,5 @@ export const AuthContext = createContext({
   isAuthenticated: false,
   isLoading: true,
   error: null,
-  refetchAuthStatus: () => { }, // Cek status login user.
+  refetchAuthStatus: async () => { }, // Cek status login user.
 });

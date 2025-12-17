@@ -4,10 +4,9 @@ import StudentLayout from "@/layouts/StudentLayout";
 import AdminDashboard from "@/pages/admin/Dashboard";
 import Loading from "@/pages/misc/Loading";
 import StudentDashboard from "@/pages/student/Dashboard";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
-import { Navigate } from "react-router";
 
 export default function AppRoutes() {
   return (
