@@ -1,23 +1,42 @@
-import { AuthProvider } from "@/contexts/auth";
-import { BrowserRouter, Routes } from "react-router";
-import AuthRoutes from "./AuthRoutes";
-import { ThemeProvider } from "../contexts/theme";
+import { useAuth } from "@/contexts/auth";
+import AdminLayout from "@/layouts/AdminLayout";
+import StudentLayout from "@/layouts/StudentLayout";
+import AdminDashboard from "@/pages/admin/Dashboard";
+import Login from "@/pages/auth/Login";
+import Loading from "@/pages/misc/Loading";
+import StudentDashboard from "@/pages/student/Dashboard";
+import { BrowserRouter, Route, Routes } from "react-router";
 import AdminRoutes from "./AdminRoutes";
-import { Route } from "react-router";
-import { Navigate } from "react-router";
+import AuthRoutes from "./AuthRoutes";
 
 export default function AppRoutes() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route index element={<Navigate to="/login" replace />} />
-            {AuthRoutes()}
-            {AdminRoutes()}
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+    <BrowserRouter>
+      <Routes>
+        {IndexRoute(useAuth())}
+        {AuthRoutes()}
+        {AdminRoutes()}
+      </Routes>
+    </BrowserRouter>
   );
+}
+
+function IndexRoute(authContext) {
+  const { isAuthenticated, isLoading, user } = authContext;
+
+  if (isLoading) return <Route index element={<Loading />} />
+  if (!isAuthenticated) return <Route index element={<Login />} />
+
+  if (["admin", "mentor"].includes(user.role))
+    return (
+      <Route element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+      </Route>
+    );
+  else if (user.role == "student")
+    return (
+      <Route element={<StudentLayout />}>
+        <Route element={<StudentDashboard />} />
+      </Route>
+    );
 }

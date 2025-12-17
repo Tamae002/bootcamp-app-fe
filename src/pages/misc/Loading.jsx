@@ -1,3 +1,9 @@
+import Throbber from "@/components/misc/Throbber";
+
 export default function Loading() {
-  return <p>Loading ...</p>;
+  return (
+    <div className="w-screen h-screen flex justify-center items-center">
+      <Throbber />
+    </div>
+  );
 }
