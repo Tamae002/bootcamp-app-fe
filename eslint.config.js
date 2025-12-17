@@ -13,6 +13,10 @@ export default defineConfig([
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
+    "env": {
+      "node": true,
+      "browser": true
+    },
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
