@@ -1,64 +1,85 @@
-import { useState } from 'react'
-import { useNavigate } from "react-router"
-import '@/assets/css/auth/ForgotPassword.css'
-import { Link } from 'react-router'
+import authApi from "@/api/auth.api";
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router";
+import { AxiosError } from "axios";
+import "@/assets/css/auth/ForgotPassword.css";
 
+export default function ForgotPassword({ onBack }) {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-export default function ForgotPassword() {
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState(null)
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-  const navigate = useNavigate()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
-  function validateEmail(e) {
-    return /\S+@\S+\.\S+/.test(e)
-  }
-
-  async function handleSubmit(ev) {
-    ev.preventDefault()
     if (!validateEmail(email)) {
-      setStatus({ type: 'error', message: 'Masukkan email valid.' })
-      return
+      setError("Masukkan email yang valid.");
+      return;
     }
 
-    // 🔥 LANGSUNG REDIRECT TANPA DELAY, TANPA STATUS
-    navigate("/pending-approval")
-  }
+    try {
+      setLoading(true);
+
+      const response = await authApi.forgotPassword({ email });
+
+      if (response.status === 200) {
+        navigate("/pending-approval");
+      }
+    } catch (err) {
+      if (import.meta.env.VITE_ENV === "development") {
+        console.error(err);
+      }
+
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404)
+          setError("Email tidak terdaftar.");
+        else if (err.response?.data?.message)
+          setError(err.response.data.message);
+        else
+          setError("Terjadi kesalahan pada server.");
+      } else {
+        setError("Terjadi kesalahan.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="forgot-root">
       <div className="scale-wrapper">
         <div className="forgot-card">
-
           <h1 className="forgot-title">Forgot Password?</h1>
 
           <p className="forgot-sub">
             Remember your password?,
-            <Link className="back-login" to="/login"> Login Here.</Link>
+            <span className="back-login" onClick={onBack}>
+              {" "}Login Here.
+            </span>
           </p>
+
+          {error && <p className="status error">{error}</p>}
 
           <form onSubmit={handleSubmit} className="forgot-form">
             <input
-              id="email"
               type="email"
+              placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email Address"
-              required
               className="forgot-input"
+              required
             />
 
-            <button type="submit" className="forgot-btn">Send Email</button>
+            <button type="submit" className="forgot-btn" disabled={loading}>
+              {loading ? "Mengirim..." : "Send Email"}
+            </button>
           </form>
-
-          {status && (
-            <div className={`status ${status.type}`}>
-              {status.message}
-            </div>
-          )}
-
         </div>
       </div>
     </div>
-  )
+  );
 }
