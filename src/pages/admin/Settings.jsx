@@ -8,7 +8,7 @@ export default function Settings() {
     <div className="m-auto max-w-2xl p-8">
       <title>Pengaturan | Geeksfarm</title>
       <header>
-        <h1 className="border-surface border-b-3 pb-2 text-5xl">Pengaturan</h1>
+        <h1 className="h-rule text-5xl">Pengaturan</h1>
       </header>
       <article className="my-4">
         <div className="flex items-center justify-between gap-4">

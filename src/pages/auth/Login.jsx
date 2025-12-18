@@ -60,7 +60,7 @@ export default function Login() {
         <form
           noValidate
           onSubmit={handleLogin}
-          className="md:py-auto max-md:m-auto md:min-w-140 max-md:max-w-120 flex flex-1 flex-col items-stretch justify-center gap-9 px-6 max-md:-translate-y-24 md:px-28"
+          className="md:py-auto max-md:m-auto md:min-w-140 max-md:max-w-120 flex flex-1 flex-col items-stretch justify-center gap-9 px-6 max-md:-translate-y-24 md:px-28 overflow-y-scroll md:h-svh py-20 scrollbar-hidden"
         >
           <img
             className="max-md:hidden"
