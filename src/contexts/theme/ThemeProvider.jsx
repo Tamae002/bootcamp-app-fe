@@ -9,17 +9,19 @@ export function ThemeProvider({ children }) {
 
     if (previousTheme !== theme) {
       document.documentElement.classList.remove(previousTheme);
-      document.documentElement.classList.add(theme);
       localStorage.setItem("theme", theme);
     }
+    document.documentElement.classList.add(theme);
   }, [theme]);
 
   return (
-    <ThemeContext value={{
-      theme,
-      // @ts-ignore
-      setTheme
-    }}>
+    <ThemeContext
+      value={{
+        theme,
+        // @ts-ignore
+        setTheme,
+      }}
+    >
       {children}
     </ThemeContext>
   );

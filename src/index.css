@@ -37,6 +37,11 @@
     input::-ms-reveal {
         display: none;
     }
+
+    a.active,
+    a.active:hover {
+        @apply bg-primary text-white;
+    }
 }
 
 @layer components {
@@ -58,6 +63,14 @@
         }
     }
 
+    .switch-root {
+        @apply data-[state=checked]:bg-primary bg-surface h-6 w-11 rounded-full p-1 shadow-sm transition-all duration-200;
+    }
+
+    .switch-thumb {
+        @apply block h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 data-[state=checked]:translate-x-5;
+    }
+
     .text-input {
         @apply bg-surface text-foreground w-full rounded-xl p-6 text-sm;
     }
@@ -74,7 +87,8 @@
         scrollbar-width: none;
     }
 
-    a.active, a.active:hover {
-        @apply bg-primary text-white;
+    /* Horizontal rule */
+    .h-rule {
+        @apply border-surface border-b-3 pb-2;
     }
 }
