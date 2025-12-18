@@ -2,7 +2,7 @@ import authApi from "@/api/auth.api";
 import LoginImage from "@/assets/images/login_image.png";
 import Logo from "@/assets/images/logo/logotype.png";
 import LogoDark from "@/assets/images/logo/logotype_dark.png";
-import Throbber from "@/components/Throbber";
+import Throbber from "@/components/misc/Throbber";
 import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
 import formDataToJson from "@/lib/formDataToJson";

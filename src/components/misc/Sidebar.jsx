@@ -8,8 +8,7 @@ import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
 import * as Popover from "@radix-ui/react-popover";
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Throbber from "./Throbber";
 
 export default function Sidebar({ navItems }) {
@@ -88,7 +87,7 @@ export default function Sidebar({ navItems }) {
           </div>
           <Popover.Root>
             <Popover.Trigger
-              className={`rounded-lg hover:bg-black/15 ${sidebarCollapsed && "hidden"}`}
+              className={`rounded-lg hover:bg-overlay-md ${sidebarCollapsed && "hidden"}`}
             >
               <KebabMenu />
             </Popover.Trigger>
@@ -96,7 +95,7 @@ export default function Sidebar({ navItems }) {
               <Popover.Content className="bg-background rounded-lg p-1 shadow-md">
                 <button
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-2 rounded p-2 text-left text-sm hover:bg-black/15">
+                  className="flex w-full items-center gap-2 rounded p-2 text-left text-sm hover:bg-overlay-md">
                   {logoutLoading && <Throbber />}
                   Logout
                 </button>

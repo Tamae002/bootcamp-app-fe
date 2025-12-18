@@ -31,6 +31,8 @@
     --color-dark-blue: var(--dark-blue);
     --color-darker-blue: var(--darker-blue);
 
+    --color-dark-navy: var(--dark-navy);
+
     --color-light-teal: var(--light-teal);
     --color-teal: var(--teal);
     --color-dark-teal: var(--dark-teal);
@@ -45,4 +47,6 @@
     --color-primary-contrast: var(--primary-contrast);
     --color-surface: var(--surface);
     --color-surface-subtle: var(--surface-subtle);
+    --color-overlay-sm: var(--overlay-sm);
+    --color-overlay-md: var(--overlay-md);
 }

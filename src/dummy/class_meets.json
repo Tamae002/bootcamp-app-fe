@@ -1,0 +1,112 @@
+[
+  {
+    "judul": "Pertemuan 1: Pengenalan HTML",
+    "tanggal": "2025-01-15T00:00:00",
+    "deskripsi_tugas": "Buat halaman sederhana menggunakan HTML."
+  },
+  {
+    "judul": "Pertemuan 2: CSS Styling",
+    "tanggal": "2025-01-22T00:00:00",
+    "deskripsi_tugas": "Styling halaman HTML dengan CSS."
+  },
+  {
+    "judul": "Pertemuan 3: JavaScript Dasar",
+    "tanggal": "2025-01-29T00:00:00",
+    "deskripsi_tugas": "Menambahkan interaktivitas dasar dengan JavaScript."
+  },
+  {
+    "judul": "Pertemuan 4: Manipulasi DOM",
+    "tanggal": "2025-02-05T00:00:00",
+    "deskripsi_tugas": "Mengubah konten halaman menggunakan JavaScript."
+  },
+  {
+    "judul": "Pertemuan 5: Event Handling",
+    "tanggal": "2025-02-12T00:00:00",
+    "deskripsi_tugas": "Menangani interaksi pengguna dengan event listeners."
+  },
+  {
+    "judul": "Pertemuan 6: Proyek Mini 1",
+    "tanggal": "2025-02-19T00:00:00",
+    "deskripsi_tugas": "Membuat kalkulator sederhana."
+  },
+  {
+    "judul": "Pertemuan 7: Asynchronous JavaScript",
+    "tanggal": "2025-02-26T00:00:00",
+    "deskripsi_tugas": "Memahami konsep asynchronous di JavaScript."
+  },
+  {
+    "judul": "Pertemuan 8: Fetch API",
+    "tanggal": "2025-03-05T00:00:00",
+    "deskripsi_tugas": "Mengambil data dari API eksternal."
+  },
+  {
+    "judul": "Pertemuan 9: JSON",
+    "tanggal": "2025-03-12T00:00:00",
+    "deskripsi_tugas": "Bekerja dengan format data JSON."
+  },
+  {
+    "judul": "Pertemuan 10: Pengenalan Framework",
+    "tanggal": "2025-03-19T00:00:00",
+    "deskripsi_tugas": "Pengantar singkat tentang framework frontend."
+  },
+  {
+    "judul": "Pertemuan 11: React Dasar",
+    "tanggal": "2025-03-26T00:00:00",
+    "deskripsi_tugas": "Mulai belajar dasar-dasar React."
+  },
+  {
+    "judul": "Pertemuan 12: Komponen React",
+    "tanggal": "2025-04-02T00:00:00",
+    "deskripsi_tugas": "Membuat dan menggunakan komponen di React."
+  },
+  {
+    "judul": "Pertemuan 13: State dan Props",
+    "tanggal": "2025-04-09T00:00:00",
+    "deskripsi_tugas": "Mengelola state dan props dalam komponen React."
+  },
+  {
+    "judul": "Pertemuan 14: Event Handling di React",
+    "tanggal": "2025-04-16T00:00:00",
+    "deskripsi_tugas": "Menangani event pengguna dalam aplikasi React."
+  },
+  {
+    "judul": "Pertemuan 15: Pengenalan Routing",
+    "tanggal": "2025-04-23T00:00:00",
+    "deskripsi_tugas": "Memahami konsep routing dalam aplikasi web."
+  },
+  {
+    "judul": "Pertemuan 16: React Router",
+    "tanggal": "2025-04-30T00:00:00",
+    "deskripsi_tugas": "Mengimplementasikan routing menggunakan React Router."
+  },
+  {
+    "judul": "Pertemuan 17: Proyek Mini 2",
+    "tanggal": "2025-05-07T00:00:00",
+    "deskripsi_tugas": "Membuat aplikasi daftar tugas sederhana dengan React."
+  },
+  {
+    "judul": "Pertemuan 18: API Calls di React",
+    "tanggal": "2025-05-14T00:00:00",
+    "deskripsi_tugas": "Melakukan panggilan API dalam aplikasi React."
+  },
+  {
+    "judul": "Pertemuan 19: State Management (Context API)",
+    "tanggal": "2025-05-21T00:00:00",
+    "deskripsi_tugas": "Menggunakan Context API untuk manajemen state."
+  },
+  {
+    "judul": "Pertemuan 20: Pengenalan Backend",
+    "tanggal": "2025-05-28T00:00:00",
+    "deskripsi_tugas": "Pengantar singkat tentang konsep backend."
+  },
+  {
+    "judul": "Pertemuan 21: Node.js Dasar",
+    "tanggal": "2025-06-04T00:00:00",
+    "deskripsi_tugas": "Memulai dengan Node.js."
+  },
+  {
+    "judul": "Pertemuan 22: Express.js",
+    "tanggal": "2025-06-11T00:00:00",
+    "deskripsi_tugas": "Membangun API sederhana dengan Express.js."
+  }
+]

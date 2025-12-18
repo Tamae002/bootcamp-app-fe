@@ -2,7 +2,7 @@ import Gear from "@/assets/icons/Gear";
 import People from "@/assets/icons/People";
 import SchoolHat from "@/assets/icons/SchoolHat";
 import Tiles from "@/assets/icons/Tiles";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/misc/Sidebar";
 import { Outlet } from "react-router";
 
 export default function AdminLayout() {

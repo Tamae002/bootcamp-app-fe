@@ -1,4 +1,4 @@
-import Throbber from "@/components/Throbber";
+import Throbber from "@/components/misc/Throbber";
 
 export default function Loading() {
   return (

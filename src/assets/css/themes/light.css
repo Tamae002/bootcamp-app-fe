@@ -29,6 +29,8 @@
     --dark-blue: #0386CE;
     --darker-blue: #016297;
 
+    --dark-navy: #0A2540;
+
     --light-teal: #04F3D5;
     --teal: #03B29D;
     --dark-teal: #03C6AE;
@@ -39,10 +41,12 @@
 
     /* Warna berdasarkan fungsi/semantik */
     --background: var(--white);
-    --foreground: #0A2540;
+    --foreground: var(--dark-navy);
     --primary: var(--purple);
     --primary-contrast: var(--purple);
     --primary-foreground: var(--white);
     --surface: var(--light-grey);
     --surface-subtle: var(--ice-white);
+    --overlay-sm: rgba(0, 0, 0, 8%);
+    --overlay-md: rgba(0, 0, 0, 15%);
 }

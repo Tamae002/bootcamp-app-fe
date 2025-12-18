@@ -52,12 +52,8 @@
                 @apply h-5 shrink-0;
             }
 
-            &.active {
-                @apply bg-primary text-white;
-            }
-
             &:not(.active):hover {
-                @apply bg-black/15;
+                @apply bg-overlay-md;
             }
         }
     }
@@ -67,7 +63,7 @@
     }
 
     .button {
-        @apply bg-primary rounded-xl px-8 py-2 font-bold text-white flex items-center justify-center gap-2;
+        @apply bg-primary flex items-center justify-center gap-2 rounded-xl px-8 py-2 font-bold text-white;
     }
 }
 
@@ -76,5 +72,9 @@
         -webkit-scrollbar: hidden;
         -ms-overflow-style: none;
         scrollbar-width: none;
+    }
+
+    a.active, a.active:hover {
+        @apply bg-primary text-white;
     }
 }
