@@ -24,11 +24,14 @@ export default function ClassList() {
 
         <section className="mt-8 grid grid-cols-2 gap-x-12 gap-y-8">
           {classes.map((class_, id) => (
-            <article key={id} className="bg-surface relative h-80 w-full rounded-3xl p-2 shadow-lg transition-all hover:scale-105 hover:shadow-md">
+            <article
+              key={id}
+              className="bg-surface relative h-fit w-full max-w-140 m-auto rounded-3xl p-2 shadow-lg transition-all hover:scale-105 hover:shadow-md"
+            >
               <figure>
                 <img
                   src="https://placehold.co/490x210/802EC0/white.png?text=Geeksfarm&font=poppins"
-                  className="aspect-7/3 rounded-2xl"
+                  className="aspect-7/3 rounded-2xl w-full"
                 />
               </figure>
               <div className="p-3 text-pretty">
