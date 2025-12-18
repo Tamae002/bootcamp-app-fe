@@ -5,33 +5,36 @@ export default function ClassDetailLayout() {
   const class_ = useClass();
 
   return (
-    <>
-      <section className="mr-80 p-8 text-pretty">
+    <div className="flex w-full scrollbar-hidden">
+      <section className="p-8 text-pretty flex-1">
         <div className="m-auto flex w-full max-w-5xl flex-col gap-8">
-          <Outlet/>
+          <Outlet />
         </div>
       </section>
 
-      <aside className="scrollbar-hidden fixed top-0 right-0 z-10 h-svh w-80 overflow-y-scroll py-8 pr-8">
-        <div className="bg-surface-subtle flex h-fit w-full flex-col gap-4 rounded-md p-4">
+      <aside className="scrollbar-hidden bg-surface-subtle relative flex h-svh w-80 flex-col overflow-y-scroll pb-24">
+        <NavLink
+          to={`/classes/${class_.id_kelas}`}
+          end
+          className="hover:bg-overlay-md px-2 py-4"
+        >
+          <h3>Halaman Depan</h3>
+        </NavLink>
+
+        {class_.pertemuan.map((item, id) => (
           <NavLink
-            to={`/classes/${class_.id_kelas}`}
-            end
-            className="bg-overlay-sm hover:bg-overlay-md rounded-sm p-2"
+            key={id}
+            to={`/classes/${class_.id_kelas}/${id}`}
+            className="hover:bg-overlay-md border-overlay-md border-t-3 px-2 py-4"
           >
-            <h3>Halaman Depan</h3>
+            <h3>{item.judul}</h3>
           </NavLink>
-          {class_.pertemuan.map((item, id) => (
-            <NavLink
-              key={id}
-              to={`/classes/${class_.id_kelas}/${id}`}
-              className="bg-overlay-sm hover:bg-overlay-md rounded-sm p-2"
-            >
-              <h3>{item.judul}</h3>
-            </NavLink>
-          ))}
-        </div>
+        ))}
       </aside>
-    </>
+
+      <button className="bg-primary hover:bg-primary-variant border-overlay-md fixed bottom-4 right-6 shadow-lg w-72 rounded-sm border-t-3 px-2 py-4 text-white">
+        + Tambah Pertemuan
+      </button>
+    </div>
   );
 }

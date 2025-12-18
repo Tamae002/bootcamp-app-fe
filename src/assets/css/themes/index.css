@@ -45,6 +45,8 @@
     --color-foreground: var(--foreground);
     --color-primary: var(--primary);
     --color-primary-contrast: var(--primary-contrast);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary-variant: var(--primary-variant);
     --color-surface: var(--surface);
     --color-surface-subtle: var(--surface-subtle);
     --color-overlay-sm: var(--overlay-sm);

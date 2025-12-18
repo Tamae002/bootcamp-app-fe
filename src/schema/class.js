@@ -1,5 +1,5 @@
-import meetSchema from "./meet";
 import userSchema from "./user";
+import meetSchema from "./meet";
 
 const classSchema = {
   id_kelas: "",
