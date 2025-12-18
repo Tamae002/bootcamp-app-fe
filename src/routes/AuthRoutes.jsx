@@ -11,7 +11,7 @@ export default function AuthRoutes() {
       <Route path="login" element={<Login />} />
       <Route path="forgot-password" element={<ForgotPassword />} />
       <Route path="pending-approval" element={<PendingApproval />} />
-      <Route path="reset-password" element={<ResetPassword />} />
+      <Route path="reset-password/:token" element={<ResetPassword />} />
     </Route>
   );
 }
