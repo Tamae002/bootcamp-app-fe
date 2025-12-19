@@ -1,5 +1,6 @@
 import UserList from "@/components/class/UserList";
 import { useClass } from "@/contexts/class";
+import Skeleton from "react-loading-skeleton";
 
 export default function ClassDetail() {
   const class_ = useClass();
@@ -14,11 +15,11 @@ export default function ClassDetail() {
         />
       </figure>
       <header>
-        <h1 className="mb-4 text-5xl">{class_.nama_kelas}</h1>
-        <p>{class_.deskripsi}</p>
+        <h1 className="mb-4 text-5xl">{class_.nama_kelas || <Skeleton />}</h1>
+        <p>{class_.deskripsi || <Skeleton />}</p>
       </header>
-      <UserList title="Pengajar" users={class_.mentor} />
-      <UserList title="Siswa" users={class_.anggota} />
+      <UserList title="Pengajar" users={class_.list_mentor} />
+      <UserList title="Siswa" users={class_.list_peserta} />
     </>
   );
 }

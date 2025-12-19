@@ -47,6 +47,7 @@
     --primary-variant: var(--dark-purple);
     --primary-foreground: var(--white);
     --surface: var(--light-grey);
+    --surface-variant: var(--color-neutral-200);
     --surface-subtle: var(--ice-white);
     --overlay-sm: rgba(0, 0, 0, 8%);
     --overlay-md: rgba(0, 0, 0, 15%);

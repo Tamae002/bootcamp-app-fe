@@ -1,3 +1,5 @@
+import defaultUserImage from "@/assets/images/user.png";
+
 export default function UserList({ users, title }) {
   return (
     <article>
@@ -5,7 +7,7 @@ export default function UserList({ users, title }) {
       <div className="flex flex-col gap-4">
         {users.map((user, id) => (
           <div key={id} className="flex items-center gap-2">
-            <img src={user.gambar} className="size-12 rounded-full" />
+            <img src={user.gambar || defaultUserImage} className="size-12 rounded-full" />
             <p>{user.name}</p>
           </div>
         ))}

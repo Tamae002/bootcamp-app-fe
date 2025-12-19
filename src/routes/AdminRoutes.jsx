@@ -3,6 +3,7 @@ import AdminLayout from "@/layouts/AdminLayout";
 import ClassDetailLayout from "@/layouts/ClassDetailLayout";
 import ProtectedRoute from "@/layouts/ProtectedRoute";
 import ClassDetail from "@/pages/admin/classes/ClassDetail";
+import ClassForm from "@/pages/admin/classes/ClassForm";
 import ClassList from "@/pages/admin/classes/ClassList";
 import MeetDetail from "@/pages/admin/classes/MeetDetail";
 import Dashboard from "@/pages/admin/Dashboard";
@@ -18,6 +19,9 @@ export default function AdminRoutes() {
 
         <Route path="classes">
           <Route index element={<ClassList />} />
+
+          <Route path="create" element={<ClassForm />} />
+
           <Route
             path=":id"
             element={

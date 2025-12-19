@@ -8,8 +8,8 @@ const classSchema = {
   deskripsi: "",
   tanggal_mulai: "",
   tanggal_berakhir: "",
-  mentor: [userSchema],
-  anggota: [userSchema],
+  list_mentor: [userSchema],
+  list_peserta: [userSchema],
   pertemuan: [meetSchema]
 }
 

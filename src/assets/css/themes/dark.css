@@ -8,6 +8,7 @@
     --primary: var(--purple);
     --primary-contrast: var(--teal);
     --surface: var(--color-neutral-800);
+    --surface-variant: var(--color-neutral-600);
     --surface-subtle: var(--dark-black);
     --overlay-sm: rgba(255, 255, 255, 8%);
     --overlay-md: rgba(255, 255, 255, 15%);

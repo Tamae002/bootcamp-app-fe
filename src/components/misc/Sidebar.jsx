@@ -10,13 +10,14 @@ import * as Popover from "@radix-ui/react-popover";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import Throbber from "./Throbber";
+import { useEffect } from "react";
 
 export default function Sidebar({ navItems }) {
   const navigate = useNavigate();
   const { user, refetchAuthStatus } = useAuth();
   const { theme } = useTheme();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(
-    window.innerWidth <= 768,
+    Boolean(localStorage.getItem("sidebar-collapsed") ?? window.innerWidth <= 768)
   );
   const [logoutLoading, setLogoutLoading] = useState(false);
 
@@ -33,10 +34,18 @@ export default function Sidebar({ navItems }) {
     }
   };
 
+  useEffect(() => {
+    console.log((localStorage.getItem("sidebar-collapsed") ?? (window.innerWidth <= 768).toString()))
+  }, [sidebarCollapsed])
+
+  useEffect(() => {
+    localStorage.setItem("sidebar-collapsed", sidebarCollapsed ? "1" : "");
+  }, [sidebarCollapsed]);
+
   return (
     <aside className="max-md:w-14">
       <div
-        className={`sidebar max-md:absolute ${sidebarCollapsed ? "w-14" : "w-63"}`}
+        className={`sidebar max-md:absolute z-100 ${sidebarCollapsed ? "w-14" : "w-63"}`}
       >
         {/* Sidebar Header */}
         <div className="flex w-8/10 items-center justify-between px-2 pt-7 pb-3">
@@ -60,7 +69,7 @@ export default function Sidebar({ navItems }) {
             <NavLink
               key={item.to}
               to={item.to}
-              onClick={() => setSidebarCollapsed(false)}
+              onClick={() => window.innerWidth <= 768 && setSidebarCollapsed(true)}
             >
               {item.icon}
               {!sidebarCollapsed && item.label}
@@ -87,15 +96,16 @@ export default function Sidebar({ navItems }) {
           </div>
           <Popover.Root>
             <Popover.Trigger
-              className={`rounded-lg hover:bg-overlay-md ${sidebarCollapsed && "hidden"}`}
+              className={`hover:bg-overlay-md rounded-lg ${sidebarCollapsed && "hidden"}`}
             >
-              <KebabMenu />
+              <KebabMenu className="size-6" />
             </Popover.Trigger>
             <Popover.Portal>
-              <Popover.Content className="bg-background rounded-lg p-1 shadow-md">
+              <Popover.Content className="popover-content">
                 <button
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-2 rounded p-2 text-left text-sm hover:bg-overlay-md">
+                  className="popover-button"
+                >
                   {logoutLoading && <Throbber />}
                   Logout
                 </button>

@@ -25,7 +25,7 @@
     #root {
         width: 100vw;
         height: 100svh;
-        overflow-y: hidden;
+        overflow-y: scroll;
     }
 
     button {
@@ -71,12 +71,20 @@
         @apply block h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 data-[state=checked]:translate-x-5;
     }
 
-    .text-input {
-        @apply bg-surface text-foreground w-full rounded-xl p-6 text-sm;
+    .input {
+        @apply bg-surface text-foreground w-full rounded-xl p-4 text-sm;
     }
 
     .button {
-        @apply bg-primary flex items-center justify-center gap-2 rounded-xl px-8 py-2 font-bold text-white;
+        @apply bg-primary hover:bg-primary-variant flex items-center justify-center gap-2 rounded-xl px-8 py-2 font-bold text-white;
+    }
+
+    .popover-content {
+        @apply bg-background rounded-lg p-1 shadow-md;
+    }
+
+    .popover-button {
+        @apply hover:bg-overlay-md flex w-full items-center gap-2 rounded p-2 text-left text-sm;
     }
 }
 

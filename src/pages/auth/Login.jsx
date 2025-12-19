@@ -43,7 +43,7 @@ export default function Login() {
 
       if (err instanceof AxiosError) {
         if (err.status == 400) setError("Email atau password salah.");
-        else if (err.status) setError(err.response.data.message);
+        else if (err.status) setError(err.response.data?.message);
         else setError("Terjadi kesalahan pada server. Mohon coba lagi nanti.");
       } else if (err instanceof ValidationError || err instanceof Error) {
         setError(err.message);
@@ -56,7 +56,7 @@ export default function Login() {
   return (
     <>
       <title>Login - Geeksfarm</title>
-      <main className="flex min-h-svh min-w-full scrollbar-hidden flex-col-reverse md:flex-row">
+      <main className="flex min-h-svh min-w-full scrollbar-hidden flex-col-reverse md:flex-row overflow-y-scroll">
         <form
           noValidate
           onSubmit={handleLogin}
@@ -76,7 +76,7 @@ export default function Login() {
               type="email"
               name="email"
               placeholder="Email"
-              className="text-input"
+              className="input"
             />
           </div>
 
@@ -85,7 +85,7 @@ export default function Login() {
             type="password"
             name="password"
             placeholder="Password"
-            className="text-input"
+            className="input"
           />
 
           <div className="text-primary-contrast flex justify-between text-sm font-semibold">
