@@ -23,6 +23,15 @@ export default function AdminRoutes() {
           <Route path="create" element={<ClassForm />} />
 
           <Route
+            path=":id/edit"
+            element={
+              <ClassProvider>
+                <ClassForm edit />
+              </ClassProvider>
+            }
+          />
+
+          <Route
             path=":id"
             element={
               <ClassProvider>

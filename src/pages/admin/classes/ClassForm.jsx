@@ -1,15 +1,35 @@
 import classApi from "@/api/class.api";
 import Throbber from "@/components/misc/Throbber";
 import { ENV } from "@/constants";
+import { useClass } from "@/contexts/class";
 import formDataToJson from "@/lib/formDataToJson";
 import { AxiosError } from "axios";
+import { useRef } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
+import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 
 export default function ClassForm({ edit = false }) {
   const navigate = useNavigate();
+  const { id: classId } = useParams();
+  const class_ = useClass();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const classNameInput = useRef(null);
+  const descriptionInput = useRef(null);
+  const startDateInput = useRef(null);
+  const endDateInput = useRef(null);
+
+  useEffect(() => {
+    if (edit) {
+      console.dir(class_)
+      classNameInput.current.value = class_.nama_kelas;
+      descriptionInput.current.value = class_.deskripsi;
+      startDateInput.current.value = class_.tanggal_mulai.slice(0, 10);
+      endDateInput.current.value = class_.tanggal_berakhir.slice(0, 10);
+    }
+  }, [edit, class_])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,6 +69,7 @@ export default function ClassForm({ edit = false }) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         {error && <p className="text-red mb-4 text-sm">{error}</p>}
         <input
+          ref={classNameInput}
           type="text"
           id="title"
           name="nama_kelas"
@@ -56,6 +77,7 @@ export default function ClassForm({ edit = false }) {
           placeholder="Judul"
         />
         <textarea
+          ref={descriptionInput}
           id="description"
           name="deskripsi"
           className="input"
@@ -63,12 +85,14 @@ export default function ClassForm({ edit = false }) {
         />
         <div className="flex gap-8">
           <input
+            ref={startDateInput}
             id="start-date"
             name="tanggal_mulai"
             type="date"
             className="input"
           />
           <input
+            ref={endDateInput}
             id="end-date"
             name="tanggal_berakhir"
             type="date"

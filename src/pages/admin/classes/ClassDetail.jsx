@@ -1,6 +1,10 @@
+import KebabMenu from "@/assets/icons/KebabMenu";
 import UserList from "@/components/class/UserList";
+import { DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useClass } from "@/contexts/class";
+import { Popover, PopoverContent, PopoverPortal, PopoverTrigger } from "@radix-ui/react-popover";
 import Skeleton from "react-loading-skeleton";
+import { Link } from "react-router";
 
 export default function ClassDetail() {
   const class_ = useClass();
@@ -10,12 +14,28 @@ export default function ClassDetail() {
       <title>{`${class_.nama_kelas} | Geeksfarm`}</title>
       <figure>
         <img
-          src="https://placehold.co/490x210@3x/802EC0/white.png?text=Geeksfarm&font=poppins"
+          src={class_.gambar || DEFAULT_CLASS_IMAGE}
           className="aspect-7/3 w-full rounded-md"
         />
       </figure>
       <header>
-        <h1 className="mb-4 text-5xl">{class_.nama_kelas || <Skeleton />}</h1>
+        <div className="flex items-start">
+          <h1 className="mb-4 flex-1 text-5xl">
+            {class_.nama_kelas || <Skeleton />}
+          </h1>
+          <Popover>
+            <PopoverTrigger className="hover:bg-overlay-md rounded-lg float-right">
+              <KebabMenu className="size-6" />
+            </PopoverTrigger>
+            <PopoverPortal>
+              <PopoverContent className="popover-content">
+                <Link to="edit" className="popover-button">
+                  Edit
+                </Link>
+              </PopoverContent>
+            </PopoverPortal>
+          </Popover>
+        </div>
         <p>{class_.deskripsi || <Skeleton />}</p>
       </header>
       <UserList title="Pengajar" users={class_.list_mentor} />
