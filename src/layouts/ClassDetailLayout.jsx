@@ -14,7 +14,7 @@ export default function ClassDetailLayout() {
 
       <aside className="scrollbar-hidden bg-surface-subtle relative flex h-svh w-80 flex-col overflow-y-scroll pb-24">
         <NavLink
-          to={`classes/${class_.kelas_id}`}
+          to={`/classes/${class_.kelas_id}`}
           end
           className="hover:bg-overlay-md px-2 py-4"
         >
@@ -24,7 +24,7 @@ export default function ClassDetailLayout() {
         {class_.pertemuan.map((item, id) => (
           <NavLink
             key={id}
-            to={`classes/${class_.kelas_id}/${id}`}
+            to={`/classes/${class_.kelas_id}/${id}`}
             className="hover:bg-overlay-md border-overlay-md border-t-3 px-2 py-4"
           >
             <h3>{item.judul}</h3>

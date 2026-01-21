@@ -40,7 +40,7 @@ export default function AdminRoutes() {
             }
           >
             <Route index element={<ClassDetail />} />
-            <Route path=":meetId" element={<MeetDetail />} />
+            <Route path=":meetId" element={<p>Test</p>} />
           </Route>
         </Route>
 

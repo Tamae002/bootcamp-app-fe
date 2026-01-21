@@ -23,13 +23,13 @@ export default function ClassForm({ edit = false }) {
 
   useEffect(() => {
     if (edit) {
-      console.dir(class_)
+      console.dir(class_);
       classNameInput.current.value = class_.nama_kelas;
       descriptionInput.current.value = class_.deskripsi;
       startDateInput.current.value = class_.tanggal_mulai.slice(0, 10);
       endDateInput.current.value = class_.tanggal_berakhir.slice(0, 10);
     }
-  }, [edit, class_])
+  }, [edit, class_]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,13 +39,17 @@ export default function ClassForm({ edit = false }) {
     const parsedFormData = formDataToJson(formData);
 
     try {
-      const response = await classApi.create({
+      const payload = {
         nama_kelas: parsedFormData.nama_kelas,
         deskripsi: parsedFormData.deskripsi,
         gambar: null,
         tanggal_mulai: new Date(parsedFormData.tanggal_mulai).toISOString(),
-        tanggal_berakhir: new Date(parsedFormData.tanggal_berakhir).toISOString(),
-      });
+        tanggal_berakhir: new Date(
+          parsedFormData.tanggal_berakhir,
+        ).toISOString(),
+      };
+      if (edit) await classApi.update(classId, payload);
+      else await classApi.create(payload);
 
       navigate("/classes");
     } catch (err) {
