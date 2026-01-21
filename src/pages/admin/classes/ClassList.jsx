@@ -77,7 +77,7 @@ export default function ClassList() {
           )) }
         </section>
 
-        <section className="bg-surface-subtle shadow-3xl fixed right-8 bottom-8 z-20 flex gap-2 rounded-xl p-2">
+        <section className="bg-surface-subtle shadow-2xl fixed right-8 bottom-8 z-20 flex gap-2 rounded-xl p-2">
           {page - 1 > 0 && (
             <Link
               to={`?page=${page - 1}`}

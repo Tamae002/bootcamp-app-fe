@@ -47,10 +47,13 @@ export default function ClassForm({ edit = false }) {
           parsedFormData.tanggal_berakhir,
         ).toISOString(),
       };
-      if (edit) await classApi.update(classId, payload);
-      else await classApi.create(payload);
-
-      navigate("/classes");
+      if (edit) {
+        await classApi.update(classId, payload);
+        navigate(`/classes/${classId}`);
+      } else {
+        await classApi.create(payload);
+        navigate("/classes");
+      }
     } catch (err) {
       if (ENV == "development") console.error(err);
 
@@ -70,7 +73,7 @@ export default function ClassForm({ edit = false }) {
         <h1 className="h-rule text-5xl">Buat Kelas</h1>
       </header>
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-        {error && <p className="text-red mb-4 text-sm">{error}</p>}
+        {error && <p className="text-red text-sm">{error}</p>}
         <input
           ref={classNameInput}
           type="text"
@@ -102,7 +105,9 @@ export default function ClassForm({ edit = false }) {
             className="input"
           />
         </div>
-        <button className="button">{loading && <Throbber />} {edit ? "Simpan" : "Buat Kelas"}</button>
+        <button className="button">
+          {loading && <Throbber />} {edit ? "Simpan" : "Buat Kelas"}
+        </button>
       </form>
     </div>
   );
