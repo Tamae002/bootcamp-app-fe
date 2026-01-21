@@ -23,7 +23,6 @@ export default function ClassForm({ edit = false }) {
 
   useEffect(() => {
     if (edit) {
-      console.dir(class_);
       classNameInput.current.value = class_.nama_kelas;
       descriptionInput.current.value = class_.deskripsi;
       startDateInput.current.value = class_.tanggal_mulai.slice(0, 10);
@@ -103,7 +102,7 @@ export default function ClassForm({ edit = false }) {
             className="input"
           />
         </div>
-        <button className="button">{loading && <Throbber />} Buat Kelas</button>
+        <button className="button">{loading && <Throbber />} {edit ? "Simpan" : "Buat Kelas"}</button>
       </form>
     </div>
   );
