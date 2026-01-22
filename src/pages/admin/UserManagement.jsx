@@ -96,10 +96,10 @@ export default function UserManagement() {
 
   return (
     <section
-      className={`relative flex gap-6 ${theme === "dark" ? "dark" : ""}`}
+      className={`relative flex gap-6 px-6 ${theme === "dark" ? "dark" : ""}`}
     >
       <div className={`flex-1 ${modal ? "blur-sm" : ""}`}>
-        <div className="flex justify-between items-start mb-3">
+        <div className="flex justify-between items-center mb-3 mt-7">
           <div>
             <h1 className="text-3xl font-normal mb-1 dark:text-white">
               Manajemen Peserta
