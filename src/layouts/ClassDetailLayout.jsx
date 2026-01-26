@@ -2,7 +2,7 @@ import { useClass } from "@/contexts/class";
 import { NavLink, Outlet } from "react-router";
 
 export default function ClassDetailLayout() {
-  const class_ = useClass();
+  const { class: class_ } = useClass();
 
   return (
     <div className="flex w-full scrollbar-hidden">

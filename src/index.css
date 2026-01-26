@@ -72,7 +72,11 @@
     }
 
     .input {
-        @apply bg-surface text-foreground w-full rounded-xl p-4 text-sm;
+        @apply bg-surface! text-foreground w-full rounded-xl! p-4 text-sm;
+
+        &:focus {
+            @apply outline-none;
+        }
     }
 
     .button {
@@ -85,6 +89,23 @@
 
     .popover-button {
         @apply hover:bg-overlay-md flex w-full items-center gap-2 rounded p-2 text-left text-sm;
+    }
+
+    .user-select-container {
+        @apply w-full p-4 text-left text-sm;
+
+        table {
+            @apply w-full border-separate border-spacing-y-2;
+        }
+
+        td,
+        th {
+            @apply px-4 py-2;
+        }
+
+        td {
+            @apply bg-overlay-sm first:rounded-l-xl last:rounded-r-xl;
+        }
     }
 }
 

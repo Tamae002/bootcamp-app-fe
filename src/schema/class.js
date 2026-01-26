@@ -8,9 +8,9 @@ const classSchema = {
   deskripsi: "",
   tanggal_mulai: "",
   tanggal_berakhir: "",
-  list_mentor: [userSchema],
-  list_peserta: [userSchema],
-  pertemuan: [meetSchema]
+  list_mentor: [],
+  list_peserta: [],
+  pertemuan: []
 }
 
 export default classSchema;

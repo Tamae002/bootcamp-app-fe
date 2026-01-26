@@ -26,11 +26,16 @@ export function ClassProvider({ children }) {
         else setError("Terjadi kesalahaan pada server. Mohon coba lagi nanti.");
       }
     }
-  }
+  };
 
   useEffect(() => {
     fetchClass();
-  }, [setClass, classId]);
+  }, [classId]);
 
-  return <ClassContext value={class_}>{children}</ClassContext>;
+  const contextValue = {
+    class: class_,
+    fetchClass,
+  };
+
+  return <ClassContext value={contextValue}>{children}</ClassContext>;
 }

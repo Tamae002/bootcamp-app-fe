@@ -1,25 +1,25 @@
 import classApi from "@/api/class.api";
+import UserSelect from "@/components/class/UserSelect";
 import Throbber from "@/components/misc/Throbber";
 import { ENV } from "@/constants";
 import { useClass } from "@/contexts/class";
 import formDataToJson from "@/lib/formDataToJson";
 import { AxiosError } from "axios";
-import { useRef } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
 export default function ClassForm({ edit = false }) {
   const navigate = useNavigate();
   const { id: classId } = useParams();
-  const class_ = useClass();
+  const { class: class_, fetchClass } = useClass();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const classNameInput = useRef(null);
   const descriptionInput = useRef(null);
   const startDateInput = useRef(null);
   const endDateInput = useRef(null);
+  const mentorInput = useRef(null);
+  const studentInput = useRef(null);
 
   useEffect(() => {
     if (edit) {
@@ -42,16 +42,28 @@ export default function ClassForm({ edit = false }) {
         nama_kelas: parsedFormData.nama_kelas,
         deskripsi: parsedFormData.deskripsi,
         gambar: null,
-        tanggal_mulai: new Date(parsedFormData.tanggal_mulai).toISOString(),
-        tanggal_berakhir: new Date(
-          parsedFormData.tanggal_berakhir,
-        ).toISOString(),
+        tanggal_mulai:
+          parsedFormData.tanggal_mulai &&
+          new Date(parsedFormData.tanggal_mulai).toISOString(),
+        tanggal_berakhir:
+          parsedFormData.tanggal_berakhir &&
+          new Date(parsedFormData.tanggal_berakhir).toISOString(),
+        added_users: [
+          ...mentorInput.current.getAddedUsers(),
+          ...studentInput.current.getAddedUsers(),
+        ],
+        removed_users: [
+          ...mentorInput.current.getRemovedUsers(),
+          ...studentInput.current.getRemovedUsers(),
+        ],
       };
       if (edit) {
         await classApi.update(classId, payload);
+        fetchClass();
         navigate(`/classes/${classId}`);
       } else {
         await classApi.create(payload);
+        fetchClass();
         navigate("/classes");
       }
     } catch (err) {
@@ -67,7 +79,7 @@ export default function ClassForm({ edit = false }) {
   };
 
   return (
-    <div className="m-auto max-w-2xl p-8">
+    <div className="m-auto max-w-4xl p-8">
       <title>Buat Kelas | Geeksfarm</title>
       <header className="mb-8">
         <h1 className="h-rule text-5xl">Buat Kelas</h1>
@@ -82,6 +94,7 @@ export default function ClassForm({ edit = false }) {
           className="input"
           placeholder="Judul"
         />
+
         <textarea
           ref={descriptionInput}
           id="description"
@@ -89,22 +102,49 @@ export default function ClassForm({ edit = false }) {
           className="input"
           placeholder="Deskripsi"
         />
-        <div className="flex gap-8">
-          <input
-            ref={startDateInput}
-            id="start-date"
-            name="tanggal_mulai"
-            type="date"
-            className="input"
-          />
-          <input
-            ref={endDateInput}
-            id="end-date"
-            name="tanggal_berakhir"
-            type="date"
-            className="input"
+
+        <div className="flex gap-8 *:w-full">
+          <div>
+            <label htmlFor="start-date">Tanggal Mulai</label>
+            <input
+              ref={startDateInput}
+              id="start-date"
+              name="tanggal_mulai"
+              type="date"
+              className="input"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="end-date">Tanggal Berakhir</label>
+            <input
+              ref={endDateInput}
+              id="end-date"
+              name="tanggal_berakhir"
+              type="date"
+              className="input"
+            />
+          </div>
+        </div>
+
+        <div>
+          <p>Mentor</p>
+          <UserSelect
+            role="mentor"
+            defaultUsers={class_.list_mentor}
+            ref={mentorInput}
           />
         </div>
+
+        <div>
+          <p>Peserta</p>
+          <UserSelect
+            role="user"
+            defaultUsers={class_.list_peserta}
+            ref={studentInput}
+          />
+        </div>
+
         <button className="button">
           {loading && <Throbber />} {edit ? "Simpan" : "Buat Kelas"}
         </button>

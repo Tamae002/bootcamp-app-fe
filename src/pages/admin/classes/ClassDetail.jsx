@@ -17,7 +17,7 @@ import { Link } from "react-router";
 
 export default function ClassDetail() {
   const navigate = useNavigate();
-  const class_ = useClass();
+  const { class: class_ } = useClass();
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const handleDelete = async (id) => {
@@ -34,6 +34,10 @@ export default function ClassDetail() {
         <img
           src={class_.gambar || DEFAULT_CLASS_IMAGE}
           className="aspect-7/3 w-full rounded-md"
+          onError={(e) => {
+            // @ts-ignore
+            e.target.src = DEFAULT_CLASS_IMAGE;
+          }}
         />
       </figure>
       <header>
