@@ -23,6 +23,9 @@ const API_ENDPOINTS = {
     DELETE: (id) => `/kelas/${id}`,
     UPDATE: (id) => `/kelas/${id}`,
   },
+  STATISTICS: {
+    GET: "/dashboard/stats",  // ← INI YANG BENAR!
+  },
 };
 
 export default API_ENDPOINTS;

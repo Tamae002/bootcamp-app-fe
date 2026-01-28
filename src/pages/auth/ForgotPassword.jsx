@@ -1,8 +1,9 @@
 import authApi from "@/api/auth.api";
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AxiosError } from "axios";
 import "@/assets/css/auth/ForgotPassword.css";
+
 
 export default function ForgotPassword({ onBack }) {
   const navigate = useNavigate();
@@ -56,11 +57,12 @@ export default function ForgotPassword({ onBack }) {
           <h1 className="forgot-title">Forgot Password?</h1>
 
           <p className="forgot-sub">
-            Remember your password?,
-            <span className="back-login" onClick={onBack}>
-              {" "}Login Here.
-            </span>
-          </p>
+  Remember your password?
+  <Link to="/login" className="back-login">
+    {" Login Here."}
+  </Link>
+</p>
+
 
           {error && <p className="status error">{error}</p>}
 
