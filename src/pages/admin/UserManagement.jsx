@@ -72,7 +72,7 @@ export default function UserManagement() {
 
   const updateUser = async (data) => {
     try {
-      await userApi.updateUser(selectedUser.id || selectedUser._id, {
+      await userApi.updateUser(selectedUser.user_id, {
         name: data.name,
         email: data.email,
       });
@@ -161,9 +161,9 @@ export default function UserManagement() {
               )}
 
               {!loading &&
-                filteredUsers.map((u) => (
+                filteredUsers.map((u, id) => (
                   <tr
-                    key={u.id || u._id}
+                    key={id}
                     className="border-t hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800"
                   >
                     <td
