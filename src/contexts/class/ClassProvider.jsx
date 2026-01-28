@@ -1,8 +1,5 @@
-import classApi from "@/api/class.api";
-import dummyClassMeets from "@/dummy/class_meets.json";
-import dummyClassMembers from "@/dummy/class_members.json";
-import dummyClasses from "@/dummy/classes.json";
-import classSchema from "@/schema/class";
+import classApi from "@/apis/class.api";
+import classSchema from "@/schemas/class";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -11,10 +8,12 @@ import { ClassContext } from "./ClassContext";
 export function ClassProvider({ children }) {
   const { id: classId } = useParams();
   const [class_, setClass] = useState(classSchema);
+  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchClass = async () => {
     try {
+      setLoading(true);
       const response = await classApi.getById(classId);
       setClass(response.data.kelas);
     } catch (err) {
@@ -25,6 +24,8 @@ export function ClassProvider({ children }) {
         if (err.status) setError(err.response.data?.message);
         else setError("Terjadi kesalahaan pada server. Mohon coba lagi nanti.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,6 +35,7 @@ export function ClassProvider({ children }) {
 
   const contextValue = {
     class: class_,
+    isLoading,
     fetchClass,
   };
 

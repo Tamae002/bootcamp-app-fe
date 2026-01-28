@@ -1,4 +1,4 @@
-import authApi from "@/api/auth.api";
+import authApi from "@/apis/auth.api";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { AxiosError } from "axios";

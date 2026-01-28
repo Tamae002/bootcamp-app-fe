@@ -12,4 +12,8 @@
     --surface-subtle: var(--dark-black);
     --overlay-sm: rgba(255, 255, 255, 8%);
     --overlay-md: rgba(255, 255, 255, 15%);
+
+    /* mdxeditor */
+    --baseText: var(--white);
+    --basePageBg: var(--surface);
 }

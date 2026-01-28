@@ -1,4 +1,4 @@
-import classApi from "@/api/class.api";
+import classApi from "@/apis/class.api";
 import Add from "@/assets/icons/Add";
 import ChevronRight from "@/assets/icons/ChevronRight";
 import { DEFAULT_CLASS_IMAGE } from "@/constants";
@@ -15,10 +15,12 @@ export default function ClassList() {
   const [totalPage, setTotalPage] = useState(0);
   const [classes, setClasses] = useState([]);
   const [limit, setLimit] = useState(parseInt(searchParams.get("limit")) || 9);
+  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchClasses = async () => {
     try {
+      setLoading(true);
       const response = await classApi.getAll({ page, limit });
       setClasses(response.data.data);
       setTotalPage(response.data.meta.lastPage);
@@ -29,6 +31,8 @@ export default function ClassList() {
         if (err.status) setError(err.response.data?.message);
         else setError("Terjadi kesalahaan pada server. Mohon coba lagi nanti.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,38 +53,42 @@ export default function ClassList() {
         <h1 className="h-rule my-2 text-5xl">Manajemen Kelas</h1>
 
         <section className="mt-8 grid grid-cols-1 gap-x-12 gap-y-8 pb-24 md:grid-cols-3">
-          {classes.length > 0
-            ? classes.map((class_, id) => (
-                <article
-                  key={id}
-                  className="bg-surface relative m-auto h-80 w-full max-w-140 rounded-3xl p-2 shadow-lg transition-all hover:scale-105 hover:shadow-md"
-                >
-                  <figure>
-                    <img
-                      src={class_.gambar || DEFAULT_CLASS_IMAGE}
-                      className="aspect-7/3 w-full rounded-2xl"
-                      onError={(e) => {
-                        // @ts-ignore
-                        e.target.src = DEFAULT_CLASS_IMAGE;
-                      }}
-                    />
-                  </figure>
-                  <div className="p-3 text-pretty">
-                    <h3 className="text-xl">
-                      <Link
-                        to={`/classes/${class_.kelas_id}`}
-                        className="after:absolute after:inset-0 after:z-1"
-                      >
-                        {class_.nama_kelas}
-                      </Link>
-                    </h3>
-                    <p className="text-justify text-xs">{class_.deskripsi}</p>
-                  </div>
-                </article>
-              ))
-            : Array.from({ length: 3 }).map((_, id) => (
-                <Skeleton key={id} className="h-80" borderRadius={16} />
-              ))}
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, id) => (
+              <Skeleton key={id} className="h-80" borderRadius={16} />
+            ))
+          ) : classes.length < 1 ? (
+            <p>Tidak ada kelas</p>
+          ) : (
+            classes.map((class_, id) => (
+              <article
+                key={id}
+                className="bg-surface relative m-auto h-80 w-full max-w-140 rounded-3xl p-2 shadow-lg transition-all hover:scale-105 hover:shadow-md"
+              >
+                <figure>
+                  <img
+                    src={class_.gambar || DEFAULT_CLASS_IMAGE}
+                    className="aspect-7/3 w-full rounded-2xl"
+                    onError={(e) => {
+                      // @ts-ignore
+                      e.target.src = DEFAULT_CLASS_IMAGE;
+                    }}
+                  />
+                </figure>
+                <div className="p-3 text-pretty">
+                  <h3 className="text-xl">
+                    <Link
+                      to={`/classes/${class_.kelas_id}`}
+                      className="after:absolute after:inset-0 after:z-1"
+                    >
+                      {class_.nama_kelas}
+                    </Link>
+                  </h3>
+                  <p className="text-justify text-xs">{class_.deskripsi}</p>
+                </div>
+              </article>
+            ))
+          )}
         </section>
 
         <section className="bg-surface-subtle fixed right-8 bottom-8 z-20 flex gap-2 rounded-xl p-2 shadow-2xl">

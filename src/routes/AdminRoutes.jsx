@@ -1,12 +1,13 @@
-import { ClassProvider } from "@/contexts/class";
+import ClassProviderLayout from "@/contexts/class/ClassProviderLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 import ClassDetailLayout from "@/layouts/ClassDetailLayout";
 import ProtectedRoute from "@/layouts/ProtectedRoute";
 import ClassDetail from "@/pages/admin/classes/ClassDetail";
 import ClassForm from "@/pages/admin/classes/ClassForm";
 import ClassList from "@/pages/admin/classes/ClassList";
-import MeetDetail from "@/pages/admin/classes/MeetDetail";
 import Dashboard from "@/pages/admin/Dashboard";
+import MeetDetail from "@/pages/admin/meets/MeetDetail";
+import MeetForm from "@/pages/admin/meets/MeetForm";
 import Settings from "@/pages/admin/Settings";
 import UserManagement from "@/pages/admin/UserManagement";
 import { Route } from "react-router";
@@ -19,28 +20,18 @@ export default function AdminRoutes() {
 
         <Route path="classes">
           <Route index element={<ClassList />} />
-
           <Route path="create" element={<ClassForm />} />
 
-          <Route
-            path=":id/edit"
-            element={
-              <ClassProvider>
-                <ClassForm edit />
-              </ClassProvider>
-            }
-          />
+          <Route element={<ClassProviderLayout />}>
+            <Route path=":id" element={<ClassDetailLayout />}>
+              <Route index element={<ClassDetail />} />
+              <Route path="meet/:meetId" element={<MeetDetail />} />
+            </Route>
 
-          <Route
-            path=":id"
-            element={
-              <ClassProvider>
-                <ClassDetailLayout />
-              </ClassProvider>
-            }
-          >
-            <Route index element={<ClassDetail />} />
-            <Route path=":meetId" element={<p>Test</p>} />
+            <Route path=":id/edit" element={<ClassForm edit />} />
+
+            <Route path=":id/meet/create" element={<MeetForm />} />
+            <Route path=":id/meet/:meetId/edit" element={<MeetForm edit />} />
           </Route>
         </Route>
 

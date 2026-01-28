@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { AxiosError } from "axios";
-import authApi from "@/api/auth.api";
+import authApi from "@/apis/auth.api";
 import "@/assets/css/auth/ResetPassword.css";
 
 export default function ResetPassword() {

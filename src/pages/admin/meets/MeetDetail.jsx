@@ -1,49 +1,45 @@
-import classApi from "@/apis/class.api";
+import meetApi from "@/apis/meet.api";
 import KebabMenu from "@/assets/icons/KebabMenu";
-import UserList from "@/components/class/UserList";
 import Throbber from "@/components/misc/Throbber";
-import { DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useClass } from "@/contexts/class";
+import meetSchema from "@/schemas/meet";
 import {
   Popover,
   PopoverContent,
   PopoverPortal,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
-import { useState } from "react";
-import Skeleton from "react-loading-skeleton";
+import { useMemo } from "react";
+import { useEffect, useState } from "react";
+import Markdown from "react-markdown";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
+import { useParams } from "react-router";
 
-export default function ClassDetail() {
+export default function MeetDetail() {
   const navigate = useNavigate();
   const { class: class_ } = useClass();
+  const { id: classId, meetId } = useParams();
+  const meet = useMemo(() =>
+    class_.pertemuan.find((meet) => meet.pertemuan_id == meetId),
+    [class_, meetId]
+  );
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const handleDelete = async (id) => {
     setDeleteLoading(true);
-    const response = await classApi.delete(id);
+    const response = await meetApi.delete(id);
     setDeleteLoading(false);
-    if (response.status == 200) navigate("/classes");
+    if (response.status == 200) navigate(`/classes/${classId}`);
   };
 
   return (
     <>
-      <title>{`${class_.nama_kelas} | Geeksfarm`}</title>
-      <figure>
-        <img
-          src={class_.gambar || DEFAULT_CLASS_IMAGE}
-          className="aspect-7/3 w-full rounded-md"
-          onError={(e) => {
-            // @ts-ignore
-            e.target.src = DEFAULT_CLASS_IMAGE;
-          }}
-        />
-      </figure>
+      <title>{`${meet?.judul} | ${class_.nama_kelas} | Geeksfarm`}</title>
       <header>
-        <div className="flex items-start">
-          <h1 className="mb-4 flex-1 text-5xl">
-            {class_.nama_kelas || <Skeleton />}
+        <div className="flex items-start border-surface border-b-3">
+          <h1 className="flex-1 pb-2 text-4xl">
+            {meet?.judul}
           </h1>
           <Popover>
             <PopoverTrigger className="hover:bg-overlay-md float-right rounded-lg">
@@ -64,10 +60,13 @@ export default function ClassDetail() {
             </PopoverPortal>
           </Popover>
         </div>
-        <p>{class_.deskripsi || <Skeleton />}</p>
+        <div className="prose prose-sm dark:prose-invert my-4">
+          <Markdown>{meet?.deskripsi_tugas}</Markdown>
+        </div>
       </header>
-      <UserList title="Pengajar" users={class_.list_mentor} />
-      <UserList title="Siswa" users={class_.list_peserta} />
+      <article>
+        <h2 className="border-surface border-b-3 pb-2 text-3xl">Tugas</h2>
+      </article>
     </>
   );
 }

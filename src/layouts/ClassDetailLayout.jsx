@@ -1,4 +1,5 @@
 import { useClass } from "@/contexts/class";
+import { Link } from "react-router";
 import { NavLink, Outlet } from "react-router";
 
 export default function ClassDetailLayout() {
@@ -21,20 +22,20 @@ export default function ClassDetailLayout() {
           <h3>Halaman Depan</h3>
         </NavLink>
 
-        {class_.pertemuan.map((item, id) => (
+        {class_.pertemuan.map((meet, id) => (
           <NavLink
             key={id}
-            to={`/classes/${class_.kelas_id}/${id}`}
+            to={`/classes/${class_.kelas_id}/meet/${meet.pertemuan_id}`}
             className="hover:bg-overlay-md border-overlay-md border-t-3 px-2 py-4"
           >
-            <h3>{item.judul}</h3>
+            <h3>{meet.judul}</h3>
           </NavLink>
         ))}
       </aside>
 
-      <button className="bg-primary hover:bg-primary-variant border-overlay-md fixed bottom-4 right-6 shadow-lg w-72 rounded-sm border-t-3 px-2 py-4 text-white">
+      <Link to={`/classes/${class_.kelas_id}/meet/create`} className="bg-primary hover:bg-primary-variant border-overlay-md fixed bottom-4 right-6 shadow-lg w-72 rounded-sm border-t-3 px-2 py-4 text-white">
         + Tambah Pertemuan
-      </button>
+      </Link>
     </div>
   );
 }

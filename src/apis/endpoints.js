@@ -23,6 +23,13 @@ const API_ENDPOINTS = {
     DELETE: (id) => `/kelas/${id}`,
     UPDATE: (id) => `/kelas/${id}`,
   },
+  MEET: {
+    GET_ALL: "/pertemuan",
+    GET_BY_ID: (id) => `/pertemuan/${id}`,
+    CREATE: "/pertemuan",
+    UPDATE: (id) => `/pertemuan/${id}`,
+    DELETE: (id) => `/pertemuan/${id}`,
+  },
 };
 
 export default API_ENDPOINTS;

@@ -1,9 +1,10 @@
-import classApi from "@/api/class.api";
+import classApi from "@/apis/class.api";
 import UserSelect from "@/components/class/UserSelect";
 import Throbber from "@/components/misc/Throbber";
-import { ENV } from "@/constants";
+import { DEFAULT_CLASS_IMAGE, ENV } from "@/constants";
 import { useClass } from "@/contexts/class";
 import formDataToJson from "@/lib/formDataToJson";
+import { MDXEditor } from "@mdxeditor/editor";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -25,8 +26,8 @@ export default function ClassForm({ edit = false }) {
     if (edit) {
       classNameInput.current.value = class_.nama_kelas;
       descriptionInput.current.value = class_.deskripsi;
-      startDateInput.current.value = class_.tanggal_mulai.slice(0, 10);
-      endDateInput.current.value = class_.tanggal_berakhir.slice(0, 10);
+      startDateInput.current.value = class_.tanggal_mulai?.slice(0, 10);
+      endDateInput.current.value = class_.tanggal_berakhir?.slice(0, 10);
     }
   }, [edit, class_]);
 
@@ -43,11 +44,13 @@ export default function ClassForm({ edit = false }) {
         deskripsi: parsedFormData.deskripsi,
         gambar: null,
         tanggal_mulai:
-          parsedFormData.tanggal_mulai &&
-          new Date(parsedFormData.tanggal_mulai).toISOString(),
+          parsedFormData.tanggal_mulai === ""
+            ? null
+            : new Date(parsedFormData.tanggal_mulai).toISOString(),
         tanggal_berakhir:
-          parsedFormData.tanggal_berakhir &&
-          new Date(parsedFormData.tanggal_berakhir).toISOString(),
+          parsedFormData.tanggal_berakhir === ""
+            ? null
+            : new Date(parsedFormData.tanggal_berakhir).toISOString(),
         added_users: [
           ...mentorInput.current.getAddedUsers(),
           ...studentInput.current.getAddedUsers(),
@@ -57,15 +60,16 @@ export default function ClassForm({ edit = false }) {
           ...studentInput.current.getRemovedUsers(),
         ],
       };
+
+      let newClassId = classId;
       if (edit) {
         await classApi.update(classId, payload);
-        fetchClass();
-        navigate(`/classes/${classId}`);
       } else {
-        await classApi.create(payload);
-        fetchClass();
-        navigate("/classes");
+        const response = await classApi.create(payload);
+        newClassId = response.data.kelas_id;
       }
+      fetchClass();
+      navigate(`/classes/${classId}`);
     } catch (err) {
       if (ENV == "development") console.error(err);
 
@@ -85,7 +89,34 @@ export default function ClassForm({ edit = false }) {
         <h1 className="h-rule text-5xl">Buat Kelas</h1>
       </header>
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+        <figure className="group relative">
+          <img
+            id="banner-preview"
+            src={class_.gambar || DEFAULT_CLASS_IMAGE}
+            className="aspect-7/3 w-full rounded-md group-hover:opacity-70"
+            onError={(e) => {
+              // @ts-ignore
+              e.target.src = DEFAULT_CLASS_IMAGE;
+            }}
+          />
+
+          <label
+            htmlFor="banner"
+            className="button background-color absolute top-1/2 left-1/2 hidden -translate-1/2 shadow-2xl group-hover:block"
+          >
+            Upload Gambar
+          </label>
+          <input
+            type="file"
+            name="gambar"
+            id="banner"
+            accept="image/*"
+            className="hidden"
+          />
+        </figure>
+
         {error && <p className="text-red text-sm">{error}</p>}
+
         <input
           ref={classNameInput}
           type="text"

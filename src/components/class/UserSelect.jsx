@@ -1,4 +1,4 @@
-import userApi from "@/api/user.api";
+import userApi from "@/apis/user.api";
 import Search from "@/assets/icons/Search";
 import { useState } from "react";
 import Throbber from "../misc/Throbber";
@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import { useImperativeHandle } from "react";
 import { useRef } from "react";
 import { useReducer } from "react";
-import ArrayReducer from "@/reducer/ArrayReducer";
+import ArrayReducer from "@/reducers/ArrayReducer";
 
 export default function UserSelect({
   ref = useRef(null),
@@ -41,7 +41,6 @@ export default function UserSelect({
     if (search == "") {
       setData([...defaultUsers, ...cachedUsers]);
       setLoading(false);
-      console.dir(data)
     } else {
       let debounceTimer = setTimeout(
         async () => {
@@ -60,7 +59,6 @@ export default function UserSelect({
         },
         search ? 500 : 0,
       );
-      console.dir(data);
       return () => clearTimeout(debounceTimer);
     }
 
