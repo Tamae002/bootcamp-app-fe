@@ -1,4 +1,4 @@
-import authApi from "@/api/auth.api";
+import authApi from "@/apis/auth.api";
 import ChevronRight from "@/assets/icons/ChevronRight";
 import KebabMenu from "@/assets/icons/KebabMenu";
 import Person from "@/assets/icons/Person";
@@ -17,7 +17,9 @@ export default function Sidebar({ navItems }) {
   const { user, refetchAuthStatus } = useAuth();
   const { theme } = useTheme();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(
-    Boolean(localStorage.getItem("sidebar-collapsed") ?? window.innerWidth <= 768)
+    Boolean(
+      localStorage.getItem("sidebar-collapsed") ?? window.innerWidth <= 768,
+    ),
   );
   const [logoutLoading, setLogoutLoading] = useState(false);
 
@@ -35,17 +37,13 @@ export default function Sidebar({ navItems }) {
   };
 
   useEffect(() => {
-    console.log((localStorage.getItem("sidebar-collapsed") ?? (window.innerWidth <= 768).toString()))
-  }, [sidebarCollapsed])
-
-  useEffect(() => {
     localStorage.setItem("sidebar-collapsed", sidebarCollapsed ? "1" : "");
   }, [sidebarCollapsed]);
 
   return (
     <aside className="max-md:w-14">
       <div
-        className={`sidebar max-md:absolute z-100 ${sidebarCollapsed ? "w-14" : "w-63"}`}
+        className={`sidebar z-100 max-md:absolute ${sidebarCollapsed ? "w-14" : "w-63"}`}
       >
         {/* Sidebar Header */}
         <div className="flex w-8/10 items-center justify-between px-2 pt-7 pb-3">
@@ -69,7 +67,9 @@ export default function Sidebar({ navItems }) {
             <NavLink
               key={item.to}
               to={item.to}
-              onClick={() => window.innerWidth <= 768 && setSidebarCollapsed(true)}
+              onClick={() =>
+                window.innerWidth <= 768 && setSidebarCollapsed(true)
+              }
             >
               {item.icon}
               {!sidebarCollapsed && item.label}
@@ -88,7 +88,9 @@ export default function Sidebar({ navItems }) {
           ) : (
             <Person className="size-8 shrink-0 rounded-full bg-neutral-400 text-white" />
           )}
-          <div className={`min-w-0 gap-px ${sidebarCollapsed && "hidden"}`}>
+          <div
+            className={`min-w-0 flex-1 gap-px text-left ${sidebarCollapsed && "hidden"}`}
+          >
             <p className="text-grey text-xs">Welcome back 👋</p>
             <p className="overflow-hidden text-sm text-ellipsis whitespace-nowrap">
               {user.name}
@@ -102,10 +104,7 @@ export default function Sidebar({ navItems }) {
             </Popover.Trigger>
             <Popover.Portal>
               <Popover.Content className="popover-content">
-                <button
-                  onClick={handleLogout}
-                  className="popover-button"
-                >
+                <button onClick={handleLogout} className="popover-button">
                   {logoutLoading && <Throbber />}
                   Logout
                 </button>

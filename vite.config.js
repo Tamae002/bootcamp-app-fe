@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
+      port: parseInt(env.PORT),
       allowedHosts: env.ALLOWED_HOSTS?.split(","),
     },
   };
