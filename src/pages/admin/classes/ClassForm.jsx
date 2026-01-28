@@ -84,9 +84,9 @@ export default function ClassForm({ edit = false }) {
 
   return (
     <div className="m-auto max-w-4xl p-8">
-      <title>Buat Kelas | Geeksfarm</title>
+      <title>{`${edit ? "Edit" : "Buat"} Kelas | Geeksfarm`}</title>
       <header className="mb-8">
-        <h1 className="h-rule text-5xl">Buat Kelas</h1>
+        <h1 className="h-rule text-5xl">{edit ? "Edit" : "Buat"} Kelas</h1>
       </header>
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         <figure className="group relative">

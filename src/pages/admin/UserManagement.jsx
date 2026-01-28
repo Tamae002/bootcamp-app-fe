@@ -5,7 +5,7 @@ import groupIcon from "../../assets/icons/group-line.svg";
 import errorIcon from "../../assets/icons/error-warning-line.svg";
 import defaultUser from "../../assets/images/user.png";
 import { useTheme } from "@/contexts/theme";
-import userApi from "@/api/user.api";
+import userApi from "@/apis/user.api";
 import { AxiosError } from "axios";
 
 export default function UserManagement() {
@@ -341,7 +341,7 @@ function UserForm({ initial, onSubmit, onClose, isEdit }) {
       email: "",
       role: "User",
       avatar: defaultUser,
-    }    
+    }
   );
 
   return (
