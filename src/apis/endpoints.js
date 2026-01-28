@@ -30,6 +30,9 @@ const API_ENDPOINTS = {
     UPDATE: (id) => `/pertemuan/${id}`,
     DELETE: (id) => `/pertemuan/${id}`,
   },
+  STATISTICS: {
+    GET: "/dashboard/stats",  // ← INI YANG BENAR!
+  },
 };
 
 export default API_ENDPOINTS;
