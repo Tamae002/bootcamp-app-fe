@@ -85,7 +85,7 @@ export default function UserManagement() {
 
   const deleteUser = async () => {
     try {
-      await userApi.deleteUser(selectedUser.id || selectedUser._id);
+      await userApi.deleteUser(selectedUser.user_id);
       fetchUsers();
       setModal(null);
       setSelectedUser(null);
