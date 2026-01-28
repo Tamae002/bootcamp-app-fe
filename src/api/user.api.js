@@ -4,13 +4,12 @@ import API_ENDPOINTS from "./endpoints";
 const userApi = {
   getById: async (id) => api.get(API_ENDPOINTS.USER.GET_BY_ID(id)),
 
-  getBySearch: async (search) =>
-    api.get(API_ENDPOINTS.USER.GET_BY_SEARCH, { params: { search } }),
-
   getMyself: async () => api.get(API_ENDPOINTS.USER.ME),
 
-  getAll: async ({ page = 1, limit = 10 }) =>
-    api.get(API_ENDPOINTS.USER.GET_ALL, { params: { page, limit } }),
+  getAll: async ({ page = 1, limit = 10, search = "", role = "" }) =>
+    api.get(API_ENDPOINTS.USER.GET_ALL, {
+      params: { page, limit, search, role },
+    }),
 
   createUser: async ({ name, email, password, role }) =>
     api.post(API_ENDPOINTS.USER.CREATE, {

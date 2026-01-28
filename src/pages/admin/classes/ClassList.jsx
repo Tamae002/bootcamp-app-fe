@@ -49,35 +49,41 @@ export default function ClassList() {
         <h1 className="h-rule my-2 text-5xl">Manajemen Kelas</h1>
 
         <section className="mt-8 grid grid-cols-1 gap-x-12 gap-y-8 pb-24 md:grid-cols-3">
-          {classes.length > 0 ? classes.map((class_, id) => (
-            <article
-              key={id}
-              className="bg-surface relative m-auto h-80 w-full max-w-140 rounded-3xl p-2 shadow-lg transition-all hover:scale-105 hover:shadow-md"
-            >
-              <figure>
-                <img
-                  src={class_.gambar || DEFAULT_CLASS_IMAGE}
-                  className="aspect-7/3 w-full rounded-2xl"
-                />
-              </figure>
-              <div className="p-3 text-pretty">
-                <h3 className="text-xl">
-                  <Link
-                    to={`/classes/${class_.kelas_id}`}
-                    className="after:absolute after:inset-0 after:z-1"
-                  >
-                    {class_.nama_kelas}
-                  </Link>
-                </h3>
-                <p className="text-justify text-xs">{class_.deskripsi}</p>
-              </div>
-            </article>
-          )) : Array.from({ length: 3 }).map((_, id) => (
-            <Skeleton key={id} className="h-80" />
-          )) }
+          {classes.length > 0
+            ? classes.map((class_, id) => (
+                <article
+                  key={id}
+                  className="bg-surface relative m-auto h-80 w-full max-w-140 rounded-3xl p-2 shadow-lg transition-all hover:scale-105 hover:shadow-md"
+                >
+                  <figure>
+                    <img
+                      src={class_.gambar || DEFAULT_CLASS_IMAGE}
+                      className="aspect-7/3 w-full rounded-2xl"
+                      onError={(e) => {
+                        // @ts-ignore
+                        e.target.src = DEFAULT_CLASS_IMAGE;
+                      }}
+                    />
+                  </figure>
+                  <div className="p-3 text-pretty">
+                    <h3 className="text-xl">
+                      <Link
+                        to={`/classes/${class_.kelas_id}`}
+                        className="after:absolute after:inset-0 after:z-1"
+                      >
+                        {class_.nama_kelas}
+                      </Link>
+                    </h3>
+                    <p className="text-justify text-xs">{class_.deskripsi}</p>
+                  </div>
+                </article>
+              ))
+            : Array.from({ length: 3 }).map((_, id) => (
+                <Skeleton key={id} className="h-80" borderRadius={16} />
+              ))}
         </section>
 
-        <section className="bg-surface-subtle shadow-3xl fixed right-8 bottom-8 z-20 flex gap-2 rounded-xl p-2">
+        <section className="bg-surface-subtle fixed right-8 bottom-8 z-20 flex gap-2 rounded-xl p-2 shadow-2xl">
           {page - 1 > 0 && (
             <Link
               to={`?page=${page - 1}`}
@@ -94,7 +100,10 @@ export default function ClassList() {
               <ChevronRight />
             </Link>
           )}
-          <Link to="create" className="bg-primary hover:bg-primary-variant size-10 rounded-xl text-white">
+          <Link
+            to="create"
+            className="bg-primary hover:bg-primary-variant size-10 rounded-xl text-white"
+          >
             <Add />
           </Link>
         </section>

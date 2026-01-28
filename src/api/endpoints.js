@@ -8,7 +8,6 @@ const API_ENDPOINTS = {
   USER: {
     GET_ALL: "/user",
     GET_BY_ID: (id) => `/user/${id}`,
-    GET_BY_SEARCH: "/user",
     CREATE: "/user",
     UPDATE: (id) => `/user/${id}`,
     DELETE: (id) => `/user/${id}`,
