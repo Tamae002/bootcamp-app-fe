@@ -51,7 +51,7 @@ export default function MeetDetail() {
                   Edit
                 </Link>
                 <button
-                  onClick={async () => await handleDelete(class_.kelas_id)}
+                  onClick={async () => await handleDelete(meet.pertemuan_id)}
                   className="popover-button text-red"
                 >
                   Hapus {deleteLoading && <Throbber />}

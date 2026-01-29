@@ -7,17 +7,25 @@ import formDataToJson from "@/lib/formDataToJson";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
+  CodeBlockNode,
+  CodeToggle,
   CreateLink,
   DiffSourceToggleWrapper,
   headingsPlugin,
+  HighlightToggle,
   imagePlugin,
+  InsertCodeBlock,
   InsertImage,
+  InsertTable,
+  InsertThematicBreak,
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
+  ListsToggle,
   markdownShortcutPlugin,
   MDXEditor,
   quotePlugin,
+  Separator,
   thematicBreakPlugin,
   toolbarPlugin,
   UndoRedo,
@@ -47,6 +55,11 @@ export default function MeetForm({ edit = false }) {
 
   useEffect(() => {
     if (edit) {
+      console.dir(class_)
+      titleInput.current.value = meet.judul;
+      dateInput.current.value = meet.tanggal.slice(0, 10);
+      descriptionInput.current.setMarkdown(meet.deskripsi_tugas);
+      attachmentLinkInput.current.value = meet.link_lampiran;
     }
   }, [edit, class_]);
 
@@ -71,7 +84,7 @@ export default function MeetForm({ edit = false }) {
 
       let newMeetId = meetId;
       if (edit) {
-        await meetApi.update(classId, payload);
+        await meetApi.update(meetId, payload);
       } else {
         const response = await meetApi.create(payload);
         newMeetId = response.data.pertemuan_id;
@@ -92,9 +105,9 @@ export default function MeetForm({ edit = false }) {
 
   return (
     <div className="m-auto max-w-4xl p-8">
-      <title>Buat Pertemuan | Geeksfarm</title>
+      <title>{`${edit ? "Edit" : "Buat"} Pertemuan | Geeksfarm`}</title>
       <header className="mb-8">
-        <h1 className="h-rule text-5xl">Buat Pertemuan</h1>
+        <h1 className="h-rule text-5xl">{edit ? "Edit" : "Buat"} Pertemuan</h1>
       </header>
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         {error && <p className="text-red text-sm">{error}</p>}
@@ -142,9 +155,15 @@ export default function MeetForm({ edit = false }) {
                 <>
                   <UndoRedo />
                   <BoldItalicUnderlineToggles />
+                  <CodeToggle />
+                  <HighlightToggle />
+                  <ListsToggle />
                   <BlockTypeSelect />
                   <CreateLink />
                   <InsertImage />
+                  <InsertTable />
+                  <InsertThematicBreak />
+                  <InsertCodeBlock />
                 </>
               ),
             }),

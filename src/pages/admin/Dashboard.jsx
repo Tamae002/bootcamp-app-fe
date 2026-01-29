@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from "../../contexts/auth/useAuth";
-import { statisticsService } from "../../api/statisticsService";
+import { statisticsService } from "../../apis/statisticsService";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -25,9 +25,9 @@ export default function Dashboard() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const data = await statisticsService.getStatistics();
-      
+
       setStats([
         { label: 'Total Peserta', value: data.jumlah_peserta || 0 },
         { label: 'Total Mentor', value: data.jumlah_mentor || 0 },
@@ -67,7 +67,7 @@ export default function Dashboard() {
       <div className="p-6 max-w-full overflow-x-hidden">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-600">{error}</p>
-          <button 
+          <button
             onClick={fetchStatistics}
             className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
           >
@@ -102,7 +102,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-medium text-slate-800">Class active</h2>
           </div>
-          
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {classes.map((c) => (
               <div key={c.id} className="bg-gray-100 rounded-lg p-3">
