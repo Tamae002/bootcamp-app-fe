@@ -140,7 +140,7 @@ export default function MeetForm({ edit = false }) {
           markdown=""
           placeholder="Deskripsi"
           className={theme == "dark" ? "dark dark-theme" : ""}
-          contentEditableClassName="prose prose-sm dark:prose-invert"
+          contentEditableClassName="prose prose-sm dark:prose-invert max-w-full"
           plugins={[
             headingsPlugin({ allowedHeadingLevels: [1, 2, 3, 4, 5, 6] }),
             listsPlugin(),

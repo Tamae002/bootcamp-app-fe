@@ -7,12 +7,8 @@ import StudentDashboard from "@/pages/student/Dashboard";
 import { Navigate, Route, Routes } from "react-router";
 import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
-import { useNavigate } from "react-router";
-import { setupInterceptor } from "@/apis/client";
 
 export default function AppRoutes() {
-  const navigate = useNavigate();
-  setupInterceptor(navigate);
   return (
     <Routes>
       {IndexRoute(useAuth())}

@@ -69,7 +69,7 @@ export default function ClassForm({ edit = false }) {
         newClassId = response.data.kelas_id;
       }
       fetchClass();
-      navigate(`/classes/${classId}`);
+      navigate(`/classes/${newClassId}`);
     } catch (err) {
       if (ENV == "development") console.error(err);
 

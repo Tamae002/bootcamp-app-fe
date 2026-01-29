@@ -18,7 +18,7 @@ import { useParams } from "react-router";
 
 export default function MeetDetail() {
   const navigate = useNavigate();
-  const { class: class_ } = useClass();
+  const { class: class_, fetchClass } = useClass();
   const { id: classId, meetId } = useParams();
   const meet = useMemo(() =>
     class_.pertemuan.find((meet) => meet.pertemuan_id == meetId),
@@ -30,6 +30,7 @@ export default function MeetDetail() {
     setDeleteLoading(true);
     const response = await meetApi.delete(id);
     setDeleteLoading(false);
+    fetchClass();
     if (response.status == 200) navigate(`/classes/${classId}`);
   };
 

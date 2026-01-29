@@ -1,4 +1,5 @@
-export const DEFAULT_CLASS_IMAGE =
-  "https://placehold.co/490x210/802EC0/white.png?text=Geeksfarm&font=poppins";
+import defaultClassThumbnail from "@/assets/images/default_class_thumbnail.png";
+
+export const DEFAULT_CLASS_IMAGE = defaultClassThumbnail;
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const ENV = import.meta.env.VITE_ENV;

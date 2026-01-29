@@ -49,8 +49,8 @@ export default function ClassList() {
     <>
       <title>Manajemen Kelas | Geeksfarm</title>
       <div className="px-8 py-10">
-        <p className="text-xl text-balance">{`Welcome, ${user.name}`}</p>
-        <h1 className="h-rule my-2 text-5xl">Manajemen Kelas</h1>
+        <p className="text-sm text-balance text-grey">{`Welcome, ${user.name}`}</p>
+        <h1 className="h-rule text-3xl font-semibold">Manajemen Kelas</h1>
 
         <section className="mt-8 grid grid-cols-1 gap-x-12 gap-y-8 pb-24 md:grid-cols-3">
           {isLoading ? (
