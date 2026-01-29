@@ -371,6 +371,19 @@ function UserForm({ initial, onSubmit, onClose, isEdit }) {
           </div>
         )
       )}
+
+      {!isEdit && (
+        <div>
+          <label className="text-xs dark:text-gray-300">Password</label>
+          <input
+            type="password"
+            className="mt-1 px-4 py-2 rounded-xl bg-gray-200 w-full text-center focus:outline-none dark:bg-gray-800 dark:text-white"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            placeholder=""
+          />
+        </div>
+      )}
       
       <div>
         <label className="text-xs dark:text-gray-300">Role</label>
