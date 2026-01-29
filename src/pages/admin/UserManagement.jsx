@@ -60,10 +60,10 @@ export default function UserManagement() {
       await userApi.createUser({
         name: data.name,
         email: data.email,
-        password: "password123",
+        password: data.password,
         role: data.role,
       });
-
+  
       fetchUsers();
     } catch (err) {
       alert("Gagal menambahkan user");
@@ -76,7 +76,7 @@ export default function UserManagement() {
         name: data.name,
         email: data.email,
       });
-
+  
       fetchUsers();
     } catch (err) {
       alert("Gagal update user");
@@ -339,6 +339,7 @@ function UserForm({ initial, onSubmit, onClose, isEdit }) {
     initial || {
       name: "",
       email: "",
+      password: "",
       role: "User",
       avatar: defaultUser,
     }
@@ -371,12 +372,26 @@ function UserForm({ initial, onSubmit, onClose, isEdit }) {
         )
       )}
 
+      {!isEdit && (
+        <div>
+          <label className="text-xs dark:text-gray-300">Password</label>
+          <input
+            type="password"
+            className="mt-1 px-4 py-2 rounded-xl bg-gray-200 w-full text-center focus:outline-none dark:bg-gray-800 dark:text-white"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            placeholder=""
+          />
+        </div>
+      )}
+      
       <div>
         <label className="text-xs dark:text-gray-300">Role</label>
         <select
           className="mt-1 px-4 py-2 rounded-xl bg-gray-200 w-full text-center dark:bg-gray-800 dark:text-white"
           value={form.role}
           onChange={(e) => setForm({ ...form, role: e.target.value })}
+          disabled={isEdit}
         >
           <option>Admin</option>
           <option>Mentor</option>
