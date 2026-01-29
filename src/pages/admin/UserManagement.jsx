@@ -60,7 +60,7 @@ export default function UserManagement() {
       await userApi.createUser({
         name: data.name,
         email: data.email,
-        password: "password123",
+        password: data.password || "password123",
         role: data.role,
       });
 
