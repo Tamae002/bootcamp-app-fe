@@ -1,11 +1,11 @@
 import { useTheme } from "@/contexts/theme";
-import * as Switch from "@radix-ui/react-switch";
+import {Switch, SwitchThumb} from "@radix-ui/react-switch";
 
 export default function Settings() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="m-auto max-w-2xl p-8">
+    <div className="content-wrapper">
       <title>Pengaturan | Geeksfarm</title>
       <header>
         <h1 className="h-rule text-5xl">Pengaturan</h1>
@@ -13,14 +13,14 @@ export default function Settings() {
       <article className="my-4">
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="dark-mode">Tema gelap</label>
-          <Switch.Root
+          <Switch
             id="dark-mode"
             className="switch-root"
             checked={theme == "dark"}
             onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
           >
-            <Switch.Thumb className="switch-thumb" />
-          </Switch.Root>
+            <SwitchThumb className="switch-thumb" />
+          </Switch>
         </div>
       </article>
     </div>

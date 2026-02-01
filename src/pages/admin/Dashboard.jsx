@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from "../../contexts/auth/useAuth";
 import { statisticsService } from "../../apis/statisticsService";
+import PageSubtitle from '@/components/typography/PageSubtitle';
+import PageTitle from '@/components/typography/PageTitle';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -79,11 +81,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-6 max-w-full overflow-x-hidden">
-      <div className="mb-6">
-        <p className="text-sm text-slate-500 dark:text-slate-100">Welcome {displayName}</p>
-        <h1 className="text-3xl md:text-4xl font-semibold text-slate-800 dark:text-slate-100">Beranda</h1>
-      </div>
+    <div className="content-wrapper-wide">
+      <PageSubtitle>Welcome {user.name}</PageSubtitle>
+      <PageTitle>Beranda</PageTitle>
 
       <div className="grid grid-cols-1 md:grid-cols-[minmax(300px,1fr)_minmax(300px,1fr)] gap-4 mb-6">
         {stats.map((s) => (

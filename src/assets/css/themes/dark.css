@@ -2,6 +2,9 @@
 
 /* Mode gelap */
 .dark {
+    --grey: var(--color-neutral-400);
+    --red: #E74C3C;
+
     /* Warna berdasarkan fungsi */
     --background: var(--darker-black);
     --foreground: var(--white);

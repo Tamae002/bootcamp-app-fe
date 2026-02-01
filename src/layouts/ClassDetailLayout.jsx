@@ -7,17 +7,17 @@ export default function ClassDetailLayout() {
 
   return (
     <div className="flex w-full scrollbar-hidden">
-      <section className="p-8 text-pretty flex-1">
+      <section className="p-8 text-pretty flex-1 min-h-screen">
         <div className="m-auto flex w-full max-w-5xl flex-col gap-8">
           <Outlet />
         </div>
       </section>
 
-      <aside className="scrollbar-hidden bg-surface-subtle relative flex h-svh w-80 flex-col overflow-y-scroll pb-24">
+      <aside className="scrollbar-hidden bg-surface-subtle relative flex w-80 flex-col overflow-y-scroll pb-24">
         <NavLink
           to={`/classes/${class_.kelas_id}`}
           end
-          className="hover:bg-overlay-md px-2 py-4"
+          className="navlink px-2 py-4"
         >
           <h3>Halaman Depan</h3>
         </NavLink>
@@ -26,7 +26,7 @@ export default function ClassDetailLayout() {
           <NavLink
             key={id}
             to={`/classes/${class_.kelas_id}/meet/${meet.pertemuan_id}`}
-            className="hover:bg-overlay-md border-overlay-md border-t-3 px-2 py-4"
+            className="navlink border-overlay-md border-t-3 px-2 py-4"
           >
             <h3>{meet.judul}</h3>
           </NavLink>

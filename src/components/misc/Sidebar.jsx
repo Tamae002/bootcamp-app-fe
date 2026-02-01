@@ -67,6 +67,7 @@ export default function Sidebar({ navItems }) {
             <NavLink
               key={item.to}
               to={item.to}
+              className="navlink"
               onClick={() =>
                 window.innerWidth <= 768 && setSidebarCollapsed(true)
               }
@@ -79,9 +80,9 @@ export default function Sidebar({ navItems }) {
 
         {/* Profil Pengguna */}
         <section className="border-grey flex items-center gap-2 border-t p-3 text-nowrap">
-          {user.image ? (
+          {user.gambar ? (
             <img
-              src={user.image}
+              src={user.gambar}
               className="size-8 shrink-0 rounded-full"
               alt="User"
             />

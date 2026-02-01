@@ -11,12 +11,13 @@ const userApi = {
       params: { page, limit, search, role },
     }),
 
-  createUser: async ({ name, email, password, role }) =>
+  createUser: async ({ name, email, password, role, gambar = "" }) =>
     api.post(API_ENDPOINTS.USER.CREATE, {
       name,
       email,
       password,
       role,
+      gambar,
     }),
 
   updateUser: async (id, { name, email }) =>

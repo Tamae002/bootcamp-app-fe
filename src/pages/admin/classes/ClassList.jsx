@@ -1,6 +1,7 @@
 import classApi from "@/apis/class.api";
 import Add from "@/assets/icons/Add";
 import ChevronRight from "@/assets/icons/ChevronRight";
+import PageTitle from "@/components/typography/PageTitle";
 import { DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useAuth } from "@/contexts/auth";
 import { AxiosError } from "axios";
@@ -48,11 +49,10 @@ export default function ClassList() {
   return (
     <>
       <title>Manajemen Kelas | Geeksfarm</title>
-      <div className="px-8 py-10">
-        <p className="text-sm text-balance text-grey">{`Welcome, ${user.name}`}</p>
-        <h1 className="h-rule text-3xl font-semibold">Manajemen Kelas</h1>
+      <div className="content-wrapper-wide">
+        <PageTitle>Manajemen Kelas</PageTitle>
 
-        <section className="mt-8 grid grid-cols-1 gap-x-12 gap-y-8 pb-24 md:grid-cols-3">
+        <section className="grid grid-cols-1 gap-x-12 gap-y-8 pb-24 md:grid-cols-3">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, id) => (
               <Skeleton key={id} className="h-80" borderRadius={16} />
@@ -63,7 +63,7 @@ export default function ClassList() {
             classes.map((class_, id) => (
               <article
                 key={id}
-                className="bg-surface relative m-auto h-80 w-full max-w-140 rounded-3xl p-2 shadow-lg transition-all hover:scale-105 hover:shadow-md"
+                className="bg-surface relative m-auto h-80 w-full max-w-140 rounded-3xl p-2 shadow-sm transition-all hover:scale-105 hover:shadow-md"
               >
                 <figure>
                   <img
@@ -95,7 +95,7 @@ export default function ClassList() {
           {page - 1 > 0 && (
             <Link
               to={`?page=${page - 1}`}
-              className="bg-primary hover:bg-primary-variant size-10 rounded-xl text-white"
+              className="button-primary size-10 rounded-xl"
             >
               <ChevronRight className="-scale-100" />
             </Link>
@@ -103,15 +103,12 @@ export default function ClassList() {
           {page + 1 <= totalPage && (
             <Link
               to={`?page=${page + 1}`}
-              className="bg-primary hover:bg-primary-variant size-10 rounded-xl text-white"
+              className="button-primary size-10 rounded-xl text-white"
             >
               <ChevronRight />
             </Link>
           )}
-          <Link
-            to="create"
-            className="bg-primary hover:bg-primary-variant size-10 rounded-xl text-white"
-          >
+          <Link to="create" className="button-primary size-10 rounded-xl">
             <Add />
           </Link>
         </section>

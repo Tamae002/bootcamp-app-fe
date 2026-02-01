@@ -1,0 +1,7 @@
+.popover-content {
+    @apply bg-background rounded-lg p-1 shadow-md;
+}
+
+.popover-button {
+    @apply hover:bg-overlay-md flex w-full items-center gap-2 rounded p-2 text-left text-sm;
+}

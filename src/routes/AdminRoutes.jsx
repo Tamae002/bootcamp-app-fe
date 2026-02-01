@@ -9,7 +9,7 @@ import Dashboard from "@/pages/admin/Dashboard";
 import MeetDetail from "@/pages/admin/meets/MeetDetail";
 import MeetForm from "@/pages/admin/meets/MeetForm";
 import Settings from "@/pages/admin/Settings";
-import UserManagement from "@/pages/admin/UserManagement";
+import UserManagement from "@/pages/admin/users/UserList";
 import { Route } from "react-router";
 
 export default function AdminRoutes() {

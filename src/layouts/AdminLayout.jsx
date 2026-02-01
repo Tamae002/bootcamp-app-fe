@@ -19,7 +19,7 @@ export default function AdminLayout() {
         navItems={navItems}
       />
 
-      <main className="flex-1 overflow-y-auto scrollbar-hidden">
+      <main className="scrollbar-hidden flex-1 overflow-y-auto">
         <Outlet />
       </main>
     </div>

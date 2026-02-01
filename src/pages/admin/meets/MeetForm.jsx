@@ -55,7 +55,7 @@ export default function MeetForm({ edit = false }) {
 
   useEffect(() => {
     if (edit) {
-      console.dir(class_)
+      console.dir(class_);
       titleInput.current.value = meet.judul;
       dateInput.current.value = meet.tanggal.slice(0, 10);
       descriptionInput.current.setMarkdown(meet.deskripsi_tugas);
@@ -179,7 +179,7 @@ export default function MeetForm({ edit = false }) {
           placeholder="Link Lampiran"
         />
 
-        <button className="button">
+        <button className="button button-primary">
           {loading && <Throbber />} {edit ? "Simpan" : "Buat Pertemuan"}
         </button>
       </form>

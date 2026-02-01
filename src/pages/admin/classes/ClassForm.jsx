@@ -83,7 +83,7 @@ export default function ClassForm({ edit = false }) {
   };
 
   return (
-    <div className="m-auto max-w-4xl p-8">
+    <div className="content-wrapper">
       <title>{`${edit ? "Edit" : "Buat"} Kelas | Geeksfarm`}</title>
       <header className="mb-8">
         <h1 className="h-rule text-5xl">{edit ? "Edit" : "Buat"} Kelas</h1>
@@ -102,7 +102,7 @@ export default function ClassForm({ edit = false }) {
 
           <label
             htmlFor="banner"
-            className="button background-color absolute top-1/2 left-1/2 hidden -translate-1/2 shadow-2xl group-hover:block"
+            className="button button-primary absolute top-1/2 left-1/2 hidden -translate-1/2 font-bold shadow-2xl group-hover:block"
           >
             Upload Gambar
           </label>
@@ -130,7 +130,7 @@ export default function ClassForm({ edit = false }) {
           ref={descriptionInput}
           id="description"
           name="deskripsi"
-          className="input"
+          className="input h-26 resize-none"
           placeholder="Deskripsi"
         />
 
@@ -176,7 +176,7 @@ export default function ClassForm({ edit = false }) {
           />
         </div>
 
-        <button className="button">
+        <button className="button button-primary font-bold">
           {loading && <Throbber />} {edit ? "Simpan" : "Buat Kelas"}
         </button>
       </form>

@@ -2,7 +2,7 @@ import userSchema from "./user";
 import meetSchema from "./meet";
 
 const classSchema = {
-  kelas_id: "",
+  kelas_id: null,
   nama_kelas: "",
   gambar: "",
   deskripsi: "",

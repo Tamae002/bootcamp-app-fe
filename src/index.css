@@ -31,8 +31,17 @@
         -ms-overflow-style: none; /* Internet Explorer 10+ */
     }
 
-    #root::-webkit-scrollbar {
-        display: none; /* Safari and Chrome */
+    *::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--grey);
+        border-radius: 8px;
     }
 
     button {
@@ -45,13 +54,22 @@
         display: none;
     }
 
-    a.active,
-    a.active:hover {
-        @apply bg-primary text-white;
-    }
 }
 
 @layer components {
+    @import "./assets/css/components/switch.css";
+    @import "./assets/css/components/popover.css";
+    @import "./assets/css/components/dialog.css";
+    @import "./assets/css/components/button.css";
+
+    .navlink.active {
+        @apply bg-primary hover:bg-primary/80 text-white;
+    }
+
+    .navlink:not(.active):hover {
+        @apply bg-overlay-md;
+    }
+
     .sidebar {
         @apply bg-surface-subtle flex h-full flex-col justify-stretch overflow-x-clip overflow-y-auto transition-all;
 
@@ -64,38 +82,23 @@
                 @apply h-5 shrink-0;
             }
 
-            &:not(.active):hover {
-                @apply bg-overlay-md;
+            &.navlink.active:hover {
+                @apply bg-primary;
             }
         }
     }
 
-    .switch-root {
-        @apply data-[state=checked]:bg-primary bg-surface h-6 w-11 rounded-full p-1 shadow-sm transition-all duration-200;
+    .content-wrapper {
+        @apply m-auto max-w-4xl p-8;
     }
 
-    .switch-thumb {
-        @apply block h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 data-[state=checked]:translate-x-5;
+    .content-wrapper-wide {
+        @apply m-auto max-w-6xl p-8;
     }
 
     .input {
-        @apply bg-surface! text-foreground w-full rounded-xl! p-4 text-sm;
-
-        &:focus {
-            @apply outline-none;
-        }
-    }
-
-    .button {
-        @apply bg-primary hover:bg-primary-variant flex items-center justify-center gap-2 rounded-xl px-8 py-2 font-bold text-white;
-    }
-
-    .popover-content {
-        @apply bg-background rounded-lg p-1 shadow-md;
-    }
-
-    .popover-button {
-        @apply hover:bg-overlay-md flex w-full items-center gap-2 rounded p-2 text-left text-sm;
+        @apply bg-surface! text-foreground flex h-13 w-full rounded-xl! p-4 text-sm outline-none *:outline-none;
+        appearance: base-select;
     }
 
     .user-select-container {
@@ -112,6 +115,48 @@
 
         td {
             @apply bg-overlay-sm first:rounded-l-xl last:rounded-r-xl;
+        }
+    }
+
+    .table {
+        @apply w-full text-sm;
+
+        thead {
+            @apply bg-primary text-white;
+        }
+
+        th {
+            @apply p-4;
+        }
+
+        tr {
+            @apply overflow-hidden;
+        }
+
+        td:first-child,
+        th:first-child {
+            @apply rounded-l-2xl;
+        }
+
+        td:last-child,
+        th:last-child {
+            @apply rounded-r-2xl;
+        }
+
+        tbody {
+            @apply dark:text-gray-200;
+        }
+
+        tr:not(:first-child) {
+            @apply border-surface border-t;
+        }
+
+        tr:hover td {
+            @apply bg-overlay-sm;
+        }
+
+        td {
+            @apply p-4;
         }
     }
 }

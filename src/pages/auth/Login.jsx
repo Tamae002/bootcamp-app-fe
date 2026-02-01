@@ -84,14 +84,14 @@ export default function Login() {
               className="input"
             />
           </div>
-          <div className="input flex h-13">
+          <div className="input">
             <input
               id="password"
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
               autoComplete="current-password"
-              className="flex-1 outline-none"
+              className="flex-1"
             />
             {showPassword ? (
               <VisibilityOff
@@ -112,7 +112,7 @@ export default function Login() {
             </div>
             <a href="/forgot-password">Lupa Password?</a>
           </div>
-          <button type="submit" className="button">
+          <button type="submit" className="button button-primary font-bold">
             {loading && <Throbber />}
             Masuk
           </button>

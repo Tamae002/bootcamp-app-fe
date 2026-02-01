@@ -1,0 +1,19 @@
+.button {
+    @apply flex cursor-pointer items-center justify-center gap-2 rounded-xl px-8 py-2 transition-all;
+}
+
+.button-primary {
+    @apply bg-primary hover:bg-primary/80 text-white;
+}
+
+.button-danger {
+    @apply bg-red hover:bg-red/80 text-white;
+}
+
+.button-outline-primary {
+    @apply bg-transparent outline-primary outline-2 text-primary;
+
+    &:hover {
+        @apply bg-primary text-white;
+    }
+}
