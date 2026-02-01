@@ -1,8 +1,9 @@
 import classApi from "@/apis/class.api";
+import fileApi from "@/apis/file.api";
 import KebabMenu from "@/assets/icons/KebabMenu";
 import UserList from "@/components/class/UserList";
 import Throbber from "@/components/misc/Throbber";
-import { DEFAULT_CLASS_IMAGE } from "@/constants";
+import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useClass } from "@/contexts/class";
 import {
   Popover,
@@ -32,8 +33,8 @@ export default function ClassDetail() {
       <title>{`${class_.nama_kelas} | Geeksfarm`}</title>
       <figure>
         <img
-          src={class_.gambar || DEFAULT_CLASS_IMAGE}
-          className="aspect-7/3 w-full rounded-md"
+          src={API_BASE_URL + class_.gambar || DEFAULT_CLASS_IMAGE}
+          className="aspect-7/3 w-full rounded-md object-cover"
           onError={(e) => {
             // @ts-ignore
             e.target.src = DEFAULT_CLASS_IMAGE;

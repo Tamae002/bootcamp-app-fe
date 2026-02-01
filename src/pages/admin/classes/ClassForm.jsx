@@ -1,10 +1,10 @@
 import classApi from "@/apis/class.api";
+import fileApi from "@/apis/file.api";
 import UserSelect from "@/components/class/UserSelect";
 import Throbber from "@/components/misc/Throbber";
 import { DEFAULT_CLASS_IMAGE, ENV } from "@/constants";
 import { useClass } from "@/contexts/class";
 import formDataToJson from "@/lib/formDataToJson";
-import { MDXEditor } from "@mdxeditor/editor";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -21,6 +21,8 @@ export default function ClassForm({ edit = false }) {
   const endDateInput = useRef(null);
   const mentorInput = useRef(null);
   const studentInput = useRef(null);
+  const bannerInputRef = useRef(null); // Ref for the banner file input
+  const bannerPreviewRef = useRef(null); // Ref for the banner preview image
 
   useEffect(() => {
     if (edit) {
@@ -31,6 +33,18 @@ export default function ClassForm({ edit = false }) {
     }
   }, [edit, class_]);
 
+  const handleBannerChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // @ts-ignore
+        bannerPreviewRef.current.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -38,11 +52,20 @@ export default function ClassForm({ edit = false }) {
     const formData = new FormData(e.target);
     const parsedFormData = formDataToJson(formData);
 
+    let uploadedImageUrl = class_.gambar || DEFAULT_CLASS_IMAGE; // Default to existing image or default
+
     try {
+      const bannerFile = bannerInputRef.current?.files?.[0];
+      if (bannerFile) {
+        const uploadResponse = await fileApi.upload(bannerFile); // fileApi.upload expects an array
+        // Assuming uploadResponse.data.url contains the URL of the uploaded image
+        uploadedImageUrl = uploadResponse.data.urls[0];
+      }
+
       const payload = {
         nama_kelas: parsedFormData.nama_kelas,
         deskripsi: parsedFormData.deskripsi,
-        gambar: null,
+        gambar: uploadedImageUrl, // Use the uploaded image URL or the existing one
         tanggal_mulai:
           parsedFormData.tanggal_mulai === ""
             ? null
@@ -74,8 +97,10 @@ export default function ClassForm({ edit = false }) {
       if (ENV == "development") console.error(err);
 
       if (err instanceof AxiosError) {
-        if (err.status) setError(err.response.data?.message);
-        else setError("Terjadi kesalahan pada server. Mohon  coba lagi nanti.");
+        if (err.response?.status) setError(err.response.data?.message);
+        else setError("Terjadi kesalahan pada server. Mohon coba lagi nanti.");
+      } else {
+        setError("Terjadi kesalahan yang tidak terduga.");
       }
     } finally {
       setLoading(false);
@@ -92,8 +117,9 @@ export default function ClassForm({ edit = false }) {
         <figure className="group relative">
           <img
             id="banner-preview"
+            ref={bannerPreviewRef}
             src={class_.gambar || DEFAULT_CLASS_IMAGE}
-            className="aspect-7/3 w-full rounded-md group-hover:opacity-70"
+            className="aspect-7/3 w-full rounded-md object-cover group-hover:opacity-70"
             onError={(e) => {
               // @ts-ignore
               e.target.src = DEFAULT_CLASS_IMAGE;
@@ -107,11 +133,13 @@ export default function ClassForm({ edit = false }) {
             Upload Gambar
           </label>
           <input
+            ref={bannerInputRef} // Assign ref here
             type="file"
-            name="gambar"
+            name="gambar" // This name attribute is now less important for direct form submission of the image
             id="banner"
             accept="image/*"
             className="hidden"
+            onChange={handleBannerChange}
           />
         </figure>
 

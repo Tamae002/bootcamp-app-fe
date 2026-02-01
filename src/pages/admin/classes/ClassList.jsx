@@ -2,7 +2,7 @@ import classApi from "@/apis/class.api";
 import Add from "@/assets/icons/Add";
 import ChevronRight from "@/assets/icons/ChevronRight";
 import PageTitle from "@/components/typography/PageTitle";
-import { DEFAULT_CLASS_IMAGE } from "@/constants";
+import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useAuth } from "@/contexts/auth";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -67,8 +67,8 @@ export default function ClassList() {
               >
                 <figure>
                   <img
-                    src={class_.gambar || DEFAULT_CLASS_IMAGE}
-                    className="aspect-7/3 w-full rounded-2xl"
+                    src={API_BASE_URL + class_.gambar || DEFAULT_CLASS_IMAGE}
+                    className="aspect-7/3 w-full rounded-2xl object-cover"
                     onError={(e) => {
                       // @ts-ignore
                       e.target.src = DEFAULT_CLASS_IMAGE;

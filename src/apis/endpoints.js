@@ -33,6 +33,10 @@ const API_ENDPOINTS = {
   STATISTICS: {
     GET: "/dashboard/stats",  // ← INI YANG BENAR!
   },
+  FILE: {
+    UPLOAD: "/api/file/upload",
+    GET: (id) => `/api/file/${id}`,
+  }
 };
 
 export default API_ENDPOINTS;
