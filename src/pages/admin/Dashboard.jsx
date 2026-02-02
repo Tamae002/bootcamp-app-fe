@@ -12,7 +12,7 @@ export default function Dashboard() {
     { label: 'Total Peserta', value: 0 },
     { label: 'Total Mentor', value: 0 },
     { label: 'Total kelas', value: 0 },
-    { label: 'Upcoming Meetings', value: 0 },
+    { label: 'Pertemuan Mendatang', value: 0 },
   ]);
 
   const [classes, setClasses] = useState([]);
@@ -34,15 +34,15 @@ export default function Dashboard() {
         { label: 'Total Peserta', value: data.jumlah_peserta || 0 },
         { label: 'Total Mentor', value: data.jumlah_mentor || 0 },
         { label: 'Total kelas', value: data.jumlah_kelas || 0 },
-        { label: 'Upcoming Meetings', value: data.jumlah_pertemuan_mendatang?.length || 0 },
+        { label: 'Pertemuan Mendatang', value: data.jumlah_pertemuan || 0 },
       ]);
 
-      if (data.jumlah_pertemuan_mendatang && Array.isArray(data.jumlah_pertemuan_mendatang)) {
-        const mappedClasses = data.jumlah_pertemuan_mendatang.map(kelas => ({
+      if (data.kelas_aktif && Array.isArray(data.kelas_aktif)) {
+        const mappedClasses = data.kelas_aktif.map(kelas => ({
           id: kelas.kelas_id,
           title: kelas.nama_kelas,
           mentor: '-',
-          participants: 0
+          participants: kelas.total_peserta || 0
         }));
         setClasses(mappedClasses);
       }
@@ -85,38 +85,34 @@ export default function Dashboard() {
       <PageSubtitle>Welcome {user.name}</PageSubtitle>
       <PageTitle>Beranda</PageTitle>
 
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(300px,1fr)_minmax(300px,1fr)] gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-[minmax(300px,1fr)_minmax(300px,1fr)] gap-3 sm:gap-4 mb-6">
         {stats.map((s) => (
           <div
             key={s.label}
-            className="bg-gray-100 dark:bg-[#262626] rounded-2xl p-6 shadow-sm"
+            className="bg-gray-100 dark:bg-[#262626] rounded-lg sm:rounded-2xl p-4 sm:p-6 shadow-sm"
           >
-            <p className="text-sm text-slate-600 dark:text-white">{s.label}</p>
-            <p className="text-3xl font-bold text-slate-800 dark:text-white mt-3">{s.value}</p>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-white">{s.label}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white mt-2 sm:mt-3">{s.value}</p>
           </div>
         ))}
       </div>
 
       {classes.length > 0 && (
-        <div className="rounded-2xl bg-white dark:bg-[#1f1f1f] p-6 shadow-sm">
+        <div className="rounded-lg sm:rounded-2xl bg-white dark:bg-[#1f1f1f] p-4 sm:p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-medium text-slate-800 dark:text-slate-100">Class active</h2>
+            <h2 className="text-base sm:text-lg font-medium text-slate-800 dark:text-slate-100">Class active</h2>
           </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
             {classes.map((c) => (
-              <div key={c.id} className="bg-gray-100 dark:bg-[#262626] rounded-lg p-3">
-                <h3 className="text-xs font-semibold text-slate-800 dark:text-slate-100 leading-tight line-clamp-2">
+              <div key={c.id} className="bg-gray-100 dark:bg-[#262626] rounded-lg p-3 sm:p-3">
+                <h3 className="text-[11px] sm:text-xs font-semibold text-slate-800 dark:text-slate-100 leading-tight line-clamp-2">
                   {c.title}
                 </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-100 mt-1 truncate">
-                  Mentor: {c.mentor}
-                </p>
                 <div className="mt-3 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-600 dark:text-slate-100">
+                  <span className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-100">
                     {c.participants} Peserta
                   </span>
-                  <button className="text-slate-600 dark:text-slate-400 text-lg leading-none">⋯</button>
                 </div>
               </div>
             ))}
