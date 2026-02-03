@@ -2,18 +2,19 @@ import classApi from "@/apis/class.api";
 import fileApi from "@/apis/file.api";
 import UserSelect from "@/components/class/UserSelect";
 import Throbber from "@/components/misc/Throbber";
-import { DEFAULT_CLASS_IMAGE, ENV } from "@/constants";
+import { API_BASE_URL, DEFAULT_CLASS_IMAGE, ENV } from "@/constants";
 import { useClass } from "@/contexts/class";
 import formDataToJson from "@/lib/formDataToJson";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export default function ClassForm({ edit = false }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { id: classId } = useParams();
-  const { class: class_, fetchClass } = useClass();
-  const [loading, setLoading] = useState(false);
+  const { class: class_ } = useClass();
   const [error, setError] = useState("");
   const classNameInput = useRef(null);
   const descriptionInput = useRef(null);
@@ -21,8 +22,8 @@ export default function ClassForm({ edit = false }) {
   const endDateInput = useRef(null);
   const mentorInput = useRef(null);
   const studentInput = useRef(null);
-  const bannerInputRef = useRef(null); // Ref for the banner file input
-  const bannerPreviewRef = useRef(null); // Ref for the banner preview image
+  const bannerInput = useRef(null);
+  const bannerPreview = useRef(null);
 
   useEffect(() => {
     if (edit) {
@@ -39,61 +40,20 @@ export default function ClassForm({ edit = false }) {
       const reader = new FileReader();
       reader.onload = (e) => {
         // @ts-ignore
-        bannerPreviewRef.current.src = e.target.result;
+        bannerPreview.current.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    const formData = new FormData(e.target);
-    const parsedFormData = formDataToJson(formData);
-
-    let uploadedImageUrl = class_.gambar || DEFAULT_CLASS_IMAGE; // Default to existing image or default
-
-    try {
-      const bannerFile = bannerInputRef.current?.files?.[0];
-      if (bannerFile) {
-        const uploadResponse = await fileApi.upload(bannerFile); // fileApi.upload expects an array
-        // Assuming uploadResponse.data.url contains the URL of the uploaded image
-        uploadedImageUrl = uploadResponse.data.urls[0];
-      }
-
-      const payload = {
-        nama_kelas: parsedFormData.nama_kelas,
-        deskripsi: parsedFormData.deskripsi,
-        gambar: uploadedImageUrl, // Use the uploaded image URL or the existing one
-        tanggal_mulai:
-          parsedFormData.tanggal_mulai === ""
-            ? null
-            : new Date(parsedFormData.tanggal_mulai).toISOString(),
-        tanggal_berakhir:
-          parsedFormData.tanggal_berakhir === ""
-            ? null
-            : new Date(parsedFormData.tanggal_berakhir).toISOString(),
-        added_users: [
-          ...mentorInput.current.getAddedUsers(),
-          ...studentInput.current.getAddedUsers(),
-        ],
-        removed_users: [
-          ...mentorInput.current.getRemovedUsers(),
-          ...studentInput.current.getRemovedUsers(),
-        ],
-      };
-
-      let newClassId = classId;
-      if (edit) {
-        await classApi.update(classId, payload);
-      } else {
-        const response = await classApi.create(payload);
-        newClassId = response.data.kelas_id;
-      }
-      fetchClass();
-      navigate(`/classes/${newClassId}`);
-    } catch (err) {
+  const createMutation = useMutation({
+    // @ts-ignore
+    mutationFn: (payload) => classApi.create(payload),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ["classes"] });
+      navigate(`/classes/${response.data.kelas_id}`);
+    },
+    onError: (err) => {
       if (ENV == "development") console.error(err);
 
       if (err instanceof AxiosError) {
@@ -102,8 +62,70 @@ export default function ClassForm({ edit = false }) {
       } else {
         setError("Terjadi kesalahan yang tidak terduga.");
       }
-    } finally {
-      setLoading(false);
+    },
+  });
+
+  const updateMutation = useMutation({
+    // @ts-ignore
+    mutationFn: (payload) => classApi.update(classId, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["classes"] });
+      navigate(`/classes/${classId}`);
+    },
+    onError: (err) => {
+      if (ENV == "development") console.error(err);
+
+      if (err instanceof AxiosError) {
+        if (err.response?.status) setError(err.response.data?.message);
+        else setError("Terjadi kesalahan pada server. Mohon coba lagi nanti.");
+      } else {
+        setError("Terjadi kesalahan yang tidak terduga.");
+      }
+    },
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    const formData = new FormData(e.target);
+    const parsedFormData = formDataToJson(formData);
+
+    let uploadedImageUrl = class_.gambar || DEFAULT_CLASS_IMAGE;
+
+    const bannerFile = bannerInput.current?.files?.[0];
+    if (bannerFile) {
+      const uploadResponse = await fileApi.upload(bannerFile);
+      uploadedImageUrl = uploadResponse.data.urls[0];
+    }
+
+    const payload = {
+      nama_kelas: parsedFormData.nama_kelas,
+      deskripsi: parsedFormData.deskripsi,
+      gambar: uploadedImageUrl,
+      tanggal_mulai:
+        parsedFormData.tanggal_mulai === ""
+          ? null
+          : new Date(parsedFormData.tanggal_mulai).toISOString(),
+      tanggal_berakhir:
+        parsedFormData.tanggal_berakhir === ""
+          ? null
+          : new Date(parsedFormData.tanggal_berakhir).toISOString(),
+      added_users: [
+        ...mentorInput.current.getAddedUsers(),
+        ...studentInput.current.getAddedUsers(),
+      ],
+      removed_users: [
+        ...mentorInput.current.getRemovedUsers(),
+        ...studentInput.current.getRemovedUsers(),
+      ],
+    };
+
+    if (edit) {
+      // @ts-ignore
+      updateMutation.mutate(payload);
+    } else {
+      // @ts-ignore
+      createMutation.mutate(payload);
     }
   };
 
@@ -117,8 +139,8 @@ export default function ClassForm({ edit = false }) {
         <figure className="group relative">
           <img
             id="banner-preview"
-            ref={bannerPreviewRef}
-            src={class_.gambar || DEFAULT_CLASS_IMAGE}
+            ref={bannerPreview}
+            src={API_BASE_URL + class_.gambar || DEFAULT_CLASS_IMAGE}
             className="aspect-7/3 w-full rounded-md object-cover group-hover:opacity-70"
             onError={(e) => {
               // @ts-ignore
@@ -133,9 +155,9 @@ export default function ClassForm({ edit = false }) {
             Upload Gambar
           </label>
           <input
-            ref={bannerInputRef} // Assign ref here
+            ref={bannerInput}
             type="file"
-            name="gambar" // This name attribute is now less important for direct form submission of the image
+            name="gambar"
             id="banner"
             accept="image/*"
             className="hidden"
@@ -205,7 +227,10 @@ export default function ClassForm({ edit = false }) {
         </div>
 
         <button className="button button-primary font-bold">
-          {loading && <Throbber />} {edit ? "Simpan" : "Buat Kelas"}
+          {(createMutation.isPending || updateMutation.isPending) && (
+            <Throbber />
+          )}{" "}
+          {edit ? "Simpan" : "Buat Kelas"}
         </button>
       </form>
     </div>

@@ -4,13 +4,14 @@ import { ENV } from "@/constants";
 import { useClass } from "@/contexts/class";
 import { useTheme } from "@/contexts/theme";
 import formDataToJson from "@/lib/formDataToJson";
+import { oneDark } from "@codemirror/theme-one-dark";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
-  CodeBlockNode,
+  codeBlockPlugin,
+  codeMirrorPlugin,
   CodeToggle,
   CreateLink,
-  DiffSourceToggleWrapper,
   headingsPlugin,
   HighlightToggle,
   imagePlugin,
@@ -25,15 +26,13 @@ import {
   markdownShortcutPlugin,
   MDXEditor,
   quotePlugin,
-  Separator,
+  tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
   UndoRedo,
 } from "@mdxeditor/editor";
 import { AxiosError } from "axios";
-import { useMemo } from "react";
-import { useRef } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export default function MeetForm({ edit = false }) {
@@ -142,7 +141,7 @@ export default function MeetForm({ edit = false }) {
           className={theme == "dark" ? "dark dark-theme" : ""}
           contentEditableClassName="prose prose-sm dark:prose-invert max-w-full"
           plugins={[
-            headingsPlugin({ allowedHeadingLevels: [1, 2, 3, 4, 5, 6] }),
+            headingsPlugin({ allowedHeadingLevels: [1, 2, 3, 4] }),
             listsPlugin(),
             quotePlugin(),
             thematicBreakPlugin(),
@@ -150,8 +149,21 @@ export default function MeetForm({ edit = false }) {
             linkDialogPlugin(),
             imagePlugin(),
             markdownShortcutPlugin(),
+            tablePlugin(),
+            codeBlockPlugin({ defaultCodeBlockLanguage: "txt" }),
+            codeMirrorPlugin({
+              codeMirrorExtensions: theme == "dark" ? [oneDark] : [],
+              codeBlockLanguages: {
+                txt: "Plain Text",
+                html: "HTML",
+                css: "CSS",
+                js: "JavaScript",
+                tsx: "TypeScript",
+              },
+            }),
             toolbarPlugin({
               toolbarContents: () => (
+                // <KitchenSinkToolbar />
                 <>
                   <UndoRedo />
                   <BoldItalicUnderlineToggles />

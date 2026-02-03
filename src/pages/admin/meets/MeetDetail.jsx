@@ -1,6 +1,7 @@
 import meetApi from "@/apis/meet.api";
 import KebabMenu from "@/assets/icons/KebabMenu";
 import Throbber from "@/components/misc/Throbber";
+import { useAuth } from "@/contexts/auth";
 import { useClass } from "@/contexts/class";
 import {
   Popover,
@@ -8,33 +9,35 @@ import {
   PopoverPortal,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
-import { useMemo } from "react";
-import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Markdown from "react-markdown";
-import { useNavigate } from "react-router";
-import { Link } from "react-router";
-import { useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+import remarkGfm from "remark-gfm";
 
 export default function MeetDetail() {
   const navigate = useNavigate();
-  const { class: class_, fetchClass } = useClass();
-  const { id: classId, meetId } = useParams();
-  const meet = useMemo(
-    () => class_?.pertemuan?.find((meet) => meet.pertemuan_id == meetId),
-    [class_, meetId],
-  );
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { class: class_ } = useClass();
+  const { meetId } = useParams();
 
-  useEffect(() => {
-    if (class_.kelas_id === null) fetchClass();
-  }, []);
+  const { data: response } = useQuery({
+    queryKey: ["meet", meetId],
+    queryFn: () => meetApi.getById(meetId),
+  });
 
-  const handleDelete = async (id) => {
-    setDeleteLoading(true);
-    const response = await meetApi.delete(id);
-    setDeleteLoading(false);
-    fetchClass();
-    if (response.status == 200) navigate(`/classes/${classId}`);
+  const meet = response?.data;
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => meetApi.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["class", meet.kelas_id] });
+      navigate(`/classes/${meet.kelas_id}`);
+    },
+  });
+
+  const handleDelete = (id) => {
+    deleteMutation.mutate(id);
   };
 
   return (
@@ -43,27 +46,31 @@ export default function MeetDetail() {
       <header>
         <div className="border-surface flex items-start border-b-3">
           <h1 className="flex-1 pb-2 text-4xl">{meet?.judul}</h1>
-          <Popover>
-            <PopoverTrigger className="hover:bg-overlay-md float-right rounded-lg">
-              <KebabMenu className="size-6" />
-            </PopoverTrigger>
-            <PopoverPortal>
-              <PopoverContent className="popover-content">
-                <Link to="edit" className="popover-button">
-                  Edit
-                </Link>
-                <button
-                  onClick={async () => await handleDelete(meet?.pertemuan_id)}
-                  className="popover-button text-red"
-                >
-                  Hapus {deleteLoading && <Throbber />}
-                </button>
-              </PopoverContent>
-            </PopoverPortal>
-          </Popover>
+          {["mentor"].includes(user.role) && (
+            <Popover>
+              <PopoverTrigger className="hover:bg-overlay-md float-right rounded-lg">
+                <KebabMenu className="size-6" />
+              </PopoverTrigger>
+              <PopoverPortal>
+                <PopoverContent className="popover-content">
+                  <Link to="edit" className="popover-button">
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(meet?.pertemuan_id)}
+                    className="popover-button text-red"
+                  >
+                    Hapus {deleteMutation.isPending && <Throbber />}
+                  </button>
+                </PopoverContent>
+              </PopoverPortal>
+            </Popover>
+          )}
         </div>
         <div className="prose prose-sm dark:prose-invert my-4">
-          <Markdown>{meet?.deskripsi_tugas}</Markdown>
+          <Markdown remarkPlugins={[remarkGfm]}>
+            {meet?.deskripsi_tugas}
+          </Markdown>
         </div>
       </header>
       <article>

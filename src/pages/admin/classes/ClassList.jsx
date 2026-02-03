@@ -3,48 +3,28 @@ import Add from "@/assets/icons/Add";
 import ChevronRight from "@/assets/icons/ChevronRight";
 import PageTitle from "@/components/typography/PageTitle";
 import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
-import { useAuth } from "@/contexts/auth";
-import { AxiosError } from "axios";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link, useSearchParams } from "react-router";
 
 export default function ClassList() {
-  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
-  const [totalPage, setTotalPage] = useState(0);
-  const [classes, setClasses] = useState([]);
   const [limit, setLimit] = useState(parseInt(searchParams.get("limit")) || 9);
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  const fetchClasses = async () => {
-    try {
-      setLoading(true);
-      const response = await classApi.getAll({ page, limit });
-      setClasses(response.data.data);
-      setTotalPage(response.data.meta.lastPage);
-    } catch (err) {
-      if (import.meta.env.VITE_ENV == "development") console.error(err);
+  const { data: response, isLoading, error } = useQuery({
+    queryKey: ["classes", { page, limit }],
+    queryFn: () => classApi.getAll({ page, limit }),
+  });
 
-      if (err instanceof AxiosError) {
-        if (err.status) setError(err.response.data?.message);
-        else setError("Terjadi kesalahaan pada server. Mohon coba lagi nanti.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const classes = response?.data?.data ?? [];
+  const totalPage = response?.data?.meta?.lastPage ?? 0;
 
   useEffect(() => {
     setPage(parseInt(searchParams.get("page")) || 1);
     setLimit(parseInt(searchParams.get("limit")) || 9);
   }, [setPage, setLimit, searchParams]);
-
-  useEffect(() => {
-    fetchClasses();
-  }, [setClasses, page, limit]);
 
   return (
     <>

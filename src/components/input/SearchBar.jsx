@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function SearchBar({
   delay = 500,
-  onEmpty = (search) => {},
+  onEmpty = null,
   onInput = (event) => {},
   action = (search) => {},
   containerClassName = "",
@@ -13,8 +13,8 @@ export default function SearchBar({
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (search == "") {
-      onEmpty(search);
+    if (search == "" && onEmpty) {
+      onEmpty();
     } else {
       let debounceTimer = setTimeout(() => action(search), search ? delay : 0);
       return () => clearTimeout(debounceTimer);

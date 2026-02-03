@@ -1,20 +1,18 @@
 import classApi from "@/apis/class.api";
-import fileApi from "@/apis/file.api";
 import KebabMenu from "@/assets/icons/KebabMenu";
 import UserList from "@/components/class/UserList";
 import Throbber from "@/components/misc/Throbber";
 import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useClass } from "@/contexts/class";
 import {
-  Popover,
-  PopoverContent,
-  PopoverPortal,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverPortal,
+    PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { useNavigate } from "react-router";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function ClassDetail() {
   const navigate = useNavigate();

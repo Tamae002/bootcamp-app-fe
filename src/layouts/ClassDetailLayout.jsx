@@ -1,13 +1,15 @@
+import { useAuth } from "@/contexts/auth";
 import { useClass } from "@/contexts/class";
 import { Link } from "react-router";
 import { NavLink, Outlet } from "react-router";
 
 export default function ClassDetailLayout() {
+  const { user } = useAuth();
   const { class: class_ } = useClass();
 
   return (
-    <div className="flex w-full scrollbar-hidden">
-      <section className="p-8 text-pretty flex-1 min-h-screen">
+    <div className="scrollbar-hidden flex w-full">
+      <section className="min-h-screen flex-1 p-8 text-pretty">
         <div className="m-auto flex w-full max-w-5xl flex-col gap-8">
           <Outlet />
         </div>
@@ -33,9 +35,14 @@ export default function ClassDetailLayout() {
         ))}
       </aside>
 
-      <Link to={`/classes/${class_.kelas_id}/meet/create`} className="bg-primary hover:bg-primary-variant border-overlay-md fixed bottom-4 right-6 shadow-lg w-72 rounded-sm border-t-3 px-2 py-4 text-white">
-        + Tambah Pertemuan
-      </Link>
+      {["mentor"].includes(user.role) && (
+        <Link
+          to={`/classes/${class_.kelas_id}/meet/create`}
+          className="bg-primary hover:bg-primary-variant border-overlay-md fixed right-6 bottom-4 w-72 rounded-sm border-t-3 px-2 py-4 text-white shadow-lg"
+        >
+          + Tambah Pertemuan
+        </Link>
+      )}
     </div>
   );
 }

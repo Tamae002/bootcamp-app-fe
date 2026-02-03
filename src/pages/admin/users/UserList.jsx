@@ -1,132 +1,123 @@
 import userApi from "@/apis/user.api";
 import Add from "@/assets/icons/Add";
 import People from "@/assets/icons/People";
+import Person from "@/assets/icons/Person";
 import Warning from "@/assets/icons/Warning";
-import defaultUser from "@/assets/images/user.png";
 import SearchBar from "@/components/input/SearchBar";
 import Throbber from "@/components/misc/Throbber";
+import PageTitle from "@/components/typography/PageTitle";
 import {
-  Dialog,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogPortal,
+    DialogTitle,
 } from "@radix-ui/react-dialog";
 import {
-  Popover,
-  PopoverContent,
-  PopoverPortal,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverPortal,
+    PopoverTrigger,
 } from "@radix-ui/react-popover";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import UserForm from "./UserForm";
-import Person from "@/assets/icons/Person";
 
 export default function UserManagement() {
   const [modal, setModal] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const queryClient = useQueryClient();
 
-  const fetchUsers = async (search = "") => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await userApi.getAll({
-        page: currentPage,
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["users", { page, search }],
+    queryFn: () =>
+      userApi.getAll({
+        page,
         limit: 10,
         search,
-      });
+      }),
+  });
 
-      const data =
-        response.data?.data || response.data?.users || response.data || [];
+  const users = data?.data?.data || data?.data?.users || data?.data || [];
 
-      setUsers(Array.isArray(data) ? data : []);
-    } catch (err) {
-      if (import.meta.env.VITE_ENV === "development") console.error(err);
-
-      if (err instanceof AxiosError) {
-        setError(
-          err.response?.data?.message || "Gagal mengambil data pengguna",
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, [currentPage]);
-
-  const createUser = async (data) => {
-    try {
-      await userApi.createUser({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        role: data.role || "admin",
-      });
-
-      fetchUsers();
-    } catch (err) {
+  const createUserMutation = useMutation({
+    // @ts-ignore
+    mutationFn: ({ name, email, password, role }) =>
+      userApi.createUser({
+        name: name,
+        email: email,
+        password: password,
+        role: role || "admin",
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
       alert("Gagal menambahkan user");
-    }
-  };
+    },
+  });
 
-  const updateUser = async (data) => {
-    try {
-      await userApi.updateUser(selectedUser.user_id, {
-        name: data.name,
-        email: data.email,
-      });
-
-      fetchUsers();
-    } catch (err) {
+  const updateUserMutation = useMutation({
+    // @ts-ignore
+    mutationFn: ({ name, email }) =>
+      userApi.updateUser(selectedUser.user_id, {
+        name,
+        email,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
       alert("Gagal update user");
-    }
-  };
+    },
+  });
 
-  const deleteUser = async () => {
-    try {
-      await userApi.deleteUser(selectedUser.user_id);
-      fetchUsers();
+  const deleteUserMutation = useMutation({
+    mutationFn: () => userApi.deleteUser(selectedUser.user_id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       setModal(null);
       setSelectedUser(null);
-    } catch (err) {
-      console.log(err)
+    },
+    onError: () => {
       alert("Gagal menghapus user");
-    }
+    },
+  });
+
+  const createUser = (data) => {
+    createUserMutation.mutate(data);
+  };
+
+  const updateUser = (data) => {
+    updateUserMutation.mutate(data);
+  };
+
+  const deleteUser = () => {
+    deleteUserMutation.mutate();
   };
 
   return (
     <section className="content-wrapper-wide">
       <div>
-        <div className="mb-3 flex items-center justify-between">
-          <div>
-            <h1 className="mb-1 text-3xl font-normal dark:text-white">
-              Manajemen Peserta
-            </h1>
-          </div>
+        <PageTitle className="flex justify-between">
+          <span>Manajemen Peserta</span>
           {/* <img src={groupIcon} className="mt-1 h-10 w-10" />*/}
           <People className="mt-1 h-10 w-10" />
-        </div>
+        </PageTitle>
 
         <SearchBar
-          onInput={() => setCurrentPage(1)}
-          onEmpty={fetchUsers}
-          action={fetchUsers}
+          onInput={() => setPage(1)}
+          action={setSearch}
           containerClassName="mb-4"
           placeholder="Cari pengguna"
         />
 
-        {error && (
+        {error instanceof AxiosError && (
           <div className="mb-3 rounded-xl bg-red-100 p-3 text-sm text-red-600 dark:bg-red-900/40 dark:text-red-300">
-            {error}
+            {error.response.data.message}
           </div>
         )}
 
@@ -140,7 +131,7 @@ export default function UserManagement() {
             </tr>
           </thead>
           <tbody>
-            {loading && (
+            {isLoading && (
               <tr>
                 <td colSpan={4} className="">
                   <Throbber size="32px" className="m-auto" />
@@ -148,7 +139,7 @@ export default function UserManagement() {
               </tr>
             )}
 
-            {!loading && users.length === 0 && (
+            {!isLoading && users.length === 0 && (
               <tr>
                 <td
                   colSpan={4}
@@ -159,7 +150,7 @@ export default function UserManagement() {
               </tr>
             )}
 
-            {!loading &&
+            {!isLoading &&
               users.map((u, id) => (
                 <tr key={id}>
                   <td
