@@ -310,7 +310,6 @@ export default function UserManagement() {
   );
 }
 
-/* DELETE */
 function DeleteConfirm({ onDelete, onClose }) {
   return (
     <DialogContent className="dialog-content space-y-4 text-center dark:text-white">
@@ -322,7 +321,7 @@ function DeleteConfirm({ onDelete, onClose }) {
         </button>
         <button
           onClick={onClose}
-          className="bg-primary rounded-xl px-6 py-2 text-white"
+          className="button button-primary"
         >
           Batalkan
         </button>
