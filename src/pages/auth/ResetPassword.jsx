@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { AxiosError } from "axios";
 import authApi from "@/apis/auth.api";
+import PasswordInput from "@/components/input/PasswordInput";
 import "@/assets/css/auth/ResetPassword.css";
 
 export default function ResetPassword() {
@@ -75,20 +76,22 @@ export default function ResetPassword() {
           {error && <p className="status error">{error}</p>}
 
           <form className="rp-form" onSubmit={handleSubmit}>
-            <input
-              type="password"
+            <PasswordInput
+              name="new-password"
               placeholder="New Password"
-              className="rp-input"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
+              autoComplete="new-password"
+              className="rp-input"
             />
 
-            <input
-              type="password"
+            <PasswordInput
+              name="confirm-password"
               placeholder="Confirm Password"
-              className="rp-input"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              autoComplete="new-password"
+              className="rp-input"
             />
 
             <button className="rp-btn" disabled={loading}>

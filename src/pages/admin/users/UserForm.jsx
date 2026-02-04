@@ -1,4 +1,5 @@
 import Person from "@/assets/icons/Person";
+import PasswordInput from "@/components/input/PasswordInput";
 import userSchema from "@/schemas/user";
 import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 import { useState } from "react";
@@ -42,12 +43,11 @@ export default function UserForm({
       {!isEdit && (
         <div>
           <label className="text-xs dark:text-gray-300">Password</label>
-          <input
-            type="password"
-            className="input mt-1"
+          <PasswordInput
+            className="mt-1"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
-            placeholder=""
+            autoComplete="new-password"
           />
         </div>
       )}

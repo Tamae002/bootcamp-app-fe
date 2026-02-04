@@ -31,12 +31,15 @@ const API_ENDPOINTS = {
     DELETE: (id) => `/pertemuan/${id}`,
   },
   STATISTICS: {
-    GET: "/dashboard/stats",  // ← INI YANG BENAR!
+    GET: "/dashboard/stats", // ← INI YANG BENAR!
   },
   FILE: {
     UPLOAD: "/api/file/upload",
     GET: (id) => `/api/file/${id}`,
-  }
+  },
+  LINK_PREVIEW: {
+    GET: "/link-preview",
+  },
 };
 
 export default API_ENDPOINTS;

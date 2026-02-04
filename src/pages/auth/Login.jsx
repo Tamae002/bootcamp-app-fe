@@ -1,9 +1,8 @@
 import authApi from "@/apis/auth.api";
-import Visibility from "@/assets/icons/Visibility";
-import VisibilityOff from "@/assets/icons/VisibilityOff";
 import LoginImage from "@/assets/images/login_image.png";
 import Logo from "@/assets/images/logo/logotype.png";
 import LogoDark from "@/assets/images/logo/logotype_dark.png";
+import PasswordInput from "@/components/input/PasswordInput";
 import Throbber from "@/components/misc/Throbber";
 import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
@@ -20,7 +19,6 @@ export default function Login() {
   const { refetchAuthStatus } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -84,27 +82,7 @@ export default function Login() {
               className="input"
             />
           </div>
-          <div className="input">
-            <input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              autoComplete="current-password"
-              className="flex-1"
-            />
-            {showPassword ? (
-              <VisibilityOff
-                className="w-8"
-                onClick={() => setShowPassword(false)}
-              />
-            ) : (
-              <Visibility
-                className="w-8"
-                onClick={() => setShowPassword(true)}
-              />
-            )}
-          </div>
+          <PasswordInput />
           <div className="text-primary-contrast flex justify-between text-sm font-semibold">
             <div className="flex gap-2">
               <input id="remember-me" type="checkbox" name="remember-me" />
