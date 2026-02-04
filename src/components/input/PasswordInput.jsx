@@ -3,7 +3,7 @@ import Visibility from "@/assets/icons/Visibility";
 import VisibilityOff from "@/assets/icons/VisibilityOff";
 
 export default function PasswordInput({
-  value = "",
+  value = null,
   onChange = () => { },
   placeholder = "Password",
   className = "",
