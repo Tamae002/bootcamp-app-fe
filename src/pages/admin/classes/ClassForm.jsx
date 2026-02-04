@@ -51,7 +51,7 @@ export default function ClassForm({ edit = false }) {
     mutationFn: (payload) => classApi.create(payload),
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["classes"] });
-      navigate(`/classes/${response.data.kelas_id}`);
+      navigate(`/classes/${response.data.kelas.kelas_id}`);
     },
     onError: (err) => {
       if (ENV == "development") console.error(err);
@@ -70,6 +70,7 @@ export default function ClassForm({ edit = false }) {
     mutationFn: (payload) => classApi.update(classId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["classes"] });
+      queryClient.invalidateQueries({ queryKey: ["class", classId] });
       navigate(`/classes/${classId}`);
     },
     onError: (err) => {
@@ -94,7 +95,10 @@ export default function ClassForm({ edit = false }) {
 
     const bannerFile = bannerInput.current?.files?.[0];
     if (bannerFile) {
-      const uploadResponse = await fileApi.upload(bannerFile);
+      const uploadResponse = await fileApi.upload({
+        files: bannerFile,
+        nama: `class-banner-${classId}`,
+      });
       uploadedImageUrl = uploadResponse.data.urls[0];
     }
 
