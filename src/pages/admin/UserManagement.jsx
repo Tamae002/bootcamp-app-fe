@@ -61,12 +61,16 @@ export default function UserManagement() {
         name: data.name,
         email: data.email,
         password: data.password,
-        role: data.role,
+        role: data.role.toLowerCase(),
       });
   
       fetchUsers();
     } catch (err) {
-      alert("Gagal menambahkan user");
+      if (err instanceof AxiosError) {
+        alert(err.response?.data?.message || "Gagal menambahkan user");
+      } else {
+        alert("Gagal menambahkan user");
+      }
     }
   };
 
@@ -278,7 +282,7 @@ export default function UserManagement() {
               </button>
               <button
                 onClick={() => setModal("delete")}
-                className="w-full bg-red-600 text-white py-2 rounded-xl"
+                className="w-full bg-gray-500 text-white py-2 rounded-xl"
               >
                 Hapus
               </button>
@@ -323,7 +327,7 @@ function Modal({ children, onClose }) {
       <div className="bg-white rounded-2xl p-6 w-80 relative dark:bg-gray-900">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 dark:text-white"
+          className="absolute right-1.5 top-1.5 dark:text-white"
         >
           ✕
         </button>
@@ -385,19 +389,20 @@ function UserForm({ initial, onSubmit, onClose, isEdit }) {
         </div>
       )}
       
-      <div>
-        <label className="text-xs dark:text-gray-300">Role</label>
-        <select
-          className="mt-1 px-4 py-2 rounded-xl bg-gray-200 w-full text-center dark:bg-gray-800 dark:text-white"
-          value={form.role}
-          onChange={(e) => setForm({ ...form, role: e.target.value })}
-          disabled={isEdit}
-        >
-          <option>Admin</option>
-          <option>Mentor</option>
-          <option>User</option>
-        </select>
-      </div>
+      {!isEdit && (
+        <div>
+          <label className="text-xs dark:text-gray-300">Role</label>
+          <select
+            className="mt-1 px-4 py-2 rounded-xl bg-gray-200 w-full text-center dark:bg-gray-800 dark:text-white"
+            value={form.role}
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
+          >
+            <option>Admin</option>
+            <option>Mentor</option>
+            <option>User</option>
+          </select>
+        </div>
+      )}
 
       <button
         onClick={() => onSubmit(form)}
@@ -425,7 +430,7 @@ function DeleteConfirm({ onDelete, onClose }) {
       <div className="flex gap-3 justify-center">
         <button
           onClick={onDelete}
-          className="bg-red-600 text-white px-6 py-2 rounded-xl"
+          className="bg-gray-300 text-white px-6 py-2 rounded-xl"
         >
           Hapus
         </button>
