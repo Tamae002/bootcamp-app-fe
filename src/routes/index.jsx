@@ -7,6 +7,7 @@ import StudentDashboard from "@/pages/student/Dashboard";
 import { Navigate, Route, Routes } from "react-router";
 import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
+import { useEffect } from "react";
 
 export default function AppRoutes() {
   return (
@@ -31,10 +32,10 @@ function IndexRoute(authContext) {
         <Route index element={<AdminDashboard />} />
       </Route>
     );
-  else if (user.role == "student")
+  else if (user.role == "user")
     return (
       <Route element={<StudentLayout />}>
-        <Route element={<StudentDashboard />} />
+        <Route index element={<StudentDashboard />} />
       </Route>
     );
 }
