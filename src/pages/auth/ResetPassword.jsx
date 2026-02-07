@@ -1,59 +1,60 @@
-import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { AxiosError } from "axios";
+import { useReducer, useState } from "react";
+import { ValidationError } from "yup";
 import authApi from "@/apis/auth.api";
 import PasswordInput from "@/components/input/PasswordInput";
-import "@/assets/css/auth/ResetPassword.css";
+import formDataToJson from "@/lib/formDataToJson";
+import parseYupErrors from "@/lib/parseYupErrors";
+import ObjectReducer from "@/reducers/ObjectReducer";
+import { resetPasswordSchema } from "@/validations/auth.validation";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
-  const { token } = useParams(); // ✅ AMBIL TOKEN DARI URL
+  const { token } = useParams();
 
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, dispatchErrors] = useReducer(ObjectReducer, {});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
-    // ✅ VALIDASI FE
-    if (!newPassword || !confirmPassword) {
-      setError("Password wajib diisi.");
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setError("Password tidak sama.");
-      return;
-    }
+    setLoading(true);
+    dispatchErrors({ type: "clear" });
+    const formData = new FormData(e.target);
+    const parsedFormData = formDataToJson(formData);
 
     try {
-      setLoading(true);
+      resetPasswordSchema.validateSync(parsedFormData, { abortEarly: false });
 
       const response = await authApi.ResetPassword({
         token,
-        newPassword,
-        confirmPassword,
+        newPassword: parsedFormData.newPassword,
+        confirmPassword: parsedFormData.confirmPassword,
       });
 
       if (response.status === 200) {
-        navigate("/login"); // ✅ BERHASIL → LOGIN
+        navigate("/login");
       }
     } catch (err) {
-      if (import.meta.env.VITE_ENV === "development") {
-        console.error(err);
-      }
+      if (import.meta.env.VITE_ENV === "development") console.error(err);
 
-      if (err instanceof AxiosError) {
+      if (err instanceof ValidationError) parseYupErrors(err, dispatchErrors);
+      else if (err instanceof AxiosError) {
         if (err.response?.data?.message) {
-          setError(err.response.data.message);
+          dispatchErrors({
+            type: "set",
+            key: "form",
+            value: err.response.data.message,
+          });
         } else {
-          setError("Terjadi kesalahan pada server.");
+          dispatchErrors({
+            type: "set",
+            key: "form",
+            value: "Terjadi kesalahan pada server.",
+          });
         }
-      } else {
-        setError("Terjadi kesalahan.");
+      } else if (err instanceof Error) {
+        dispatchErrors({ type: "set", key: "form", value: err.message });
       }
     } finally {
       setLoading(false);
@@ -61,40 +62,46 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="rp-root">
-      <div className="scale-wrapper">
-        <div className="rp-card">
-          <h1 className="rp-title">Reset Password</h1>
+    <div className="bg-surface flex min-h-screen w-full items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-background rounded-xl p-8">
+          <h1 className="text-foreground mb-4 text-center text-3xl font-bold">
+            Reset Password
+          </h1>
 
-          <p className="rp-sub">
-            Remember your password?{" "}
-            <Link to="/login" className="rp-login">
-              Login Here.
+          <p className="text-grey mb-8 text-center text-sm">
+            Ingat password Anda?{" "}
+            <Link to="/login" className="text-primary hover:underline">
+              Login disini.
             </Link>
           </p>
 
-          {error && <p className="status error">{error}</p>}
+          {errors?.form && (
+            <p className="bg-red/20 text-red mb-6 rounded-lg px-4 py-2 text-center text-sm">
+              {errors.form}
+            </p>
+          )}
 
-          <form className="rp-form" onSubmit={handleSubmit}>
+          <form noValidate onSubmit={handleSubmit} className="space-y-6">
             <PasswordInput
-              name="new-password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              name="newPassword"
+              label="Password Baru"
+              error={errors?.newPassword}
               autoComplete="new-password"
-              className="rp-input"
             />
 
             <PasswordInput
-              name="confirm-password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              name="confirmPassword"
+              label="Konfirmasi Password"
+              error={errors?.confirmPassword}
               autoComplete="new-password"
-              className="rp-input"
             />
 
-            <button className="rp-btn" disabled={loading}>
+            <button
+              type="submit"
+              className="button button-primary w-full"
+              disabled={loading}
+            >
               {loading ? "Memproses..." : "Reset Password"}
             </button>
           </form>

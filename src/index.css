@@ -54,6 +54,13 @@
         display: none;
     }
 
+    select {
+        appearance: base-select;
+
+        option {
+            @apply bg-background text-foreground;
+        }
+    }
 }
 
 @layer components {
@@ -97,8 +104,40 @@
     }
 
     .input {
-        @apply bg-surface! text-foreground flex h-13 w-full rounded-xl! p-4 text-sm outline-none *:outline-none;
-        appearance: base-select;
+        @apply bg-surface! text-foreground relative flex h-13 w-full items-center gap-4 rounded-xl! p-4 text-sm *:outline-none;
+
+        &:has(textarea) {
+            @apply h-fit;
+        }
+
+        input,
+        select,
+        textarea {
+            @apply flex-1 transition-all;
+        }
+
+        &:has(label) {
+            input,
+            textarea {
+                @apply not-placeholder-shown:translate-y-1;
+            }
+        }
+
+        &.error {
+            @apply outline-red outline;
+        }
+
+        label {
+            @apply bg-surface-variant absolute -top-2 left-3 rounded-full px-4 text-sm leading-snug opacity-100 transition-all peer-placeholder-shown:opacity-0;
+        }
+
+        &.error > label {
+            @apply bg-red;
+        }
+
+        & > .icon {
+            @apply h-5;
+        }
     }
 
     .user-select-container {

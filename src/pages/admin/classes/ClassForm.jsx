@@ -1,6 +1,8 @@
 import classApi from "@/apis/class.api";
 import fileApi from "@/apis/file.api";
 import UserSelect from "@/components/class/UserSelect";
+import Input from "@/components/input/Input";
+import Textarea from "@/components/input/Textarea";
 import Throbber from "@/components/misc/Throbber";
 import { API_BASE_URL, DEFAULT_CLASS_IMAGE, ENV } from "@/constants";
 import { useClass } from "@/contexts/class";
@@ -171,21 +173,20 @@ export default function ClassForm({ edit = false }) {
 
         {error && <p className="text-red text-sm">{error}</p>}
 
-        <input
+        <Input
           ref={classNameInput}
           type="text"
           id="title"
           name="nama_kelas"
-          className="input"
-          placeholder="Judul"
+          label="Judul"
         />
 
-        <textarea
+        <Textarea
           ref={descriptionInput}
           id="description"
           name="deskripsi"
-          className="input h-26 resize-none"
-          placeholder="Deskripsi"
+          className="h-26 resize-none"
+          label="Deskripsi"
         />
 
         <div className="flex gap-8 *:w-full">

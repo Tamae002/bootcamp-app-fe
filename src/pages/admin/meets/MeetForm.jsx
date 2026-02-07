@@ -1,4 +1,5 @@
 import meetApi from "@/apis/meet.api";
+import Input from "@/components/input/Input";
 import Throbber from "@/components/misc/Throbber";
 import { ENV } from "@/constants";
 import { useClass } from "@/contexts/class";
@@ -60,7 +61,7 @@ export default function MeetForm({ edit = false }) {
       descriptionInput.current.setMarkdown(meet.deskripsi_tugas);
       attachmentLinkInput.current.value = meet.link_lampiran;
     }
-  }, [edit, class_]);
+  }, [edit, class_, meet]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,13 +112,13 @@ export default function MeetForm({ edit = false }) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         {error && <p className="text-red text-sm">{error}</p>}
         <div className="flex items-end gap-4">
-          <input
+          <Input
             ref={titleInput}
             type="text"
             id="title"
             name="judul"
-            className="input h-13"
-            placeholder="Judul"
+            containerClassName="flex-1"
+            label="Judul"
             required
           />
 
@@ -163,7 +164,6 @@ export default function MeetForm({ edit = false }) {
             }),
             toolbarPlugin({
               toolbarContents: () => (
-                // <KitchenSinkToolbar />
                 <>
                   <UndoRedo />
                   <BoldItalicUnderlineToggles />
@@ -182,13 +182,12 @@ export default function MeetForm({ edit = false }) {
           ]}
         />
 
-        <input
+        <Input
           ref={attachmentLinkInput}
           type="url"
           id="attachment-link"
           name="link_lampiran"
-          className="input"
-          placeholder="Link Lampiran"
+          label="Link Lampiran"
         />
 
         <button className="button button-primary">
