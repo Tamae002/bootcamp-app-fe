@@ -134,5 +134,4 @@ npm run lint
 ### Git Workflow
 - Never commit secrets or .env files
 - Run `npm run lint` before committing
-- Test changes with `npm run build` before pushing
 - Never use git commit --amend after pushing
