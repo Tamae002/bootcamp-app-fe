@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import searchIcon from "../../assets/icons/search-line.svg";
-import groupIcon from "../../assets/icons/group-line.svg";
+import People from "../../assets/icons/People";
 import errorIcon from "../../assets/icons/error-warning-line.svg";
 import defaultUser from "../../assets/images/user.png";
 import { useTheme } from "@/contexts/theme";
@@ -19,22 +19,41 @@ export default function UserManagement() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [totalPage, setTotalPage] = useState(1);
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
       setError(null);
-
-      const response = await userApi.getAll({ page, limit: 10 });
-
-      const data =
-        response.data?.data ||
-        response.data?.users ||
-        response.data || [];
-
-      setUsers(Array.isArray(data) ? data : []);
+  
+      const response = await userApi.getAll({
+        page,
+        limit: 10,
+        search,
+        role: roleFilter === "all" ? "" : roleFilter,
+      });
+  
+      const res = response.data;
+  
+      const usersData =
+        res?.data?.data ||
+        res?.data?.users ||
+        res?.users ||
+        res?.data ||
+        [];
+  
+        const total =
+        res?.meta?.last_page ||
+        res?.meta?.total_page ||
+        (Array.isArray(usersData) && usersData.length === 10
+          ? page + 1
+          : page);
+      
+  
+      setUsers(Array.isArray(usersData) ? usersData : []);
+      setTotalPage(Number(total) || 1);
     } catch (err) {
-      if (import.meta.env.VITE_ENV === "development") console.error(err);
-
       if (err instanceof AxiosError) {
         setError(
           err.response?.data?.message || "Gagal mengambil data pengguna"
@@ -47,13 +66,7 @@ export default function UserManagement() {
 
   useEffect(() => {
     fetchUsers();
-  }, [page]);
-
-  const filteredUsers = users.filter(
-    (u) =>
-      u.name?.toLowerCase().includes(search.toLowerCase()) ||
-      u.email?.toLowerCase().includes(search.toLowerCase())
-  );
+  }, [page, search, roleFilter]);
 
   const createUser = async (data) => {
     try {
@@ -63,7 +76,7 @@ export default function UserManagement() {
         password: data.password,
         role: data.role.toLowerCase(),
       });
-  
+
       fetchUsers();
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -80,7 +93,7 @@ export default function UserManagement() {
         name: data.name,
         email: data.email,
       });
-  
+
       fetchUsers();
     } catch (err) {
       alert("Gagal update user");
@@ -112,20 +125,49 @@ export default function UserManagement() {
               Pengaturan dan pemeliharaan data pengguna
             </p>
           </div>
-          <img src={groupIcon} className="w-10 h-10 mt-1" />
+          <People className="w-10 h-10 mt-1 text-gray-700 dark:text-white" />
         </div>
 
-        <div className="relative w-full mb-4">
-          <img
-            src={searchIcon}
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 opacity-60"
-          />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search People"
-            className="pl-9 py-2 text-sm rounded-xl w-full bg-gray-200 focus:outline-none dark:bg-gray-800 dark:text-white"
-          />
+        <div className="flex items-center gap-3 mb-4">
+          {/* SEARCH */}
+          <div className="relative flex-1">
+            <img
+              src={searchIcon}
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 opacity-60"
+            />
+            <input
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+              placeholder="Search People"
+              className="pl-9 py-2 text-sm rounded-xl w-full bg-gray-200 focus:outline-none dark:bg-gray-800 dark:text-white"
+            />
+          </div>
+
+          {/* FILTER ROLE */}
+          <div className="relative">
+            <select
+              value={roleFilter}
+              onChange={(e) => {
+                setRoleFilter(e.target.value);
+                setPage(1);
+              }}
+              className="
+                px-4 py-2 pr-8 
+                text-sm rounded-xl 
+                bg-gray-200 cursor-pointer 
+                focus:outline-none
+                dark:bg-gray-800 dark:text-white
+              "
+            >
+              <option value="all">Role</option>
+              <option value="admin">Admin</option>
+              <option value="mentor">Mentor</option>
+              <option value="user">User</option>
+            </select>
+          </div>
         </div>
 
         {error && (
@@ -153,7 +195,7 @@ export default function UserManagement() {
                 </tr>
               )}
 
-              {!loading && filteredUsers.length === 0 && (
+              {!loading && users.length === 0 && (
                 <tr>
                   <td
                     colSpan={4}
@@ -165,7 +207,7 @@ export default function UserManagement() {
               )}
 
               {!loading &&
-                filteredUsers.map((u, id) => (
+                users.map((u, id) => (
                   <tr
                     key={id}
                     className="border-t hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800"
@@ -207,56 +249,59 @@ export default function UserManagement() {
             </tbody>
           </table>
         </div>
-      </div>
-
-      {/* READ PROFILE */}
-      {selectedUser && !modal && (
-        <aside className="fixed right-6 top-14 w-80 bg-white rounded-3xl p-5 z-30 shadow-xl border dark:bg-gray-900 dark:border-gray-800">
+        
+        {/* PAGINATION */}
+        <div className="flex justify-center items-center gap-2 mt-6">
+          {/* PREV */}
           <button
-            onClick={() => setSelectedUser(null)}
-            className="absolute right-4 top-4 dark:text-white"
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+            className="px-3 py-2 rounded-lg bg-white disabled:opacity-40 dark:bg-gray-900 dark:text-white"
           >
-            ✕
+            ‹
           </button>
 
-          <p className="text-sm font-medium mb-3 dark:text-white">
-            Foto Profil
-          </p>
+          {Array.from({ length: 3 }, (_, i) => {
+            let startPage = 1;
 
-          <div className="w-32 h-32 mx-auto rounded-2xl bg-gray-100 flex items-center justify-center mb-4 dark:bg-gray-800">
-            <img
-              src={selectedUser.avatar || defaultUser}
-              className="w-24 h-24 rounded-full"
-            />
-          </div>
+            if (totalPage > 3 && page >= 3) {
+              startPage = page - 1;
+            }
 
-          <div className="space-y-3">
-            {[
-              { label: "Nama", key: "name" },
-              { label: "Email", key: "email" },
-              { label: "Role", key: "role" },
-            ].map((item, i) => (
-              <div key={i}>
-                <label className="text-xs dark:text-gray-300">
-                  {item.label}
-                </label>
-                <div className="mt-1 px-4 py-2 rounded-xl bg-gray-200 text-center font-medium dark:bg-gray-800 dark:text-white">
-                  {selectedUser[item.key]}
-                </div>
-              </div>
-            ))}
+            const currentPage = startPage + i;
 
-            <div>
-              <label className="text-xs dark:text-gray-300">Badge</label>
-              <div className="mt-1 px-4 py-2 rounded-xl bg-gray-200 text-center font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300">
-                {selectedUser.role}
-              </div>
-            </div>
-          </div>
-        </aside>
-      )}
+            if (currentPage > totalPage) return null;
 
-      {/* ADD */}
+            return (
+              <button
+                key={currentPage}
+                onClick={() => setPage(currentPage)}
+                className={`px-4 py-2 rounded-lg text-sm
+                  ${
+                    page === currentPage
+                      ? "bg-primary text-white"
+                      : "bg-white text-gray-700 hover:bg-gray-100"
+                  }
+                  dark:bg-gray-900 dark:text-white
+                `}
+              >
+                {currentPage}
+              </button>
+            );
+          })}
+
+          {/* NEXT */}
+          <button
+            disabled={page === totalPage}
+            onClick={() => setPage((p) => p + 1)}
+            className="px-3 py-2 rounded-lg bg-white disabled:opacity-40 dark:bg-gray-900 dark:text-white"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+
+      {/* ADD BUTTON */}
       <button
         onClick={() => {
           setSelectedUser(null);
@@ -384,11 +429,10 @@ function UserForm({ initial, onSubmit, onClose, isEdit }) {
             className="mt-1 px-4 py-2 rounded-xl bg-gray-200 w-full text-center focus:outline-none dark:bg-gray-800 dark:text-white"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
-            placeholder=""
           />
         </div>
       )}
-      
+
       {!isEdit && (
         <div>
           <label className="text-xs dark:text-gray-300">Role</label>
@@ -430,7 +474,7 @@ function DeleteConfirm({ onDelete, onClose }) {
       <div className="flex gap-3 justify-center">
         <button
           onClick={onDelete}
-          className="bg-gray-300 text-white px-6 py-2 rounded-xl"
+          className="bg-gray-500 text-white px-6 py-2 rounded-xl"
         >
           Hapus
         </button>
