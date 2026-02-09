@@ -91,7 +91,7 @@ export default function MeetDetail() {
 
   return (
     <>
-      <title>{`${meet?.judul} | ${class_.nama_kelas} | Geeksfarm`}</title>
+      <title>{`${meet?.judul} | ${class_?.nama_kelas} | Geeksfarm`}</title>
       <header>
         <div className="border-surface flex items-start border-b-3">
           <h1 className="flex-1 pb-2 text-4xl">{meet?.judul}</h1>

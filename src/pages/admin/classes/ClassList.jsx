@@ -47,7 +47,7 @@ export default function ClassList() {
               >
                 <figure>
                   <img
-                    src={API_BASE_URL + class_.gambar || DEFAULT_CLASS_IMAGE}
+                    src={API_BASE_URL + class_?.gambar || DEFAULT_CLASS_IMAGE}
                     className="aspect-7/3 w-full rounded-2xl object-cover"
                     onError={(e) => {
                       // @ts-ignore
@@ -58,13 +58,13 @@ export default function ClassList() {
                 <div className="p-3 text-pretty">
                   <h3 className="text-xl">
                     <Link
-                      to={`/classes/${class_.kelas_id}`}
+                      to={`/classes/${class_?.kelas_id}`}
                       className="after:absolute after:inset-0 after:z-1"
                     >
-                      {class_.nama_kelas}
+                      {class_?.nama_kelas}
                     </Link>
                   </h3>
-                  <p className="text-justify text-xs">{class_.deskripsi}</p>
+                  <p className="text-justify text-xs">{class_?.deskripsi}</p>
                 </div>
               </article>
             ))

@@ -1,7 +1,7 @@
 import Person from "@/assets/icons/Person";
 import Input from "@/components/input/Input";
 import PasswordInput from "@/components/input/PasswordInput";
-import Select from "@/components/input/Select";
+import SelectInput from "@/components/input/SelectInput";
 import userSchema from "@/schemas/user";
 import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 import { useState } from "react";
@@ -59,7 +59,7 @@ export default function UserForm({
       )}
 
       {!isEdit && (
-        <Select
+        <SelectInput
           label="Role"
           className="mt-1"
           options={roleOptions}

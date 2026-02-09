@@ -1,105 +1,114 @@
 import meetApi from "@/apis/meet.api";
+import DateInput from "@/components/input/DateInput";
 import Input from "@/components/input/Input";
+import MarkdownEditor from "@/components/meet/MarkdownEditor";
 import Throbber from "@/components/misc/Throbber";
 import { ENV } from "@/constants";
 import { useClass } from "@/contexts/class";
 import { useTheme } from "@/contexts/theme";
-import formDataToJson from "@/lib/formDataToJson";
-import { oneDark } from "@codemirror/theme-one-dark";
-import {
-  BlockTypeSelect,
-  BoldItalicUnderlineToggles,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  CodeToggle,
-  CreateLink,
-  headingsPlugin,
-  HighlightToggle,
-  imagePlugin,
-  InsertCodeBlock,
-  InsertImage,
-  InsertTable,
-  InsertThematicBreak,
-  linkDialogPlugin,
-  linkPlugin,
-  listsPlugin,
-  ListsToggle,
-  markdownShortcutPlugin,
-  MDXEditor,
-  quotePlugin,
-  tablePlugin,
-  thematicBreakPlugin,
-  toolbarPlugin,
-  UndoRedo,
-} from "@mdxeditor/editor";
+import { meetSchema } from "@/validations/meet.validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
+/** @import {MeetFormData} from "@/schemas/meet" */
 
 export default function MeetForm({ edit = false }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { theme } = useTheme();
 
   const { id: classId, meetId } = useParams();
-  const { class: class_, fetchClass } = useClass();
+  const { class: class_ } = useClass();
   const meet = useMemo(
-    () => class_.pertemuan.find((meet) => meet.pertemuan_id == meetId),
-    [meetId, class_],
+    () => class_?.pertemuan.find((meet) => meet.pertemuan_id == meetId),
+    [meetId, class_]
   );
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const titleInput = useRef(null);
-  const dateInput = useRef(null);
   const descriptionInput = useRef(null);
-  const attachmentLinkInput = useRef(null);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(meetSchema),
+    defaultValues: {
+      judul: "",
+      tanggal: null,
+      link_lampiran: "",
+    },
+  });
 
   useEffect(() => {
-    if (edit) {
-      console.dir(class_);
-      titleInput.current.value = meet.judul;
-      dateInput.current.value = meet.tanggal.slice(0, 10);
-      descriptionInput.current.setMarkdown(meet.deskripsi_tugas);
-      attachmentLinkInput.current.value = meet.link_lampiran;
+    if (edit && meet) {
+      reset({
+        judul: meet.judul || "",
+        tanggal: meet.tanggal ? new Date(meet.tanggal) : null,
+        link_lampiran: meet.link_lampiran || "",
+      });
+      descriptionInput.current?.setMarkdown(meet.deskripsi_tugas || "");
     }
-  }, [edit, class_, meet]);
+  }, [edit, meet, reset]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    const formData = new FormData(e.target);
-    const parsedFormData = formDataToJson(formData);
-
-    try {
-      const payload = {
-        kelas_id: classId,
-        judul: parsedFormData.judul,
-        tanggal:
-          parsedFormData.tanggal === ""
-            ? null
-            : new Date(parsedFormData.tanggal).toISOString(),
-        deskripsi_tugas: descriptionInput.current.getMarkdown(),
-        link_lampiran: parsedFormData.link_lampiran,
-      };
-
-      let newMeetId = meetId;
-      if (edit) {
-        await meetApi.update(meetId, payload);
-      } else {
-        const response = await meetApi.create(payload);
-        newMeetId = response.data.pertemuan_id;
-      }
-      fetchClass();
-      navigate(`/classes/${classId}/meet/${newMeetId}`);
-    } catch (err) {
+  const createMutation = useMutation({
+    /** @param {MeetFormData} payload */
+    mutationFn: (payload) => meetApi.create(payload),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ["class", classId] });
+      navigate(`/classes/${classId}/meet/${response.data.pertemuan_id}`);
+    },
+    onError: (err) => {
       if (ENV == "development") console.error(err);
 
       if (err instanceof AxiosError) {
-        if (err.status) setError(err.response.data?.message);
-        else setError("Terjadi kesalahan pada server. Mohon  coba lagi nanti.");
+        if (err.response?.status) setError(err.response.data?.message);
+        else setError("Terjadi kesalahan pada server. Mohon coba lagi nanti.");
+      } else {
+        setError("Terjadi kesalahan yang tidak terduga.");
       }
-    } finally {
-      setLoading(false);
+    },
+  });
+
+  const updateMutation = useMutation({
+    /** @param {MeetFormData} payload */
+    mutationFn: (payload) => meetApi.update(meetId, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["class", classId] });
+      navigate(`/classes/${classId}/meet/${meetId}`);
+    },
+    onError: (err) => {
+      if (ENV == "development") console.error(err);
+
+      if (err instanceof AxiosError) {
+        if (err.response?.status) setError(err.response.data?.message);
+        else setError("Terjadi kesalahan pada server. Mohon coba lagi nanti.");
+      } else {
+        setError("Terjadi kesalahan yang tidak terduga.");
+      }
+    },
+  });
+
+  const onSubmit = (data) => {
+    setError("");
+
+    /** @type {MeetFormData} */
+    const payload = {
+      kelas_id: classId,
+      judul: data.judul,
+      tanggal: data.tanggal ? data.tanggal.toISOString() : null,
+      deskripsi_tugas: descriptionInput.current?.getMarkdown() || "",
+      link_lampiran: data.link_lampiran,
+    };
+
+    if (edit) {
+      updateMutation.mutate(payload);
+    } else {
+      createMutation.mutate(payload);
     }
   };
 
@@ -109,89 +118,54 @@ export default function MeetForm({ edit = false }) {
       <header className="mb-8">
         <h1 className="h-rule text-5xl">{edit ? "Edit" : "Buat"} Pertemuan</h1>
       </header>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
         {error && <p className="text-red text-sm">{error}</p>}
         <div className="flex items-end gap-4">
           <Input
-            ref={titleInput}
             type="text"
             id="title"
-            name="judul"
-            containerClassName="flex-1"
             label="Judul"
-            required
+            error={errors.judul?.message}
+            containerClassName="flex-1"
+            {...register("judul")}
           />
 
-          <div>
-            <label htmlFor="start-date">Tanggal</label>
-            <input
-              ref={dateInput}
-              id="date"
-              name="tanggal"
-              type="date"
-              className="input"
-              required
-            />
-          </div>
+          <Controller
+            name="tanggal"
+            control={control}
+            render={({ field }) => (
+              <DateInput
+                label="Tanggal & Waktu"
+                selected={field.value}
+                onChange={field.onChange}
+                timeInputLabel="Waktu"
+                showTimeInput
+                error={errors.tanggal?.message}
+              />
+            )}
+          />
         </div>
 
-        <MDXEditor
+        <MarkdownEditor
           ref={descriptionInput}
           markdown=""
           placeholder="Deskripsi"
           className={theme == "dark" ? "dark dark-theme" : ""}
           contentEditableClassName="prose prose-sm dark:prose-invert max-w-full"
-          plugins={[
-            headingsPlugin({ allowedHeadingLevels: [1, 2, 3, 4] }),
-            listsPlugin(),
-            quotePlugin(),
-            thematicBreakPlugin(),
-            linkPlugin(),
-            linkDialogPlugin(),
-            imagePlugin(),
-            markdownShortcutPlugin(),
-            tablePlugin(),
-            codeBlockPlugin({ defaultCodeBlockLanguage: "txt" }),
-            codeMirrorPlugin({
-              codeMirrorExtensions: theme == "dark" ? [oneDark] : [],
-              codeBlockLanguages: {
-                txt: "Plain Text",
-                html: "HTML",
-                css: "CSS",
-                js: "JavaScript",
-                tsx: "TypeScript",
-              },
-            }),
-            toolbarPlugin({
-              toolbarContents: () => (
-                <>
-                  <UndoRedo />
-                  <BoldItalicUnderlineToggles />
-                  <CodeToggle />
-                  <HighlightToggle />
-                  <ListsToggle />
-                  <BlockTypeSelect />
-                  <CreateLink />
-                  <InsertImage />
-                  <InsertTable />
-                  <InsertThematicBreak />
-                  <InsertCodeBlock />
-                </>
-              ),
-            }),
-          ]}
+          isDark={theme == "dark"}
         />
 
         <Input
-          ref={attachmentLinkInput}
           type="url"
           id="attachment-link"
-          name="link_lampiran"
           label="Link Lampiran"
+          error={errors.link_lampiran?.message}
+          {...register("link_lampiran")}
         />
 
         <button className="button button-primary">
-          {loading && <Throbber />} {edit ? "Simpan" : "Buat Pertemuan"}
+          {(createMutation.isPending || updateMutation.isPending) && <Throbber />}{" "}
+          {edit ? "Simpan" : "Buat Pertemuan"}
         </button>
       </form>
     </div>

@@ -28,10 +28,10 @@ export default function ClassDetail() {
 
   return (
     <>
-      <title>{`${class_.nama_kelas} | Geeksfarm`}</title>
+      <title>{`${class_?.nama_kelas} | Geeksfarm`}</title>
       <figure>
         <img
-          src={API_BASE_URL + class_.gambar || DEFAULT_CLASS_IMAGE}
+          src={API_BASE_URL + class_?.gambar || DEFAULT_CLASS_IMAGE}
           className="aspect-7/3 w-full rounded-md object-cover"
           onError={(e) => {
             // @ts-ignore
@@ -42,7 +42,7 @@ export default function ClassDetail() {
       <header>
         <div className="flex items-start">
           <h1 className="mb-4 flex-1 text-5xl">
-            {class_.nama_kelas || <Skeleton />}
+            {class_?.nama_kelas || <Skeleton />}
           </h1>
           <Popover>
             <PopoverTrigger className="hover:bg-overlay-md float-right rounded-lg">
@@ -54,7 +54,7 @@ export default function ClassDetail() {
                   Edit
                 </Link>
                 <button
-                  onClick={async () => await handleDelete(class_.kelas_id)}
+                  onClick={async () => await handleDelete(class_?.kelas_id)}
                   className="popover-button text-red"
                 >
                   Hapus {deleteLoading && <Throbber />}
@@ -63,10 +63,10 @@ export default function ClassDetail() {
             </PopoverPortal>
           </Popover>
         </div>
-        <p>{class_.deskripsi || <Skeleton />}</p>
+        <p>{class_?.deskripsi || <Skeleton />}</p>
       </header>
-      <UserList title="Pengajar" users={class_.list_mentor} />
-      <UserList title="Siswa" users={class_.list_peserta} />
+      <UserList title="Pengajar" users={class_?.list_mentor} />
+      <UserList title="Siswa" users={class_?.list_peserta} />
     </>
   );
 }

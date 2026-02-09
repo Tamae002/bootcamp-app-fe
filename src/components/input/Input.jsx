@@ -9,7 +9,7 @@ import React from "react";
  * @property {string} [props.containerClassName=""] - Additional classes for the container (div) element
  * @property {string} [props.fieldsetClassName=""] - Additional classes for the fieldset wrapper element
  * @property {string} [props.error=null] - Error message to display below the input
- * @property {React.RefObject} [props.ref] - Ref object for the input element
+ * @property {React.Ref<HTMLInputElement>} [props.ref] - Ref object for the input element
  * @property {React.ReactNode} [children] - Element to be rendered inside the fieldset next to the input fields
 
  * @param {React.InputHTMLAttributes<HTMLInputElement> & InputProps} props - Component props
@@ -38,7 +38,7 @@ export default function Input({
         {label && <label>{label}</label>}
         {children}
       </fieldset>
-      {error && <p className="text-red px-4 pt-1 text-sm">{error}</p>}
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

@@ -31,7 +31,7 @@ const API_ENDPOINTS = {
     DELETE: (id) => `/pertemuan/${id}`,
   },
   STATISTICS: {
-    GET: "/dashboard/stats", // ← INI YANG BENAR!
+    GET: "/dashboard",
   },
   FILE: {
     UPLOAD: "/api/file/upload",

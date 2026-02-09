@@ -15,19 +15,22 @@ export default function ClassDetailLayout() {
         </div>
       </section>
 
-      <aside className="scrollbar-hidden bg-surface-subtle relative flex w-80 flex-col overflow-y-scroll pb-24">
+      <aside
+        className="scrollbar-hidden bg-surface-subtle relative flex w-80
+          flex-col overflow-y-scroll pb-24"
+      >
         <NavLink
-          to={`/classes/${class_.kelas_id}`}
+          to={`/classes/${class_?.kelas_id}`}
           end
           className="navlink px-2 py-4"
         >
           <h3>Halaman Depan</h3>
         </NavLink>
 
-        {class_.pertemuan.map((meet, id) => (
+        {class_?.pertemuan.map((meet, id) => (
           <NavLink
             key={id}
-            to={`/classes/${class_.kelas_id}/meet/${meet.pertemuan_id}`}
+            to={`/classes/${class_?.kelas_id}/meet/${meet.pertemuan_id}`}
             className="navlink border-overlay-md border-t-3 px-2 py-4"
           >
             <h3>{meet.judul}</h3>
@@ -37,8 +40,10 @@ export default function ClassDetailLayout() {
 
       {["mentor"].includes(user.role) && (
         <Link
-          to={`/classes/${class_.kelas_id}/meet/create`}
-          className="bg-primary hover:bg-primary-variant border-overlay-md fixed right-6 bottom-4 w-72 rounded-sm border-t-3 px-2 py-4 text-white shadow-lg"
+          to={`/classes/${class_?.kelas_id}/meet/create`}
+          className="button button-primary border-overlay-md fixed
+            right-4 bottom-4 w-72 rounded-sm border-t-3 px-2 py-4 text-white
+            shadow-lg text-center"
         >
           + Tambah Pertemuan
         </Link>

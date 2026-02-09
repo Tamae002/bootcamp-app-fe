@@ -4,7 +4,7 @@ import ReactSelect from "react-select";
 /**
  * Reusable select component with floating label, matching Input component styling.
  *
- * @typedef {object} SelectProps
+ * @typedef {object} SelectInputProps
  * @property {string} [props.label] - Label text displayed above the input
  * @property {Array<{value: string, label: string}>} props.options - Options for the select
  * @property {string} [props.className=""] - Additional CSS classes for styling
@@ -15,10 +15,10 @@ import ReactSelect from "react-select";
  * @property {boolean} [props.disabled=false] - Whether the select is disabled
  * @property {string} [props.placeholder] - Placeholder text
  *
- * @param {SelectProps} props - Component props
+ * @param {SelectInputProps} props - Component props
  * @returns {React.JSX.Element}
  */
-export default function Select({
+export default function SelectInput({
   label = null,
   options = [],
   className = "",
@@ -80,7 +80,7 @@ export default function Select({
         />
         {label && <label>{label}</label>}
       </fieldset>
-      {error && <p className="text-red px-4 pt-1 text-sm">{error}</p>}
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

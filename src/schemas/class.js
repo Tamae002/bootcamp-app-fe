@@ -1,16 +1,25 @@
-import userSchema from "./user";
-import meetSchema from "./meet";
+/**
+ * @typedef {object} Class
+ * @prop {string} kelas_id
+ * @prop {string} nama_kelas
+ * @prop {string} gambar
+ * @prop {string} deskripsi
+ * @prop {string} tanggal_mulai
+ * @prop {string} tanggal_berakhir
+ * @prop {any[]} list_mentor
+ * @prop {any[]} list_peserta
+ * @prop {any[]} pertemuan
+ */
 
-const classSchema = {
-  kelas_id: null,
-  nama_kelas: "",
-  gambar: "",
-  deskripsi: "",
-  tanggal_mulai: "",
-  tanggal_berakhir: "",
-  list_mentor: [],
-  list_peserta: [],
-  pertemuan: []
-}
+/**
+ * @typedef {object} ClassFormData
+ * @prop {string} nama_kelas
+ * @prop {string} gambar
+ * @prop {string} deskripsi
+ * @prop {string} tanggal_mulai
+ * @prop {string} tanggal_berakhir
+ * @prop {any[]} added_users
+ * @prop {any[]} removed_users
+ */
 
-export default classSchema;
+export { }

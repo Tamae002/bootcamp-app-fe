@@ -1,5 +1,4 @@
 import classApi from "@/apis/class.api";
-import classSchema from "@/schemas/class";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { ClassContext } from "./ClassContext";
@@ -13,7 +12,7 @@ export function ClassProvider({ children }) {
     enabled: !!classId,
   });
 
-  const class_ = data?.data?.kelas ?? classSchema;
+  const class_ = data?.data?.kelas;
 
   const contextValue = {
     class: class_,
