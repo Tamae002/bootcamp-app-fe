@@ -1,0 +1,22 @@
+@custom-variant dark (&:is(.dark *));
+
+/* Mode gelap */
+.dark {
+    --grey: var(--color-neutral-400);
+    --red: #E74C3C;
+
+    /* Warna berdasarkan fungsi */
+    --background: var(--darker-black);
+    --foreground: var(--white);
+    --primary: var(--purple);
+    --primary-contrast: var(--teal);
+    --surface: var(--color-neutral-800);
+    --surface-variant: var(--color-neutral-600);
+    --surface-subtle: var(--dark-black);
+    --overlay-sm: rgba(255, 255, 255, 8%);
+    --overlay-md: rgba(255, 255, 255, 15%);
+
+    /* mdxeditor */
+    --baseText: var(--white);
+    --basePageBg: var(--surface);
+}

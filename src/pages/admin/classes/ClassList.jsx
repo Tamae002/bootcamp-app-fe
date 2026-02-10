@@ -1,0 +1,98 @@
+import classApi from "@/apis/class.api";
+import Add from "@/assets/icons/Add";
+import ChevronRight from "@/assets/icons/ChevronRight";
+import PageTitle from "@/components/typography/PageTitle";
+import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import { Link, useSearchParams } from "react-router";
+
+export default function ClassList() {
+  const [searchParams] = useSearchParams();
+  const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
+  const [limit, setLimit] = useState(parseInt(searchParams.get("limit")) || 9);
+
+  const { data: response, isLoading, error } = useQuery({
+    queryKey: ["classes", { page, limit }],
+    queryFn: () => classApi.getAll({ page, limit }),
+  });
+
+  const classes = response?.data?.data ?? [];
+  const totalPage = response?.data?.meta?.lastPage ?? 0;
+
+  useEffect(() => {
+    setPage(parseInt(searchParams.get("page")) || 1);
+    setLimit(parseInt(searchParams.get("limit")) || 9);
+  }, [setPage, setLimit, searchParams]);
+
+  return (
+    <>
+      <title>Manajemen Kelas | Geeksfarm</title>
+      <div className="content-wrapper-wide">
+        <PageTitle>Manajemen Kelas</PageTitle>
+
+        <section className="grid grid-cols-1 gap-x-12 gap-y-8 pb-24 md:grid-cols-3">
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, id) => (
+              <Skeleton key={id} className="h-80" borderRadius={16} />
+            ))
+          ) : classes.length < 1 ? (
+            <p>Tidak ada kelas</p>
+          ) : (
+            classes.map((class_, id) => (
+              <article
+                key={id}
+                className="bg-surface relative m-auto h-80 w-full max-w-140 rounded-3xl p-2 shadow-sm transition-all hover:scale-105 hover:shadow-md"
+              >
+                <figure>
+                  <img
+                    src={API_BASE_URL + class_.gambar || DEFAULT_CLASS_IMAGE}
+                    className="aspect-7/3 w-full rounded-2xl object-cover"
+                    onError={(e) => {
+                      // @ts-ignore
+                      e.target.src = DEFAULT_CLASS_IMAGE;
+                    }}
+                  />
+                </figure>
+                <div className="p-3 text-pretty">
+                  <h3 className="text-xl">
+                    <Link
+                      to={`/classes/${class_.kelas_id}`}
+                      className="after:absolute after:inset-0 after:z-1"
+                    >
+                      {class_.nama_kelas}
+                    </Link>
+                  </h3>
+                  <p className="text-justify text-xs">{class_.deskripsi}</p>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+
+        <section className="bg-surface-subtle fixed right-8 bottom-8 z-20 flex gap-2 rounded-xl p-2 shadow-2xl">
+          {page - 1 > 0 && (
+            <Link
+              to={`?page=${page - 1}`}
+              className="button-primary size-10 rounded-xl"
+            >
+              <ChevronRight className="-scale-100" />
+            </Link>
+          )}
+          {page + 1 <= totalPage && (
+            <Link
+              to={`?page=${page + 1}`}
+              className="button-primary size-10 rounded-xl text-white"
+            >
+              <ChevronRight />
+            </Link>
+          )}
+          <Link to="create" className="button-primary size-10 rounded-xl">
+            <Add />
+          </Link>
+        </section>
+      </div>
+    </>
+  );
+}
