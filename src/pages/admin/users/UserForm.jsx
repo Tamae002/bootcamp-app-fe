@@ -1,5 +1,7 @@
 import Person from "@/assets/icons/Person";
+import Input from "@/components/input/Input";
 import PasswordInput from "@/components/input/PasswordInput";
+import Select from "@/components/input/Select";
 import userSchema from "@/schemas/user";
 import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 import { useState } from "react";
@@ -12,8 +14,15 @@ export default function UserForm({
 }) {
   const [form, setForm] = useState(initial || userSchema);
 
+  const roleOptions = [
+    { value: "admin", label: "Admin" },
+    { value: "mentor", label: "Mentor" },
+    { value: "user", label: "Siswa" },
+  ];
+
+
   return (
-    <DialogContent className="dialog-content space-y-3 dark:text-white">
+    <DialogContent className="dialog-content flex flex-col gap-4 space-y-3 dark:text-white">
       <DialogTitle className="text-center font-bold">
         {isEdit ? "Edit Peserta" : "Tambah Peserta"}
       </DialogTitle>
@@ -30,42 +39,35 @@ export default function UserForm({
         { label: "Nama", key: "name" },
         { label: "Email", key: "email" },
       ].map((item, i) => (
-        <div key={i}>
-          <label className="text-xs dark:text-gray-300">{item.label}</label>
-          <input
-            className="input mt-1"
-            value={form[item.key]}
-            onChange={(e) => setForm({ ...form, [item.key]: e.target.value })}
-          />
-        </div>
+        <Input
+          key={i}
+          label={item.label}
+          className="mt-1"
+          value={form[item.key]}
+          onChange={(e) => setForm({ ...form, [item.key]: e.target.value })}
+        />
       ))}
 
       {!isEdit && (
-        <div>
-          <label className="text-xs dark:text-gray-300">Password</label>
-          <PasswordInput
-            className="mt-1"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            autoComplete="new-password"
-          />
-        </div>
+        <PasswordInput
+          label="Password"
+          className="mt-1"
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          autoComplete="new-password"
+        />
       )}
 
       {!isEdit && (
-        <div>
-          <label className="text-xs dark:text-gray-300">Role</label>
-          <select
-            className="input mt-1"
-            value={form.role}
-            onChange={(e) => setForm({ ...form, role: e.target.value })}
-            disabled={isEdit}
-          >
-            <option value="admin">Admin</option>
-            <option value="mentor">Mentor</option>
-            <option value="user">User</option>
-          </select>
-        </div>
+        <Select
+          label="Role"
+          className="mt-1"
+          options={roleOptions}
+          value={form.role}
+          onChange={(value) => setForm({ ...form, role: value })}
+          disabled={isEdit}
+          placeholder="Pilih role..."
+        />
       )}
 
       <button

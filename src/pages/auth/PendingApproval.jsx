@@ -1,33 +1,29 @@
-import '@/assets/css/auth/PendingApproval.css';
-import { useNavigate } from "react-router";
-import pendingIcon from '@/assets/images/hourglass.png';
+import Hourglass from "@/assets/icons/Hourglass";
+import { Link } from "react-router";
 
 export default function PendingApproval() {
-  const navigate = useNavigate();
-
   return (
-    <div className="pending-root">
-      <div className="scale-wrapper">
-        <div className="pending-card">
-          <h1 className="pending-title">Menunggu<br />Persetujuan</h1>
+    <div className="bg-surface flex min-h-screen w-full items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-background flex flex-col items-center rounded-xl p-8 text-center">
+          <h1 className="text-foreground mb-6 text-3xl font-bold">
+            Menunggu
+            <br />
+            Persetujuan
+          </h1>
 
-          <img
-            src={pendingIcon}
-            alt="approval icon"
-            className="pending-icon"
-          />
+          <div className="mb-6">
+            <Hourglass className="text-foreground h-32 w-32" />
+          </div>
 
-          <p className="pending-sub">
-            Kami telah mengirimkan email verifikasi kepada anda. Silakan periksa email anda unuk petunjuk selanjutnya.
+          <p className="text-grey mb-8 text-sm">
+            Kami telah mengirimkan email verifikasi kepada Anda. Silakan periksa
+            email Anda untuk petunjuk selanjutnya.
           </p>
 
-          <button
-            className="pending-btn"
-            onClick={() => navigate("/")}
-          >
+          <Link to="/" className="button button-primary w-full">
             Pergi ke beranda
-          </button>
-
+          </Link>
         </div>
       </div>
     </div>

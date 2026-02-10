@@ -77,3 +77,61 @@ npm run lint
 - User-facing UI text: Indonesian (e.g., "Password wajib diisi")
 - Code comments: English
 - Variable/function names: English
+
+## Extended Guidelines
+
+### Form Handling
+- Use `formDataToJson()` to convert FormData to plain object
+- Use `parseYupErrors()` to convert Yup errors to field-level errors
+- Use `ObjectReducer` for form error state management
+- Validate with `schema.validateSync(data, { abortEarly: false })`
+
+### Context Pattern
+- Create context folder: `/src/contexts/[name]/`
+- Files: `index.js`, `[Name]Context.js`, `[Name]Provider.jsx`, `use[Name].js`
+- Export provider from `index.js` for clean imports
+- Use `use[Name]()` hook to consume context
+
+### Schema Objects
+- Define default objects in `/src/schemas/[name].js`
+- Use for initializing form state
+- Contains empty/default values for all fields
+
+### Reducer Patterns
+- `ObjectReducer`: For managing object state (form errors, data)
+- `ArrayReducer`: For managing array state (lists, selections)
+- Actions: `{ type: "set", field: "name", value: "John" }` or `{ type: "clear" }`
+
+### Icon Components
+- Store in `/src/assets/icons/`
+- Use PascalCase naming
+- Return SVG elements directly
+- Accept standard props (className, onClick, etc.)
+
+### State Management
+- Use React hooks (useState, useReducer) for local state
+- Use Context API for shared state (auth, theme, class data)
+- Use TanStack Query (React Query) for server state
+
+### Async Patterns
+- Use async/await for API calls
+- Always handle loading states with Throbber component
+- Handle errors with try-catch and appropriate user feedback
+- Use finally block for cleanup (setLoading(false))
+
+### Routing
+- Use React Router v7
+- Route files in `/src/routes/`
+- Protected routes use `ProtectedRoute` layout component
+- Lazy load routes when appropriate
+
+### CSS Organization
+- Global styles in `/src/assets/css/`
+- Theme variables in `/src/assets/css/themes/`
+- Component-specific styles in `/src/assets/css/components/`
+- Use Tailwind's `@layer` for custom utilities
+
+### Git Workflow
+- Never commit secrets or .env files
+- Run `npm run lint` before committing
+- Never use git commit --amend after pushing

@@ -1,49 +1,61 @@
 import authApi from "@/apis/auth.api";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import Input from "@/components/input/Input";
+import formDataToJson from "@/lib/formDataToJson";
+import parseYupErrors from "@/lib/parseYupErrors";
+import ObjectReducer from "@/reducers/ObjectReducer";
+import { forgotPasswordSchema } from "@/validations/auth.validation";
 import { AxiosError } from "axios";
-import "@/assets/css/auth/ForgotPassword.css";
+import { useReducer, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { ValidationError } from "yup";
 
-
-export default function ForgotPassword({ onBack }) {
+export default function ForgotPassword() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const [errors, dispatchErrors] = useReducer(ObjectReducer, {});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
-    if (!validateEmail(email)) {
-      setError("Masukkan email yang valid.");
-      return;
-    }
+    setLoading(true);
+    dispatchErrors({ type: "clear" });
+    const formData = new FormData(e.target);
+    const parsedFormData = formDataToJson(formData);
 
     try {
-      setLoading(true);
+      forgotPasswordSchema.validateSync(parsedFormData, { abortEarly: false });
 
-      const response = await authApi.forgotPassword({ email });
+      const response = await authApi.forgotPassword({
+        email: parsedFormData.email,
+      });
 
       if (response.status === 200) {
         navigate("/pending-approval");
       }
     } catch (err) {
-      if (import.meta.env.VITE_ENV === "development") {
-        console.error(err);
-      }
+      if (import.meta.env.VITE_ENV === "development") console.error(err);
 
-      if (err instanceof AxiosError) {
+      if (err instanceof ValidationError) parseYupErrors(err, dispatchErrors);
+      else if (err instanceof AxiosError) {
         if (err.response?.status === 404)
-          setError("Email tidak terdaftar.");
+          dispatchErrors({
+            type: "set",
+            key: "form",
+            value: "Email tidak terdaftar.",
+          });
         else if (err.response?.data?.message)
-          setError(err.response.data.message);
+          dispatchErrors({
+            type: "set",
+            key: "form",
+            value: err.response.data.message,
+          });
         else
-          setError("Terjadi kesalahan pada server.");
-      } else {
-        setError("Terjadi kesalahan.");
+          dispatchErrors({
+            type: "set",
+            key: "form",
+            value: "Terjadi kesalahan pada server.",
+          });
+      } else if (err instanceof Error) {
+        dispatchErrors({ type: "set", key: "form", value: err.message });
       }
     } finally {
       setLoading(false);
@@ -51,33 +63,40 @@ export default function ForgotPassword({ onBack }) {
   };
 
   return (
-    <div className="forgot-root">
-      <div className="scale-wrapper">
-        <div className="forgot-card">
-          <h1 className="forgot-title">Forgot Password?</h1>
+    <div className="bg-surface flex min-h-screen w-full items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-background rounded-xl p-8">
+          <h1 className="text-foreground mb-4 text-center text-3xl font-bold">
+            Lupa Password?
+          </h1>
 
-          <p className="forgot-sub">
-  Remember your password?
-  <Link to="/login" className="back-login">
-    {" Login Here."}
-  </Link>
-</p>
+          <p className="text-grey mb-8 text-center text-sm">
+            Ingat password Anda?{" "}
+            <Link to="/login" className="text-primary hover:underline">
+              Login disini.
+            </Link>
+          </p>
 
+          {errors?.form && (
+            <p className="bg-red/20 text-red mb-6 rounded-lg px-4 py-2 text-center text-sm">
+              {errors.form}
+            </p>
+          )}
 
-          {error && <p className="status error">{error}</p>}
-
-          <form onSubmit={handleSubmit} className="forgot-form">
-            <input
+          <form noValidate onSubmit={handleSubmit} className="space-y-6">
+            <Input
+              name="email"
+              label="Alamat Email"
               type="email"
-              placeholder="Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="forgot-input"
-              required
+              error={errors?.email}
             />
 
-            <button type="submit" className="forgot-btn" disabled={loading}>
-              {loading ? "Mengirim..." : "Send Email"}
+            <button
+              type="submit"
+              className="button button-primary w-full"
+              disabled={loading}
+            >
+              {loading ? "Mengirim..." : "Kirim Email"}
             </button>
           </form>
         </div>
