@@ -1,5 +1,6 @@
 import classApi from "@/apis/class.api";
 import fileApi from "@/apis/file.api";
+import Delete from "@/assets/icons/Delete";
 import UserSelect from "@/components/class/UserSelect";
 import DateInput from "@/components/input/DateInput";
 import Input from "@/components/input/Input";
@@ -25,10 +26,13 @@ export default function ClassForm({ edit = false }) {
   const [bannerPreviewUrl, setBannerPreviewUrl] = useState(null);
   const updateBannerPreview = useEffectEvent((banner) => {
     setBannerPreviewUrl(banner);
-  })
+  });
   const bannerInput = useRef(null);
 
-  const defaultMentorCount = useMemo(() => class_?.list_mentor?.length || 0, [class_]);
+  const defaultMentorCount = useMemo(
+    () => class_?.list_mentor?.length || 0,
+    [class_],
+  );
 
   const {
     register,
@@ -42,6 +46,8 @@ export default function ClassForm({ edit = false }) {
     defaultValues: {
       nama_kelas: "",
       deskripsi: "",
+      tanggal_mulai: new Date(),
+      tanggal_berakhir: null,
       mentor_added_users: [],
       mentor_removed_users: [],
       student_added_users: [],
@@ -57,7 +63,9 @@ export default function ClassForm({ edit = false }) {
         tanggal_mulai: new Date(class_?.tanggal_mulai),
         tanggal_berakhir: new Date(class_?.tanggal_berakhir),
       });
-      updateBannerPreview(class_?.gambar ? API_BASE_URL + class_?.gambar : null);
+      updateBannerPreview(
+        class_?.gambar ? API_BASE_URL + class_?.gambar : null,
+      );
     }
   }, [edit, class_, reset]);
 
@@ -69,6 +77,13 @@ export default function ClassForm({ edit = false }) {
         setBannerPreviewUrl(e.target.result);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveBanner = () => {
+    setBannerPreviewUrl(null);
+    if (bannerInput.current) {
+      bannerInput.current.value = "";
     }
   };
 
@@ -114,7 +129,7 @@ export default function ClassForm({ edit = false }) {
   const onSubmit = async (data) => {
     setError("");
 
-    let uploadedImageUrl = class_?.gambar || DEFAULT_CLASS_IMAGE;
+    let uploadedImageUrl = "";
 
     const bannerFile = bannerInput.current?.files?.[0];
     if (bannerFile) {
@@ -130,14 +145,13 @@ export default function ClassForm({ edit = false }) {
       nama_kelas: data.nama_kelas,
       deskripsi: data.deskripsi,
       gambar: uploadedImageUrl,
-      tanggal_mulai: data.tanggal_mulai ? data.tanggal_mulai.toISOString() : null,
+      tanggal_mulai: data.tanggal_mulai
+        ? data.tanggal_mulai.toISOString()
+        : null,
       tanggal_berakhir: data.tanggal_berakhir
         ? data.tanggal_berakhir.toISOString()
         : null,
-      added_users: [
-        ...data.mentor_added_users,
-        ...data.student_added_users,
-      ],
+      added_users: [...data.mentor_added_users, ...data.student_added_users],
       removed_users: [
         ...data.mentor_removed_users,
         ...data.student_removed_users,
@@ -149,7 +163,7 @@ export default function ClassForm({ edit = false }) {
     } else {
       createMutation.mutate(payload);
     }
-  }
+  };
 
   return (
     <div className="content-wrapper">
@@ -170,13 +184,27 @@ export default function ClassForm({ edit = false }) {
             }}
           />
 
-          <label
-            htmlFor="banner"
-            className="button button-primary absolute top-1/2 left-1/2 hidden
-              -translate-1/2 font-bold shadow-2xl group-hover:block"
+          <div
+            className="absolute top-1/2 left-1/2 hidden -translate-1/2 flex-row
+              gap-2 group-hover:flex"
           >
-            Upload Gambar
-          </label>
+            <label
+              htmlFor="banner"
+              className="button button-primary font-bold shadow-2xl"
+            >
+              Upload Gambar
+            </label>
+            {bannerPreviewUrl && (
+              <button
+                type="button"
+                onClick={handleRemoveBanner}
+                className="button button-danger font-bold shadow-2xl"
+              >
+                <Delete className="h-5 w-5" />
+                Hapus
+              </button>
+            )}
+          </div>
           <input
             ref={bannerInput}
             type="file"
@@ -258,7 +286,10 @@ export default function ClassForm({ edit = false }) {
                     removedUsers={removedField.value}
                     onAddedUsersChange={addedField.onChange}
                     onRemovedUsersChange={removedField.onChange}
-                    error={errors.mentor_added_users?.message || errors.mentor_removed_users?.message}
+                    error={
+                      errors.mentor_added_users?.message ||
+                      errors.mentor_removed_users?.message
+                    }
                   />
                 )}
               />

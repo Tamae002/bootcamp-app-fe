@@ -1,6 +1,7 @@
 import { linkPreviewApi } from "@/apis/link_preview.api";
 import meetApi from "@/apis/meet.api";
 import userApi from "@/apis/user.api";
+import Calendar from "@/assets/icons/Calendar";
 import Download from "@/assets/icons/Download";
 import KebabMenu from "@/assets/icons/KebabMenu";
 import Person from "@/assets/icons/Person";
@@ -8,6 +9,7 @@ import Throbber from "@/components/misc/Throbber";
 import { API_BASE_URL } from "@/constants";
 import { useAuth } from "@/contexts/auth";
 import { useClass } from "@/contexts/class";
+import formatDate from "@/lib/formatDate";
 import {
   Popover,
   PopoverContent,
@@ -97,7 +99,9 @@ export default function MeetDetail() {
           <h1 className="flex-1 pb-2 text-4xl">{meet?.judul}</h1>
           {["mentor"].includes(user.role) && (
             <Popover>
-              <PopoverTrigger className="hover:bg-overlay-md float-right rounded-lg">
+              <PopoverTrigger
+                className="hover:bg-overlay-md float-right rounded-lg"
+              >
                 <KebabMenu className="size-6" />
               </PopoverTrigger>
               <PopoverPortal>
@@ -116,11 +120,23 @@ export default function MeetDetail() {
             </Popover>
           )}
         </div>
+        <div className="bg-surface mt-4 flex items-center gap-3 rounded-lg p-3">
+          <Calendar className="text-primary size-5" />
+          <div className="flex flex-col">
+            <span className="text-foreground/60 text-xs">
+              Tanggal Pertemuan
+            </span>
+            <span className="text-sm font-medium">
+              {formatDate(meet?.tanggal)}
+            </span>
+          </div>
+        </div>
         <div
           ref={descriptionRef}
-          className={`prose prose-sm dark:prose-invert my-4 overflow-hidden transition-all duration-300 ${
-            !isExpanded && shouldCollapse ? "max-h-[60vh]" : "max-h-none"
-          }`}
+          className={`prose prose-sm dark:prose-invert my-4 overflow-hidden
+            transition-all duration-300 ${
+              !isExpanded && shouldCollapse ? "max-h-[60vh]" : "max-h-none"
+            }`}
         >
           <Markdown remarkPlugins={[remarkGfm]}>
             {meet?.deskripsi_tugas}
@@ -129,10 +145,15 @@ export default function MeetDetail() {
         {shouldCollapse && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-primary hover:text-primary-variant relative -mt-2 w-full text-sm font-medium transition-colors"
+            className="text-primary hover:text-primary-variant relative -mt-2
+              w-full text-sm font-medium transition-colors"
           >
             {!isExpanded && (
-              <div className="from-background pointer-events-none absolute w-full bottom-[calc(100%+16px)] h-16 bg-linear-to-t to-transparent" />
+              <div
+                className="from-background pointer-events-none absolute
+                  bottom-[calc(100%+16px)] h-16 w-full bg-linear-to-t
+                  to-transparent"
+              />
             )}
             {isExpanded ? "Sembunyikan" : "Baca selengkapnya"}
           </button>
@@ -142,7 +163,9 @@ export default function MeetDetail() {
             href={linkPreview.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-surface hover:border-primary/50 mt-4 flex items-center gap-4 rounded-xl border-2 border-transparent p-4 transition-colors"
+            className="bg-surface hover:border-primary/50 mt-4 flex items-center
+              gap-4 rounded-xl border-2 border-transparent p-4
+              transition-colors"
           >
             {linkPreview.image && (
               <img
@@ -152,7 +175,8 @@ export default function MeetDetail() {
                     : new URL(linkPreview.image, linkPreview.url).href
                 }
                 alt={linkPreview.title}
-                className="bg-surface-variant h-20 w-32 shrink-0 rounded-lg object-cover"
+                className="bg-surface-variant h-20 w-32 shrink-0 rounded-lg
+                  object-cover"
               />
             )}
             <div className="min-w-0 flex-1">
@@ -201,7 +225,10 @@ export default function MeetDetail() {
                         className="size-10 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="bg-primary/20 flex size-10 items-center justify-center rounded-full">
+                      <div
+                        className="bg-primary/20 flex size-10 items-center
+                          justify-center rounded-full"
+                      >
                         <Person className="text-primary size-5" />
                       </div>
                     )}
@@ -225,7 +252,9 @@ export default function MeetDetail() {
                   <a
                     href={API_BASE_URL + jawaban.file_path}
                     download
-                    className="bg-primary hover:bg-primary-variant inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white"
+                    className="bg-primary hover:bg-primary-variant inline-flex
+                      items-center gap-2 rounded-lg px-3 py-2 text-sm
+                      font-medium text-white"
                   >
                     <Download className="size-4" />
                     Unduh File
@@ -236,11 +265,7 @@ export default function MeetDetail() {
                     Nilai: {jawaban.nilai}
                   </span>
                   <span className="text-foreground/60 text-xs">
-                    {new Date(jawaban.createdAt).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
+                    {formatDate(jawaban.createdAt, { showTime: false })}
                   </span>
                 </div>
               </div>

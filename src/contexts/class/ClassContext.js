@@ -11,16 +11,4 @@ import { createContext } from "react";
  */
 
 /** @type {React.Context<ClassContextValue>} */
-export const ClassContext = createContext({
-  class: {
-    kelas_id: null,
-    nama_kelas: "",
-    deskripsi: "",
-    gambar: "",
-    list_mentor: [],
-    list_peserta: [],
-    pertemuan: [],
-    tanggal_berakhir: "",
-    tanggal_mulai: ""
-  }
-});
+export const ClassContext = createContext({});

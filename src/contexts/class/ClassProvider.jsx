@@ -12,7 +12,17 @@ export function ClassProvider({ children }) {
     enabled: !!classId,
   });
 
-  const class_ = data?.data?.kelas;
+  const class_ = data?.data?.kelas ?? {
+      kelas_id: null,
+      nama_kelas: "",
+      deskripsi: "",
+      gambar: "",
+      list_mentor: [],
+      list_peserta: [],
+      pertemuan: [],
+      tanggal_berakhir: "",
+      tanggal_mulai: "",
+    };
 
   const contextValue = {
     class: class_,
