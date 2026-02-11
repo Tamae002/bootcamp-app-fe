@@ -1,5 +1,7 @@
 import userApi from "@/apis/user.api";
 import Add from "@/assets/icons/Add";
+import ChevronLeft from "@/assets/icons/ChevronLeft";
+import ChevronRight from "@/assets/icons/ChevronRight";
 import People from "@/assets/icons/People";
 import Person from "@/assets/icons/Person";
 import Warning from "@/assets/icons/Warning";
@@ -7,21 +9,22 @@ import SearchBar from "@/components/input/SearchBar";
 import Throbber from "@/components/misc/Throbber";
 import PageTitle from "@/components/typography/PageTitle";
 import {
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogPortal,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
 } from "@radix-ui/react-dialog";
 import {
-    Popover,
-    PopoverContent,
-    PopoverPortal,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverPortal,
+  PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";
+import ReactPaginate from "react-paginate";
 import UserForm from "./UserForm";
 
 export default function UserManagement() {
@@ -42,6 +45,7 @@ export default function UserManagement() {
   });
 
   const users = data?.data?.data || data?.data?.users || data?.data || [];
+  const totalPage = data?.data?.meta?.lastPage ?? 0;
 
   const createUserMutation = useMutation({
     // @ts-ignore
@@ -116,7 +120,10 @@ export default function UserManagement() {
         />
 
         {error instanceof AxiosError && (
-          <div className="mb-3 rounded-xl bg-red-100 p-3 text-sm text-red-600 dark:bg-red-900/40 dark:text-red-300">
+          <div
+            className="mb-3 rounded-xl bg-red-100 p-3 text-sm text-red-600
+              dark:bg-red-900/40 dark:text-red-300"
+          >
             {error.response.data.message}
           </div>
         )}
@@ -168,14 +175,20 @@ export default function UserManagement() {
                     <span className="font-medium">{u.name}</span>
                   </td>
                   <td className="text-center">
-                    <span className="bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-semibold">
+                    <span
+                      className="bg-primary/10 text-primary rounded-full px-3
+                        py-1 text-xs font-semibold"
+                    >
                       {u.role}
                     </span>
                   </td>
                   <td className="text-center">{u.email}</td>
                   <td className="text-right">
                     <Popover>
-                      <PopoverTrigger className="bg-surface hover:bg-overlay-sm rounded-lg px-3 py-1">
+                      <PopoverTrigger
+                        className="bg-surface hover:bg-overlay-sm rounded-lg
+                          px-3 py-1"
+                      >
                         •••
                       </PopoverTrigger>
                       <PopoverPortal>
@@ -210,7 +223,10 @@ export default function UserManagement() {
 
       {/* READ PROFILE */}
       {selectedUser && !modal && (
-        <aside className="fixed top-14 right-6 z-30 w-80 rounded-3xl border bg-white p-5 shadow-xl dark:border-gray-800 dark:bg-gray-900">
+        <aside
+          className="fixed top-14 right-6 z-30 w-80 rounded-3xl border bg-white
+            p-5 shadow-xl dark:border-gray-800 dark:bg-gray-900"
+        >
           <button
             onClick={() => setSelectedUser(null)}
             className="absolute top-4 right-4 dark:text-white"
@@ -222,7 +238,10 @@ export default function UserManagement() {
             Foto Profil
           </p>
 
-          <div className="mx-auto mb-4 flex h-32 w-32 items-center justify-center rounded-2xl bg-gray-100 dark:bg-gray-800">
+          <div
+            className="mx-auto mb-4 flex h-32 w-32 items-center justify-center
+              rounded-2xl bg-gray-100 dark:bg-gray-800"
+          >
             {selectedUser.gambar ? (
               <img src={selectedUser.gambar} className="size-24 rounded-full" />
             ) : (
@@ -240,7 +259,10 @@ export default function UserManagement() {
                 <label className="text-xs dark:text-gray-300">
                   {item.label}
                 </label>
-                <div className="mt-1 rounded-xl bg-gray-200 px-4 py-2 text-center font-medium dark:bg-gray-800 dark:text-white">
+                <div
+                  className="mt-1 rounded-xl bg-gray-200 px-4 py-2 text-center
+                    font-medium dark:bg-gray-800 dark:text-white"
+                >
                   {selectedUser[item.key]}
                 </div>
               </div>
@@ -248,7 +270,10 @@ export default function UserManagement() {
 
             <div>
               <label className="text-xs dark:text-gray-300">Badge</label>
-              <div className="mt-1 rounded-xl bg-gray-200 px-4 py-2 text-center font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+              <div
+                className="mt-1 rounded-xl bg-gray-200 px-4 py-2 text-center
+                  font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+              >
                 {selectedUser.role}
               </div>
             </div>
@@ -256,16 +281,47 @@ export default function UserManagement() {
         </aside>
       )}
 
-      {/* ADD */}
-      <button
-        onClick={() => {
-          setSelectedUser(null);
-          setModal("create");
-        }}
-        className="button-primary fixed right-6 bottom-6 z-40 h-14 w-14 rounded-full p-3"
+      {/* ADD BUTTON & PAGINATION */}
+      <section
+        className="bg-surface-subtle fixed right-8 bottom-8 left-8 z-20 flex
+          flex-wrap items-center justify-between gap-4 rounded-xl p-3 shadow-2xl
+          md:left-auto md:w-fit"
       >
-        <Add />
-      </button>
+        <ReactPaginate
+          previousLabel={<ChevronLeft className="h-5 w-5" />}
+          nextLabel={<ChevronRight className="h-5 w-5" />}
+          breakLabel="..."
+          pageCount={totalPage}
+          marginPagesDisplayed={1}
+          pageRangeDisplayed={2}
+          onPageChange={({ selected }) => {
+            setPage(selected + 1);
+          }}
+          forcePage={page - 1}
+          containerClassName="pagination-container"
+          pageClassName="pagination-page"
+          previousClassName="pagination-previous"
+          nextClassName="pagination-next"
+          activeClassName="selected"
+          disabledClassName="disabled"
+          renderOnZeroPageCount={null}
+        />
+
+        <div className="bg-surface h-8 w-px" />
+
+        <button
+          onClick={() => {
+            setSelectedUser(null);
+            setModal("create");
+          }}
+          className="button-primary flex items-center gap-2 rounded-xl px-5
+            py-2.5 text-sm font-medium transition-all hover:scale-105
+            hover:shadow-lg"
+        >
+          <Add className="h-5 w-5" />
+          <span>Tambah Pengguna</span>
+        </button>
+      </section>
 
       <Dialog
         open={modal}
@@ -312,17 +368,16 @@ export default function UserManagement() {
 
 function DeleteConfirm({ onDelete, onClose }) {
   return (
-    <DialogContent className="dialog-content space-y-4 text-center dark:text-white">
+    <DialogContent
+      className="dialog-content space-y-4 text-center dark:text-white"
+    >
       <Warning className="mx-auto h-16 w-16" />
       <DialogTitle>Apakah anda yakin ingin menghapus data ini?</DialogTitle>
       <div className="bg-op flex justify-center gap-3">
         <button onClick={onDelete} className="button button-danger">
           Hapus
         </button>
-        <button
-          onClick={onClose}
-          className="button button-primary"
-        >
+        <button onClick={onClose} className="button button-primary">
           Batalkan
         </button>
       </div>

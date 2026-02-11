@@ -33,6 +33,9 @@ const API_ENDPOINTS = {
   STATISTICS: {
     GET: "/dashboard",
   },
+  HOME: {
+    GET: "/home",
+  },
   FILE: {
     UPLOAD: "/api/file/upload",
     GET: (id) => `/api/file/${id}`,

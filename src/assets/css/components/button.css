@@ -1,19 +1,63 @@
 .button {
-    @apply flex cursor-pointer items-center justify-center gap-2 rounded-xl px-8 py-2 transition-all;
+  @apply flex cursor-pointer items-center justify-center gap-2 rounded-xl px-8 py-2 transition-all;
 }
 
 .button-primary {
-    @apply bg-primary hover:bg-primary/80 text-white;
+  @apply bg-primary hover:bg-primary/80 text-white;
 }
 
 .button-danger {
-    @apply bg-red hover:bg-red/80 text-white;
+  @apply bg-red hover:bg-red/80 text-white;
 }
 
 .button-outline-primary {
-    @apply bg-transparent outline-primary outline-2 text-primary;
+  @apply outline-primary text-primary bg-transparent outline-2;
 
-    &:hover {
-        @apply bg-primary text-white;
-    }
+  &:hover {
+    @apply bg-primary text-white;
+  }
+}
+
+.button-primary {
+  @apply bg-primary hover:bg-primary/80 text-white;
+}
+
+.button-danger {
+  @apply bg-red hover:bg-red/80 text-white;
+}
+
+.button-outline-primary {
+  @apply outline-primary text-primary bg-transparent outline-2;
+
+  &:hover {
+    @apply bg-primary text-white;
+  }
+}
+
+.pagination-container {
+  @apply flex items-center gap-2;
+
+  .pagination-page,
+  .pagination-previous,
+  .pagination-next {
+    @apply flex h-10 w-10 items-center justify-center rounded-xl transition-all;
+  }
+
+  .pagination-page {
+    @apply bg-surface hover:bg-surface-subtle;
+  }
+
+  .pagination-page.selected {
+    @apply bg-primary hover:bg-primary/80 text-white;
+  }
+
+  .pagination-previous,
+  .pagination-next {
+    @apply bg-primary hover:bg-primary/80 text-white;
+  }
+
+  .pagination-previous.disabled,
+  .pagination-next.disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
 }
