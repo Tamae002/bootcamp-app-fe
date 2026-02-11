@@ -45,13 +45,13 @@ export default function UserManagement() {
   });
 
   const users = data?.data?.data || data?.data?.users || data?.data || [];
-  const totalPage = data?.data?.meta?.lastPage ?? 0;
+  const totalPage = data?.data?.meta?.totalPages ?? 0;
 
   const createUserMutation = useMutation({
     // @ts-ignore
     mutationFn: ({ name, email, password, role }) =>
       userApi.createUser({
-        name: name,
+        name: totalPages,
         email: email,
         password: password,
         role: role || "admin",
@@ -281,12 +281,8 @@ export default function UserManagement() {
         </aside>
       )}
 
-      {/* ADD BUTTON & PAGINATION */}
-      <section
-        className="bg-surface-subtle fixed right-8 bottom-8 left-8 z-20 flex
-          flex-wrap items-center justify-between gap-4 rounded-xl p-3 shadow-2xl
-          md:left-auto md:w-fit"
-      >
+      {/* PAGINATION */}
+      <section className="mt-6 flex items-center justify-center">
         <ReactPaginate
           previousLabel={<ChevronLeft className="h-5 w-5" />}
           nextLabel={<ChevronRight className="h-5 w-5" />}
@@ -302,26 +298,26 @@ export default function UserManagement() {
           pageClassName="pagination-page"
           previousClassName="pagination-previous"
           nextClassName="pagination-next"
+          breakClassName="pagination-break"
           activeClassName="selected"
           disabledClassName="disabled"
           renderOnZeroPageCount={null}
         />
-
-        <div className="bg-surface h-8 w-px" />
-
-        <button
-          onClick={() => {
-            setSelectedUser(null);
-            setModal("create");
-          }}
-          className="button-primary flex items-center gap-2 rounded-xl px-5
-            py-2.5 text-sm font-medium transition-all hover:scale-105
-            hover:shadow-lg"
-        >
-          <Add className="h-5 w-5" />
-          <span>Tambah Pengguna</span>
-        </button>
       </section>
+
+      {/* ADD BUTTON - FAB */}
+      <button
+        onClick={() => {
+          setSelectedUser(null);
+          setModal("create");
+        }}
+        className="button-primary fixed right-6 bottom-6 z-40 flex h-14 w-14
+          items-center justify-center rounded-full p-3 shadow-lg transition-all
+          hover:scale-110 hover:shadow-xl"
+        aria-label="Tambah Pengguna"
+      >
+        <Add className="h-6 w-6" />
+      </button>
 
       <Dialog
         open={modal}

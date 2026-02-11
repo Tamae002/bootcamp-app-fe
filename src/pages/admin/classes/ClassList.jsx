@@ -2,6 +2,7 @@ import classApi from "@/apis/class.api";
 import Add from "@/assets/icons/Add";
 import ChevronLeft from "@/assets/icons/ChevronLeft";
 import ChevronRight from "@/assets/icons/ChevronRight";
+import SearchBar from "@/components/input/SearchBar";
 import PageTitle from "@/components/typography/PageTitle";
 import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
@@ -15,14 +16,15 @@ export default function ClassList() {
   const [searchParams] = useSearchParams();
   const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
   const [limit, setLimit] = useState(parseInt(searchParams.get("limit")) || 9);
+  const [search, setSearch] = useState(searchParams.get("search") || "");
 
   const {
     data: response,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["classes", { page, limit }],
-    queryFn: () => classApi.getAll({ page, limit }),
+    queryKey: ["classes", { page, limit, search }],
+    queryFn: () => classApi.getAll({ page, limit, search }),
   });
 
   const classes = response?.data?.data ?? [];
@@ -31,13 +33,22 @@ export default function ClassList() {
   useEffect(() => {
     setPage(parseInt(searchParams.get("page")) || 1);
     setLimit(parseInt(searchParams.get("limit")) || 9);
-  }, [setPage, setLimit, searchParams]);
+    setSearch(searchParams.get("search") || "");
+  }, [setPage, setLimit, setSearch, searchParams]);
 
   return (
     <>
       <title>Manajemen Kelas | Geeksfarm</title>
       <div className="content-wrapper-wide">
         <PageTitle>Manajemen Kelas</PageTitle>
+
+        <SearchBar
+          onInput={() => setPage(1)}
+          action={(value) => navigate(`?page=1&search=${value}`)}
+          onEmpty={() => navigate(`?page=1`)}
+          containerClassName="mb-6"
+          placeholder="Cari kelas"
+        />
 
         <section
           className="grid grid-cols-1 gap-x-12 gap-y-8 pb-24 md:grid-cols-3"

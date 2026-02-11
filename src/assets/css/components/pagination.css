@@ -1,0 +1,32 @@
+.pagination-container {
+  @apply flex items-center gap-2;
+}
+
+.pagination-page,
+.pagination-previous,
+.pagination-next,
+.pagination-break {
+  @apply flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl transition-all;
+}
+
+.pagination-page {
+  @apply bg-surface hover:bg-surface-subtle;
+}
+
+.pagination-page.selected {
+  @apply bg-primary hover:bg-primary/80 text-white;
+}
+
+.pagination-previous,
+.pagination-next {
+  @apply bg-primary hover:bg-primary/80 text-white;
+}
+
+.pagination-previous.disabled,
+.pagination-next.disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.pagination-break {
+  @apply text-foreground cursor-default;
+}
