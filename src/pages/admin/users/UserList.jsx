@@ -26,6 +26,7 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import UserForm from "./UserForm";
+import { API_BASE_URL } from "@/constants";
 
 export default function UserManagement() {
   const [modal, setModal] = useState(null);
@@ -74,10 +75,11 @@ export default function UserManagement() {
 
   const updateUserMutation = useMutation({
     // @ts-ignore
-    mutationFn: ({ name, email }) =>
+    mutationFn: ({ name, email, gambar }) =>
       userApi.updateUser(selectedUser.user_id, {
         name,
         email,
+        gambar,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -183,7 +185,7 @@ export default function UserManagement() {
                     }}
                   >
                     {u.gambar ? (
-                      <img src={u.gambar} className="size-8 rounded-full" />
+                      <img src={API_BASE_URL + u.gambar} className="size-8 rounded-full object-cover" />
                     ) : (
                       <Person className="size-8" />
                     )}

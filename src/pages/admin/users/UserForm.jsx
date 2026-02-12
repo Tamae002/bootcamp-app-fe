@@ -1,8 +1,12 @@
+import fileApi from "@/apis/file.api";
+import Camera from "@/assets/icons/Camera";
+import Delete from "@/assets/icons/Delete";
 import Person from "@/assets/icons/Person";
 import Input from "@/components/input/Input";
 import PasswordInput from "@/components/input/PasswordInput";
 import SelectInput from "@/components/input/SelectInput";
 import Throbber from "@/components/misc/Throbber";
+import { API_BASE_URL } from "@/constants";
 import userSchema from "@/schemas/user";
 import {
   createUserSchema,
@@ -10,7 +14,7 @@ import {
 } from "@/validations/user.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function UserForm({
@@ -26,6 +30,12 @@ export default function UserForm({
     { value: "mentor", label: "Mentor" },
     { value: "user", label: "Siswa" },
   ];
+
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null);
+  const updatePhotoPreview = useEffectEvent((photo) => {
+    setPhotoPreviewUrl(photo);
+  });
+  const photoInput = useRef(null);
 
   const validationSchema = isEdit ? updateUserSchema : createUserSchema;
 
@@ -43,7 +53,26 @@ export default function UserForm({
 
   useEffect(() => {
     reset(initial);
+    updatePhotoPreview(initial?.gambar ? API_BASE_URL + initial.gambar : null);
   }, [initial, reset]);
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPhotoPreviewUrl(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setPhotoPreviewUrl(null);
+    if (photoInput.current) {
+      photoInput.current.value = "";
+    }
+  };
 
   const watchedValues = watch();
   const errorRef = useRef(null);
@@ -55,8 +84,24 @@ export default function UserForm({
     }
   }, [error]);
 
-  const handleFormSubmit = (data) => {
-    onSubmit(data);
+  const handleFormSubmit = async (data) => {
+    let uploadedImageUrl = "";
+
+    const photoFile = photoInput.current?.files?.[0];
+    if (photoFile) {
+      const uploadResponse = await fileApi.upload({
+        files: photoFile,
+        nama: `user-photo-${data.user_id || Date.now()}`,
+      });
+      uploadedImageUrl = uploadResponse.data.urls[0];
+    }
+
+    const payload = {
+      ...data,
+      gambar: uploadedImageUrl || data.gambar,
+    };
+
+    onSubmit(payload);
   };
 
   return (
@@ -82,14 +127,57 @@ export default function UserForm({
           </div>
         )}
 
-        <div
-          className="mx-auto flex size-24 items-center justify-center
-            rounded-2xl bg-gray-100 dark:bg-gray-800"
-        >
-          {watchedValues?.gambar ? (
-            <img src={watchedValues.gambar} className="size-16 rounded-full" />
-          ) : (
-            <Person className="size-16" />
+        <div className="flex flex-col items-center gap-3">
+          <figure
+            className="group relative flex size-28 items-center justify-center
+              overflow-hidden rounded-full bg-gray-100 shadow-md
+              dark:bg-gray-800"
+          >
+            {photoPreviewUrl ? (
+              <img
+                src={photoPreviewUrl}
+                className="size-full object-cover"
+                alt="Preview"
+              />
+            ) : (
+              <Person className="size-14 text-gray-400 dark:text-gray-500" />
+            )}
+            <div
+              className="absolute inset-0 flex items-center justify-center
+                bg-black/40 opacity-0 transition-opacity duration-200
+                group-hover:opacity-100"
+            >
+              <label
+                htmlFor="photo"
+                className="bg-primary flex cursor-pointer items-center gap-1.5
+                  rounded-full px-3 py-1.5 text-xs font-medium text-white
+                  shadow-lg transition-transform hover:scale-105
+                  active:scale-95"
+              >
+                <Camera className="h-3.5 w-3.5" />
+                Ubah
+              </label>
+            </div>
+            <input
+              ref={photoInput}
+              type="file"
+              name="gambar"
+              id="photo"
+              accept="image/*"
+              className="hidden"
+              onChange={handlePhotoChange}
+            />
+          </figure>
+          {photoPreviewUrl && (
+            <button
+              type="button"
+              onClick={handleRemovePhoto}
+              className="flex items-center gap-1.5 text-xs text-red-500
+                transition-colors hover:text-red-600"
+            >
+              <Delete className="h-3.5 w-3.5" />
+              Hapus foto
+            </button>
           )}
         </div>
 

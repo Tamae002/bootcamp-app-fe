@@ -262,7 +262,7 @@ export default function MeetDetail() {
                 </div>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="text-lg font-semibold">
-                    Nilai: {jawaban.nilai}
+                    {jawaban.nilai ? `Nilai: ${jawaban.nilai}` : "Belum dinilai"}
                   </span>
                   <span className="text-foreground/60 text-xs">
                     {formatDate(jawaban.createdAt, { showTime: false })}
