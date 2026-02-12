@@ -61,7 +61,7 @@ export default function Sidebar({ navItems }) {
   return (
     <aside className="max-md:w-14">
       <div
-        className={`sidebar z-100 max-md:absolute
+        className={`sidebar z-50 max-md:absolute
           ${sidebarCollapsed ? "w-14" : "w-63"}`}
       >
         {/* Sidebar Header */}

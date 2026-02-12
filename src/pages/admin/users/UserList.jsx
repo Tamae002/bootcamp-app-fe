@@ -32,6 +32,7 @@ export default function UserManagement() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [formError, setFormError] = useState(null);
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
@@ -51,16 +52,23 @@ export default function UserManagement() {
     // @ts-ignore
     mutationFn: ({ name, email, password, role }) =>
       userApi.createUser({
-        name: totalPages,
+        name: name,
         email: email,
         password: password,
         role: role || "admin",
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      setFormError(null);
+      setModal(null);
+      setSelectedUser(null);
     },
-    onError: () => {
-      alert("Gagal menambahkan user");
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        setFormError(err.response?.data?.message || "Gagal menambahkan user");
+      } else {
+        setFormError("Gagal menambahkan user");
+      }
     },
   });
 
@@ -73,9 +81,16 @@ export default function UserManagement() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      setFormError(null);
+      setModal(null);
+      setSelectedUser(null);
     },
-    onError: () => {
-      alert("Gagal update user");
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        setFormError(err.response?.data?.message || "Gagal update user");
+      } else {
+        setFormError("Gagal update user");
+      }
     },
   });
 
@@ -325,6 +340,7 @@ export default function UserManagement() {
           if (!open) {
             setModal(null);
             setSelectedUser(null);
+            setFormError(null);
           }
         }}
       >
@@ -335,14 +351,17 @@ export default function UserManagement() {
                 initial={modal === "edit" ? selectedUser : null}
                 onSubmit={(data) => {
                   modal === "edit" ? updateUser(data) : createUser(data);
-                  setModal(null);
-                  setSelectedUser(null);
                 }}
                 onClose={() => {
                   setModal(null);
                   setSelectedUser(null);
+                  setFormError(null);
                 }}
                 isEdit={modal === "edit"}
+                error={formError}
+                isLoading={
+                  createUserMutation.isPending || updateUserMutation.isPending
+                }
               />
             )}
 

@@ -1,5 +1,5 @@
 .dialog-overlay {
-    @apply fixed inset-0 p-10 bg-black/50 grid place-items-center overflow-y-auto;
+    @apply fixed inset-0 p-10 bg-black/50 grid place-items-center overflow-y-auto z-60;
     animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 

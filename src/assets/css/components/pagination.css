@@ -9,6 +9,13 @@
   @apply flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl transition-all;
 }
 
+.pagination-page > a,
+.pagination-previous > a,
+.pagination-next > a,
+.pagination-break > a {
+  @apply flex h-full w-full items-center justify-center;
+}
+
 .pagination-page {
   @apply bg-surface hover:bg-surface-subtle;
 }
