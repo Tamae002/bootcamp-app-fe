@@ -54,11 +54,12 @@ export default function MeetDetail() {
   const linkPreview = linkPreviewResponse?.data;
 
   useEffect(() => {
-    if (descriptionRef.current && meet?.deskripsi_tugas) {
+    if (descriptionRef.current) {
       const contentHeight = descriptionRef.current.scrollHeight;
       const screenHeight = window.innerHeight;
       // Collapse if content exceeds 60% of screen height
       setShouldCollapse(contentHeight > screenHeight * 0.6);
+      setIsExpanded(false);
     }
   }, [meet?.deskripsi_tugas]);
 
@@ -196,7 +197,7 @@ export default function MeetDetail() {
                   {linkPreview.siteName}
                 </span>
               </div>
-              <h3 className="mt-1 truncate text-base font-semibold">
+              <h3 className="mt-1 truncate text-base font-semibold text-wrap">
                 {linkPreview.title}
               </h3>
               <p className="text-foreground/70 line-clamp-2 text-sm">
@@ -262,7 +263,9 @@ export default function MeetDetail() {
                 </div>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="text-lg font-semibold">
-                    {jawaban.nilai ? `Nilai: ${jawaban.nilai}` : "Belum dinilai"}
+                    {jawaban.nilai
+                      ? `Nilai: ${jawaban.nilai}`
+                      : "Belum dinilai"}
                   </span>
                   <span className="text-foreground/60 text-xs">
                     {formatDate(jawaban.createdAt, { showTime: false })}
