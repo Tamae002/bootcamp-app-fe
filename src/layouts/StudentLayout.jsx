@@ -2,10 +2,10 @@ import Person from "@/assets/icons/Person";
 import { NavLink, Outlet } from "react-router";
 
 export default function StudentLayout() {
-  const navItems = [
-    { label: "Beranda", path: "/" },
-    { label: "Kelas", path: "/kelas" },
-  ];
+const navItems = [
+  { label: "Beranda", path: "/student/dashboard" },
+  { label: "Kelas", path: "/student/kelas" },
+];
 
   return (
     <div className="flex min-h-screen flex-col">

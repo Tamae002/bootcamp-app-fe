@@ -10,6 +10,7 @@ import Loading from "@/pages/misc/Loading";
 
 const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
 const StudentDashboard = lazy(() => import("@/pages/student/Dashboard"));
+import StudentRoutes from "./StudentRoutes";
 
 export default function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
       {IndexRoute(useAuth())}
       {AuthRoutes()}
       {AdminRoutes()}
+      {StudentRoutes()}
     </Routes>
   );
 }
