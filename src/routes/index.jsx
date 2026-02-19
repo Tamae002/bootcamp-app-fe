@@ -7,6 +7,7 @@ import StudentDashboard from "@/pages/student/Dashboard";
 import { Navigate, Route, Routes } from "react-router";
 import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
+import StudentRoutes from "./StudentRoutes";
 import { useEffect } from "react";
 
 export default function AppRoutes() {
@@ -15,6 +16,7 @@ export default function AppRoutes() {
       {IndexRoute(useAuth())}
       {AuthRoutes()}
       {AdminRoutes()}
+      {StudentRoutes()}
     </Routes>
   );
 }
