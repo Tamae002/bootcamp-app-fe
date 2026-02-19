@@ -7,7 +7,6 @@ import PageTitle from '@/components/typography/PageTitle';
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const displayName = user?.name || user?.fullName || user?.full_name || user?.username || "Raya";
 
   const [stats, setStats] = useState([
     { label: 'Total Peserta', value: 0 },
@@ -103,7 +102,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base sm:text-lg font-medium text-slate-800 dark:text-slate-100">Class active</h2>
           </div>
-          
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
             {classes.map((c) => (
               <div key={c.id} className="bg-gray-100 dark:bg-[#262626] rounded-lg p-3 sm:p-3">

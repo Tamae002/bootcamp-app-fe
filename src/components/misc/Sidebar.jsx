@@ -1,26 +1,37 @@
 import authApi from "@/apis/auth.api";
+import userApi from "@/apis/user.api";
 import ChevronRight from "@/assets/icons/ChevronRight";
 import KebabMenu from "@/assets/icons/KebabMenu";
-import Person from "@/assets/icons/Person";
 import Logotype from "@/assets/images/logo/logotype.png";
 import LogotypeDark from "@/assets/images/logo/logotype_dark.png";
 import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
+import UserForm from "@/pages/admin/users/UserForm";
+import { Dialog, DialogOverlay, DialogPortal } from "@radix-ui/react-dialog";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
   PopoverPortal,
+  PopoverTrigger,
 } from "@radix-ui/react-popover";
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
+import ProfilePhoto from "./ProfilePhoto";
 import Throbber from "./Throbber";
-import { useEffect } from "react";
 
-function ProfilePopoverContent({ logoutLoading, handleLogout }) {
+function ProfilePopoverContent({
+  logoutLoading,
+  handleLogout,
+  onAccountSettings,
+}) {
   return (
     <PopoverPortal>
       <PopoverContent className="popover-content">
+        <button onClick={onAccountSettings} className="popover-button">
+          Pengaturan akun
+        </button>
         <button onClick={handleLogout} className="popover-button">
           {logoutLoading && <Throbber />}
           Logout
@@ -34,12 +45,15 @@ export default function Sidebar({ navItems }) {
   const navigate = useNavigate();
   const { user, refetchAuthStatus } = useAuth();
   const { theme } = useTheme();
+  const queryClient = useQueryClient();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(
     Boolean(
       localStorage.getItem("sidebar-collapsed") ?? window.innerWidth <= 768,
     ),
   );
   const [logoutLoading, setLogoutLoading] = useState(false);
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+  const [formError, setFormError] = useState(null);
 
   const handleLogout = async () => {
     setLogoutLoading(true);
@@ -52,6 +66,34 @@ export default function Sidebar({ navItems }) {
       navigate("/");
       setLogoutLoading(false);
     }
+  };
+
+  const updateUserMutation = useMutation({
+    // @ts-ignore
+    mutationFn: ({ name, email, gambar }) =>
+      userApi.updateUser(user.user_id, {
+        name,
+        email,
+        gambar,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+      refetchAuthStatus();
+      setFormError(null);
+      setIsProfileDialogOpen(false);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        setFormError(err.response?.data?.message || "Gagal update profil");
+      } else {
+        setFormError("Gagal update profil");
+      }
+    },
+  });
+
+  const handleUpdateProfile = (data) => {
+    updateUserMutation.mutate(data);
   };
 
   useEffect(() => {
@@ -110,22 +152,17 @@ export default function Sidebar({ navItems }) {
           {/* Photo Profile Popover */}
           <Popover>
             <PopoverTrigger>
-              {user.gambar ? (
-                <img
-                  src={user.gambar}
-                  className="size-8 shrink-0 rounded-full"
-                  alt="User"
-                />
-              ) : (
-                <Person
-                  className="size-8 shrink-0 rounded-full bg-neutral-400
-                    text-white"
-                />
-              )}
+              <ProfilePhoto
+                src={user.gambar}
+                alt={user.name}
+                size="sm"
+                className="shrink-0"
+              />
             </PopoverTrigger>
             <ProfilePopoverContent
               logoutLoading={logoutLoading}
               handleLogout={handleLogout}
+              onAccountSettings={() => setIsProfileDialogOpen(true)}
             />
           </Popover>
 
@@ -153,10 +190,38 @@ export default function Sidebar({ navItems }) {
             <ProfilePopoverContent
               logoutLoading={logoutLoading}
               handleLogout={handleLogout}
+              onAccountSettings={() => setIsProfileDialogOpen(true)}
             />
           </Popover>
         </section>
       </div>
+
+      {/* Profile Edit Dialog */}
+      <Dialog
+        open={isProfileDialogOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setIsProfileDialogOpen(false);
+            setFormError(null);
+          }
+        }}
+      >
+        <DialogPortal>
+          <DialogOverlay className="dialog-overlay">
+            <UserForm
+              initial={user}
+              onSubmit={handleUpdateProfile}
+              onClose={() => {
+                setIsProfileDialogOpen(false);
+                setFormError(null);
+              }}
+              isEdit={true}
+              error={formError}
+              isLoading={updateUserMutation.isPending}
+            />
+          </DialogOverlay>
+        </DialogPortal>
+      </Dialog>
     </aside>
   );
 }

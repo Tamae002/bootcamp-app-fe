@@ -18,6 +18,10 @@
   }
 }
 
+.button-secondary {
+  @apply bg-surface hover:bg-surface-subtle text-foreground;
+}
+
 .button-primary {
   @apply bg-primary hover:bg-primary/80 text-white;
 }

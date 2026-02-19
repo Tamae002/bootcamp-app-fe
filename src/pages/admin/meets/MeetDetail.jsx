@@ -1,12 +1,12 @@
+import answerApi from "@/apis/answer.api";
 import { linkPreviewApi } from "@/apis/link_preview.api";
 import meetApi from "@/apis/meet.api";
 import userApi from "@/apis/user.api";
 import Calendar from "@/assets/icons/Calendar";
-import Download from "@/assets/icons/Download";
 import KebabMenu from "@/assets/icons/KebabMenu";
-import Person from "@/assets/icons/Person";
-import Throbber from "@/components/misc/Throbber";
-import { API_BASE_URL } from "@/constants";
+import AnswerCard from "@/components/answer/AnswerCard";
+import DeleteConfirm from "@/components/dialog/DeleteConfirm";
+import GradeDialog from "@/components/dialog/GradeDialog";
 import { useAuth } from "@/contexts/auth";
 import { useClass } from "@/contexts/class";
 import formatDate from "@/lib/formatDate";
@@ -16,6 +16,7 @@ import {
   PopoverPortal,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
+import { Dialog, DialogOverlay, DialogPortal } from "@radix-ui/react-dialog";
 import {
   useMutation,
   useQueries,
@@ -36,6 +37,9 @@ export default function MeetDetail() {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [shouldCollapse, setShouldCollapse] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isGradeDialogOpen, setIsGradeDialogOpen] = useState(false);
+  const [selectedJawaban, setSelectedJawaban] = useState(null);
   const descriptionRef = useRef(null);
 
   const { data: response } = useQuery({
@@ -81,15 +85,37 @@ export default function MeetDetail() {
   };
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => meetApi.delete(id),
+    mutationFn: () => meetApi.delete(meet?.pertemuan_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["class", meet.kelas_id] });
+      setIsDeleteDialogOpen(false);
       navigate(`/classes/${meet.kelas_id}`);
     },
   });
 
-  const handleDelete = (id) => {
-    deleteMutation.mutate(id);
+  const handleDelete = () => {
+    deleteMutation.mutate();
+  };
+
+  const handleOpenGradeDialog = (jawaban) => {
+    setSelectedJawaban(jawaban);
+    setIsGradeDialogOpen(true);
+  };
+
+  const gradeMutation = useMutation({
+    mutationFn: ({ jawabanId, nilai }) => answerApi.grade(jawabanId, { nilai }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meet", meetId] });
+      setIsGradeDialogOpen(false);
+      setSelectedJawaban(null);
+    },
+  });
+
+  const handleGrade = (gradedJawaban) => {
+    gradeMutation.mutate({
+      jawabanId: gradedJawaban.jawaban_id,
+      nilai: gradedJawaban.nilai,
+    });
   };
 
   return (
@@ -111,10 +137,10 @@ export default function MeetDetail() {
                     Edit
                   </Link>
                   <button
-                    onClick={() => handleDelete(meet?.pertemuan_id)}
+                    onClick={() => setIsDeleteDialogOpen(true)}
                     className="popover-button text-red"
                   >
-                    Hapus {deleteMutation.isPending && <Throbber />}
+                    Hapus
                   </button>
                 </PopoverContent>
               </PopoverPortal>
@@ -159,49 +185,49 @@ export default function MeetDetail() {
             {isExpanded ? "Sembunyikan" : "Baca selengkapnya"}
           </button>
         )}
-        {linkPreview && (
+        {meet?.link_lampiran && (
           <a
-            href={linkPreview.url}
+            href={linkPreview?.url || meet.link_lampiran}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-surface hover:border-primary/50 mt-4 flex items-center
               gap-4 rounded-xl border-2 border-transparent p-4
               transition-colors"
           >
-            {linkPreview.image && (
+            {linkPreview?.image && (
               <img
                 src={
-                  linkPreview.image.startsWith("http")
-                    ? linkPreview.image
-                    : new URL(linkPreview.image, linkPreview.url).href
+                  linkPreview?.image.startsWith("http")
+                    ? linkPreview?.image
+                    : new URL(linkPreview?.image, linkPreview?.url).href
                 }
-                alt={linkPreview.title}
+                alt={linkPreview?.title}
                 className="bg-surface-variant h-20 w-32 shrink-0 rounded-lg
                   object-cover"
               />
             )}
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                {linkPreview.favicon && (
+                {linkPreview?.favicon && (
                   <img
                     src={
-                      linkPreview.favicon.startsWith("http")
-                        ? linkPreview.favicon
-                        : new URL(linkPreview.favicon, linkPreview.url).href
+                      linkPreview?.favicon.startsWith("http")
+                        ? linkPreview?.favicon
+                        : new URL(linkPreview?.favicon, linkPreview?.url).href
                     }
                     alt=""
                     className="h-4 w-4"
                   />
                 )}
                 <span className="text-foreground/60 text-xs">
-                  {linkPreview.siteName}
+                  {linkPreview?.siteName}
                 </span>
               </div>
               <h3 className="mt-1 truncate text-base font-semibold text-wrap">
-                {linkPreview.title}
+                {linkPreview?.title}
               </h3>
               <p className="text-foreground/70 line-clamp-2 text-sm">
-                {linkPreview.description}
+                {linkPreview?.description || meet.link_lampiran}
               </p>
             </div>
           </a>
@@ -210,70 +236,15 @@ export default function MeetDetail() {
       <section>
         <h2 className="border-surface border-b-3 pb-2 text-3xl">Tugas</h2>
         <div className="mt-4 grid grid-cols-2 gap-4">
-          {meet?.jawaban?.map((jawaban) => {
-            const userData = getUserData(jawaban.user_id);
-            return (
-              <div
-                key={jawaban.jawaban_id}
-                className="bg-surface rounded-xl p-4 shadow-sm"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    {userData?.gambar ? (
-                      <img
-                        src={userData.gambar}
-                        alt={userData.name}
-                        className="size-10 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div
-                        className="bg-primary/20 flex size-10 items-center
-                          justify-center rounded-full"
-                      >
-                        <Person className="text-primary size-5" />
-                      </div>
-                    )}
-                    <span className="text-foreground/80 text-sm font-medium">
-                      {userData?.name || "Memuat..."}
-                    </span>
-                  </div>
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs ${
-                      jawaban.status === "menunggu"
-                        ? "bg-yellow text-black"
-                        : jawaban.status === "dinilai"
-                          ? "bg-green text-white"
-                          : "bg-grey text-white"
-                    }`}
-                  >
-                    {jawaban.status}
-                  </span>
-                </div>
-                <div className="mt-3">
-                  <a
-                    href={API_BASE_URL + jawaban.file_path}
-                    download
-                    className="bg-primary hover:bg-primary-variant inline-flex
-                      items-center gap-2 rounded-lg px-3 py-2 text-sm
-                      font-medium text-white"
-                  >
-                    <Download className="size-4" />
-                    Unduh File
-                  </a>
-                </div>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-lg font-semibold">
-                    {jawaban.nilai
-                      ? `Nilai: ${jawaban.nilai}`
-                      : "Belum dinilai"}
-                  </span>
-                  <span className="text-foreground/60 text-xs">
-                    {formatDate(jawaban.createdAt, { showTime: false })}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
+          {meet?.jawaban?.map((jawaban) => (
+            <AnswerCard
+              key={jawaban.jawaban_id}
+              jawaban={jawaban}
+              userData={getUserData(jawaban.user_id)}
+              onGradeClick={handleOpenGradeDialog}
+              isMentor={user.role === "mentor"}
+            />
+          ))}
         </div>
         {(!meet?.jawaban || meet.jawaban.length === 0) && (
           <p className="text-foreground/60 mt-4 text-center text-sm">
@@ -281,6 +252,34 @@ export default function MeetDetail() {
           </p>
         )}
       </section>
+
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogPortal>
+          <DialogOverlay className="dialog-overlay">
+            <DeleteConfirm
+              onDelete={handleDelete}
+              onClose={() => setIsDeleteDialogOpen(false)}
+              isLoading={deleteMutation.isPending}
+            />
+          </DialogOverlay>
+        </DialogPortal>
+      </Dialog>
+
+      <Dialog open={isGradeDialogOpen} onOpenChange={setIsGradeDialogOpen}>
+        <DialogPortal>
+          <DialogOverlay className="dialog-overlay">
+            <GradeDialog
+              jawaban={selectedJawaban}
+              onGrade={handleGrade}
+              onClose={() => {
+                setIsGradeDialogOpen(false);
+                setSelectedJawaban(null);
+              }}
+              isLoading={gradeMutation.isPending}
+            />
+          </DialogOverlay>
+        </DialogPortal>
+      </Dialog>
     </>
   );
 }

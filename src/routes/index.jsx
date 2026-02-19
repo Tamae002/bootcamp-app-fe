@@ -1,13 +1,15 @@
+import { lazy } from "react";
+import LazyComponent from "@/components/misc/LazyComponent";
 import { useAuth } from "@/contexts/auth";
 import AdminLayout from "@/layouts/AdminLayout";
 import StudentLayout from "@/layouts/StudentLayout";
-import AdminDashboard from "@/pages/admin/Dashboard";
-import Loading from "@/pages/misc/Loading";
-import StudentDashboard from "@/pages/student/Dashboard";
 import { Navigate, Route, Routes } from "react-router";
 import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
-import { useEffect } from "react";
+import Loading from "@/pages/misc/Loading";
+
+const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
+const StudentDashboard = lazy(() => import("@/pages/student/Dashboard"));
 
 export default function AppRoutes() {
   return (
@@ -29,13 +31,13 @@ function IndexRoute(authContext) {
   if (["admin", "mentor"].includes(user.role))
     return (
       <Route element={<AdminLayout />}>
-        <Route index element={<AdminDashboard />} />
+        <Route index element={<LazyComponent component={AdminDashboard} />} />
       </Route>
     );
   else if (user.role == "user")
     return (
       <Route element={<StudentLayout />}>
-        <Route index element={<StudentDashboard />} />
+        <Route index element={<LazyComponent component={StudentDashboard} />} />
       </Route>
     );
 }

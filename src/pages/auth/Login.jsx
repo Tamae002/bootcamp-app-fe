@@ -77,7 +77,7 @@ export default function Login() {
   return (
     <>
       <title>Login - Geeksfarm</title>
-      <main className="scrollbar-hidden flex min-h-svh min-w-full flex-col-reverse overflow-y-scroll md:flex-row">
+      <main className="scrollbar-hidden flex min-h-svh w-full flex-col-reverse overflow-y-scroll md:flex-row">
         <form
           noValidate
           onSubmit={handleLogin}

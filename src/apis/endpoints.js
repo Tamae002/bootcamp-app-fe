@@ -14,6 +14,7 @@ const API_ENDPOINTS = {
     ME: "/user/me",
   },
   ANSWER: {
+    CREATE: (meetId) => `/jawaban/${meetId}`,
     GRADE: (id) => `/jawaban/${id}/nilai`,
   },
   CLASS: {

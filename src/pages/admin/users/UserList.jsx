@@ -6,6 +6,7 @@ import People from "@/assets/icons/People";
 import Person from "@/assets/icons/Person";
 import Warning from "@/assets/icons/Warning";
 import SearchBar from "@/components/input/SearchBar";
+import ProfilePhoto from "@/components/misc/ProfilePhoto";
 import Throbber from "@/components/misc/Throbber";
 import PageTitle from "@/components/typography/PageTitle";
 import {
@@ -26,7 +27,6 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import UserForm from "./UserForm";
-import { API_BASE_URL } from "@/constants";
 
 export default function UserManagement() {
   const [modal, setModal] = useState(null);
@@ -184,11 +184,7 @@ export default function UserManagement() {
                       setModal(null);
                     }}
                   >
-                    {u.gambar ? (
-                      <img src={API_BASE_URL + u.gambar} className="size-8 rounded-full object-cover" />
-                    ) : (
-                      <Person className="size-8" />
-                    )}
+                    <ProfilePhoto src={u.gambar} alt={u.name} size="sm" />
                     <span className="font-medium">{u.name}</span>
                   </td>
                   <td className="text-center">
@@ -259,11 +255,12 @@ export default function UserManagement() {
             className="mx-auto mb-4 flex h-32 w-32 items-center justify-center
               rounded-2xl bg-gray-100 dark:bg-gray-800"
           >
-            {selectedUser.gambar ? (
-              <img src={selectedUser.gambar} className="size-24 rounded-full" />
-            ) : (
-              <Person className="size-24" />
-            )}
+            <ProfilePhoto
+              src={selectedUser.gambar}
+              alt={selectedUser.name}
+              size="xl"
+              useApiBaseUrl={false}
+            />
           </div>
 
           <div className="space-y-3">
@@ -385,12 +382,10 @@ export default function UserManagement() {
 
 function DeleteConfirm({ onDelete, onClose }) {
   return (
-    <DialogContent
-      className="dialog-content space-y-4 text-center dark:text-white"
-    >
+    <DialogContent className="dialog-content space-y-4 text-center">
       <Warning className="mx-auto h-16 w-16" />
       <DialogTitle>Apakah anda yakin ingin menghapus data ini?</DialogTitle>
-      <div className="bg-op flex justify-center gap-3">
+      <div className="flex justify-center gap-3">
         <button onClick={onDelete} className="button button-danger">
           Hapus
         </button>
