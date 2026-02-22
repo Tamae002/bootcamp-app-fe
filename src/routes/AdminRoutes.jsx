@@ -1,23 +1,22 @@
-import { lazy } from "react";
 import LazyComponent from "@/components/misc/LazyComponent";
 import ClassProviderLayout from "@/contexts/class/ClassProviderLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 import ClassDetailLayout from "@/layouts/ClassDetailLayout";
 import ProtectedRoute from "@/layouts/ProtectedRoute";
+import { lazy } from "react";
 import { Route } from "react-router";
 
-const ClassDetail = lazy(() => import("@/pages/admin/classes/ClassDetail"));
+const ClassDetail = lazy(() => import("@/pages/global/classes/ClassDetail"));
 const ClassForm = lazy(() => import("@/pages/admin/classes/ClassForm"));
 const ClassList = lazy(() => import("@/pages/admin/classes/ClassList"));
 const Dashboard = lazy(() => import("@/pages/admin/Dashboard"));
-const MeetDetail = lazy(() => import("@/pages/admin/meets/MeetDetail"));
+const MeetDetail = lazy(() => import("@/pages/global/meets/MeetDetail"));
 const MeetForm = lazy(() => import("@/pages/admin/meets/MeetForm"));
-const Settings = lazy(() => import("@/pages/admin/Settings"));
 const UserManagement = lazy(() => import("@/pages/admin/users/UserList"));
 
 export default function AdminRoutes() {
   return (
-    <Route element={<ProtectedRoute role={["admin", "mentor"]} />}>
+    <Route path="admin" element={<ProtectedRoute role={["admin", "mentor"]} />}>
       <Route element={<AdminLayout />}>
         <Route
           path="dashboard"
@@ -35,11 +34,11 @@ export default function AdminRoutes() {
             <Route path=":id" element={<ClassDetailLayout />}>
               <Route
                 index
-                element={<LazyComponent component={ClassDetail} />}
+                element={<LazyComponent component={ClassDetail} prefix="/admin" />}
               />
               <Route
                 path="meet/:meetId"
-                element={<LazyComponent component={MeetDetail} />}
+                element={<LazyComponent component={MeetDetail} prefix="/admin" />}
               />
             </Route>
 
@@ -62,11 +61,6 @@ export default function AdminRoutes() {
         <Route
           path="users"
           element={<LazyComponent component={UserManagement} />}
-        />
-
-        <Route
-          path="settings"
-          element={<LazyComponent component={Settings} />}
         />
       </Route>
     </Route>

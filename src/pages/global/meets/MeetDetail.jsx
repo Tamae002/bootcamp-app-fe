@@ -1,5 +1,5 @@
 import answerApi from "@/apis/answer.api";
-import { linkPreviewApi } from "@/apis/link_preview.api";
+import { linkPreviewApi } from "@/apis/linkPreview.api";
 import meetApi from "@/apis/meet.api";
 import userApi from "@/apis/user.api";
 import Calendar from "@/assets/icons/Calendar";
@@ -28,7 +28,11 @@ import Markdown from "react-markdown";
 import { Link, useNavigate, useParams } from "react-router";
 import remarkGfm from "remark-gfm";
 
-export default function MeetDetail() {
+export default function MeetDetail({ prefix = "" }) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -89,7 +93,7 @@ export default function MeetDetail() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["class", meet.kelas_id] });
       setIsDeleteDialogOpen(false);
-      navigate(`/classes/${meet.kelas_id}`);
+      navigate(`${prefix}/classes/${meet.kelas_id}`);
     },
   });
 
@@ -112,6 +116,7 @@ export default function MeetDetail() {
   });
 
   const handleGrade = (gradedJawaban) => {
+    // @ts-ignore
     gradeMutation.mutate({
       jawabanId: gradedJawaban.jawaban_id,
       nilai: gradedJawaban.nilai,

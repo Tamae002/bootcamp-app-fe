@@ -1,16 +1,34 @@
-import { lazy } from 'react'
-import { Navigate, Route } from 'react-router'
-import StudentLayout from '@/layouts/StudentLayout'
+import { lazy } from "react";
+import { Navigate, Route } from "react-router";
+import StudentLayout from "@/layouts/StudentLayout";
+import ProtectedRoute from "@/layouts/ProtectedRoute";
+import LazyComponent from "@/components/misc/LazyComponent";
+import ClassProviderLayout from "@/contexts/class/ClassProviderLayout";
+import ClassDetailLayout from "@/layouts/ClassDetailLayout";
 
-const Dashboard = lazy(() => import('@/pages/student/Dashboard'))
-const Kelas = lazy(() => import('@/pages/student/Kelas'))
+const Kelas = lazy(() => import("@/pages/student/Kelas"));
+const ClassDetail = lazy(() => import("@/pages/global/classes/ClassDetail"));
+const MeetDetail = lazy(() => import("@/pages/global/meets/MeetDetail"));
 
-export default function StudentRoutes() {  // ← PASTIKAN ADA 'export default'
+export default function StudentRoutes() {
   return (
-    <Route path="/student" element={<StudentLayout />}>
-      <Route index element={<Navigate to="/student/dashboard" replace />} />
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="kelas" element={<Kelas />} />
+    <Route element={<ProtectedRoute role={["user"]} />}>
+      <Route element={<StudentLayout />}>
+        <Route path="classes">
+          <Route index element={<LazyComponent component={Kelas} />} />
+
+          <Route element={<ClassProviderLayout />}>
+            <Route path=":id" element={<ClassDetailLayout />}>
+              <Route
+                index
+                element={<LazyComponent component={ClassDetail} />}
+              />
+
+              <Route path="meet/:meetId" element={<LazyComponent component={MeetDetail} />} />
+            </Route>
+          </Route>
+        </Route>
+      </Route>
     </Route>
-  )
+  );
 }

@@ -4,7 +4,7 @@ import Loading from "@/pages/misc/Loading";
 /**
  * Wrapper component that renders a lazy-loaded component with a Suspense fallback.
  *
- * @param {Object} props - Component props
+ * @param {any} props - Component props
  * @param {React.ComponentType} props.component - The lazy-loaded component to render
  * @returns {React.ReactElement} The wrapped component with Suspense boundary
  * @example

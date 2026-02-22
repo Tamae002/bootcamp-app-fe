@@ -1,10 +1,10 @@
 .dialog-overlay {
-    @apply fixed inset-0 p-10 bg-black/50 grid place-items-center overflow-y-auto z-60;
+    @apply fixed inset-0 z-60 grid place-items-center overflow-y-auto bg-black/50 p-4 md:p-10;
     animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dialog-content {
-    @apply bg-background w-9/10 max-w-lg rounded-2xl p-8 shadow-lg outline-none;
+    @apply bg-background w-full rounded-2xl p-6 shadow-lg outline-none md:w-9/10 md:max-w-lg md:p-8;
     animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 

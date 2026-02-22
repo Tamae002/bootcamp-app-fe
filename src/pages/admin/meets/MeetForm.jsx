@@ -60,7 +60,7 @@ export default function MeetForm({ edit = false }) {
     mutationFn: (payload) => meetApi.create(payload),
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["class", classId] });
-      navigate(`/classes/${classId}/meet/${response.data.pertemuan_id}`);
+      navigate(`/admin/classes/${classId}/meet/${response.data.pertemuan_id}`);
     },
     onError: (err) => {
       if (ENV == "development") console.error(err);
@@ -79,7 +79,7 @@ export default function MeetForm({ edit = false }) {
     mutationFn: (payload) => meetApi.update(meetId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["class", classId] });
-      navigate(`/classes/${classId}/meet/${meetId}`);
+      navigate(`/admin/classes/${classId}/meet/${meetId}`);
     },
     onError: (err) => {
       if (ENV == "development") console.error(err);

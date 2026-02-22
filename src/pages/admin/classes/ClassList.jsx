@@ -1,15 +1,16 @@
 import classApi from "@/apis/class.api";
+import ClassCard from "@/components/class/ClassCard";
 import Add from "@/assets/icons/Add";
 import ChevronLeft from "@/assets/icons/ChevronLeft";
 import ChevronRight from "@/assets/icons/ChevronRight";
 import SearchBar from "@/components/input/SearchBar";
 import PageTitle from "@/components/typography/PageTitle";
-import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import Skeleton from "react-loading-skeleton";
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
+import { Link } from "react-router";
 
 export default function ClassList() {
   const navigate = useNavigate();
@@ -61,34 +62,11 @@ export default function ClassList() {
             <p>Tidak ada kelas</p>
           ) : (
             classes.map((class_, id) => (
-              <article
+              <ClassCard
                 key={id}
-                className="bg-surface relative m-auto h-80 w-full max-w-140
-                  rounded-3xl p-2 shadow-sm transition-all hover:scale-105
-                  hover:shadow-md"
-              >
-                <figure>
-                  <img
-                    src={API_BASE_URL + class_?.gambar || DEFAULT_CLASS_IMAGE}
-                    className="aspect-7/3 w-full rounded-2xl object-cover"
-                    onError={(e) => {
-                      // @ts-ignore
-                      e.target.src = DEFAULT_CLASS_IMAGE;
-                    }}
-                  />
-                </figure>
-                <div className="p-3 text-pretty">
-                  <h3 className="text-xl">
-                    <Link
-                      to={`/classes/${class_?.kelas_id}`}
-                      className="after:absolute after:inset-0 after:z-1"
-                    >
-                      {class_?.nama_kelas}
-                    </Link>
-                  </h3>
-                  <p className="text-justify text-xs">{class_?.deskripsi}</p>
-                </div>
-              </article>
+                classItem={class_}
+                to={`/admin/classes/${class_?.kelas_id}`}
+              />
             ))
           )}
         </section>
@@ -123,9 +101,8 @@ export default function ClassList() {
 
           <Link
             to="create"
-            className="button-primary flex items-center gap-1 rounded-xl px-3
-              py-2 text-xs font-medium transition-all hover:scale-105
-              hover:shadow-lg md:gap-2 md:px-5 md:py-2.5 md:text-sm"
+            className="button button-primary h-8 gap-1 px-3 text-xs font-medium
+              transition-all md:gap-2 md:px-5 md:py-2.5 md:text-sm"
           >
             <Add className="h-4 w-4 md:h-5 md:w-5" />
             <span className="md:hidden">Tambah</span>

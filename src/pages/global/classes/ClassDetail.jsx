@@ -3,22 +3,25 @@ import Calendar from "@/assets/icons/Calendar";
 import KebabMenu from "@/assets/icons/KebabMenu";
 import UserList from "@/components/class/UserList";
 import DeleteConfirm from "@/components/dialog/DeleteConfirm";
-import Throbber from "@/components/misc/Throbber";
 import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useClass } from "@/contexts/class";
 import formatDate from "@/lib/formatDate";
+import { Dialog, DialogOverlay, DialogPortal } from "@radix-ui/react-dialog";
 import {
   Popover,
   PopoverContent,
   PopoverPortal,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
-import { Dialog, DialogOverlay, DialogPortal } from "@radix-ui/react-dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link, useNavigate } from "react-router";
 
-export default function ClassDetail() {
+export default function ClassDetail({ prefix = "" }) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const navigate = useNavigate();
   const { class: class_ } = useClass();
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -29,7 +32,7 @@ export default function ClassDetail() {
     const response = await classApi.delete(class_?.kelas_id);
     setDeleteLoading(false);
     setIsDeleteDialogOpen(false);
-    if (response.status == 200) navigate("/classes");
+    if (response.status == 200) navigate(`${prefix}/classes`);
   };
 
   return (

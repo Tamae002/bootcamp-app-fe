@@ -7,11 +7,15 @@ export default function ProtectedRoute({ guestOnly = false, role = [] }) {
 
   if (isLoading) return <Loading />
 
-  if (guestOnly == isAuthenticated)
+  if (guestOnly == isAuthenticated) {
+    console.log("guest only");
     return <Navigate to="/" replace />
+  }
 
-  if (isAuthenticated && !role?.includes(user.role))
+  if (isAuthenticated && !role?.includes(user.role)) {
+    console.log("not role")
     return <Navigate to="/" replace />
+  }
 
   return <Outlet />
 }

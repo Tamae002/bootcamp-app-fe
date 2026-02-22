@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
 import UserForm from "@/pages/admin/users/UserForm";
 import { Dialog, DialogOverlay, DialogPortal } from "@radix-ui/react-dialog";
+import { Switch, SwitchThumb } from "@radix-ui/react-switch";
 import {
   Popover,
   PopoverContent,
@@ -25,12 +26,24 @@ function ProfilePopoverContent({
   logoutLoading,
   handleLogout,
   onAccountSettings,
+  theme,
+  setTheme,
 }) {
   return (
     <PopoverPortal>
       <PopoverContent className="popover-content">
+        <div className="flex items-center justify-between gap-4 px-3 py-2">
+          <span className="text-sm">Tema gelap</span>
+          <Switch
+            className="switch-root"
+            checked={theme == "dark"}
+            onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+          >
+            <SwitchThumb className="switch-thumb" />
+          </Switch>
+        </div>
         <button onClick={onAccountSettings} className="popover-button">
-          Pengaturan akun
+          Pengaturan
         </button>
         <button onClick={handleLogout} className="popover-button">
           {logoutLoading && <Throbber />}
@@ -44,7 +57,7 @@ function ProfilePopoverContent({
 export default function Sidebar({ navItems }) {
   const navigate = useNavigate();
   const { user, refetchAuthStatus } = useAuth();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const queryClient = useQueryClient();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(
     Boolean(
@@ -163,6 +176,8 @@ export default function Sidebar({ navItems }) {
               logoutLoading={logoutLoading}
               handleLogout={handleLogout}
               onAccountSettings={() => setIsProfileDialogOpen(true)}
+              theme={theme}
+              setTheme={setTheme}
             />
           </Popover>
 
@@ -191,6 +206,8 @@ export default function Sidebar({ navItems }) {
               logoutLoading={logoutLoading}
               handleLogout={handleLogout}
               onAccountSettings={() => setIsProfileDialogOpen(true)}
+              theme={theme}
+              setTheme={setTheme}
             />
           </Popover>
         </section>

@@ -106,7 +106,7 @@ export default function UserForm({
 
   return (
     <DialogContent
-      className="dialog-content flex flex-col gap-4 space-y-3 dark:text-white"
+      className="dialog-content flex flex-col gap-4 dark:text-white"
     >
       <DialogTitle className="text-center font-bold">
         {isEdit ? "Edit Peserta" : "Tambah Peserta"}

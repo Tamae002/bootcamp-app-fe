@@ -92,7 +92,7 @@ export default function ClassForm({ edit = false }) {
     mutationFn: (payload) => classApi.create(payload),
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["classes"] });
-      navigate(`/classes/${response.data.kelas.kelas_id}`);
+      navigate(`/admin/classes/${response.data.kelas.kelas_id}`);
     },
     onError: (err) => {
       if (ENV == "development") console.error(err);
@@ -112,7 +112,7 @@ export default function ClassForm({ edit = false }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["classes"] });
       queryClient.invalidateQueries({ queryKey: ["class", classId] });
-      navigate(`/classes/${classId}`);
+      navigate(`/admin/classes/${classId}`);
     },
     onError: (err) => {
       if (ENV == "development") console.error(err);

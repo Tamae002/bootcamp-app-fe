@@ -27,6 +27,7 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import UserForm from "./UserForm";
+import DeleteConfirm from "@/components/dialog/DeleteConfirm";
 
 export default function UserManagement() {
   const [modal, setModal] = useState(null);
@@ -41,7 +42,7 @@ export default function UserManagement() {
     queryFn: () =>
       userApi.getAll({
         page,
-        limit: 8,
+        limit: 10,
         search,
       }),
   });
@@ -145,93 +146,95 @@ export default function UserManagement() {
           </div>
         )}
 
-        <table className="table">
-          <thead>
-            <tr>
-              <th className="text-left">Nama</th>
-              <th className="text-center">Role</th>
-              <th className="text-center">Email</th>
-              <th className="text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading && (
+        <div className="overflow-x-auto">
+          <table className="table min-w-90">
+            <thead>
               <tr>
-                <td colSpan={4} className="">
-                  <Throbber size="32px" className="m-auto" />
-                </td>
+                <th className="text-left">Nama</th>
+                <th className="text-center">Role</th>
+                <th className="text-center">Email</th>
+                <th className="text-right">Action</th>
               </tr>
-            )}
-
-            {!isLoading && users.length === 0 && (
-              <tr>
-                <td
-                  colSpan={4}
-                  className="text-center text-gray-500 dark:text-gray-400"
-                >
-                  Tidak ada data
-                </td>
-              </tr>
-            )}
-
-            {!isLoading &&
-              users.map((u, id) => (
-                <tr key={id}>
-                  <td
-                    className="flex cursor-pointer items-center gap-3"
-                    onClick={() => {
-                      setSelectedUser(u);
-                      setModal(null);
-                    }}
-                  >
-                    <ProfilePhoto src={u.gambar} alt={u.name} size="sm" />
-                    <span className="font-medium">{u.name}</span>
-                  </td>
-                  <td className="text-center">
-                    <span
-                      className="bg-primary/10 text-primary rounded-full px-3
-                        py-1 text-xs font-semibold"
-                    >
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="text-center">{u.email}</td>
-                  <td className="text-right">
-                    <Popover>
-                      <PopoverTrigger
-                        className="bg-surface hover:bg-overlay-sm rounded-lg
-                          px-3 py-1"
-                      >
-                        •••
-                      </PopoverTrigger>
-                      <PopoverPortal>
-                        <PopoverContent className="popover-content">
-                          <button
-                            className="popover-button"
-                            onClick={() => {
-                              setModal("edit");
-                              setSelectedUser(u);
-                            }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="popover-button text-red"
-                            onClick={() => {
-                              setModal("delete");
-                              setSelectedUser(u);
-                            }}
-                          >
-                            Hapus
-                          </button>
-                        </PopoverContent>
-                      </PopoverPortal>
-                    </Popover>
+            </thead>
+            <tbody>
+              {isLoading && (
+                <tr>
+                  <td colSpan={4} className="">
+                    <Throbber size="32px" className="m-auto" />
                   </td>
                 </tr>
-              ))}
-          </tbody>
-        </table>
+              )}
+
+              {!isLoading && users.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="text-center text-gray-500 dark:text-gray-400"
+                  >
+                    Tidak ada data
+                  </td>
+                </tr>
+              )}
+
+              {!isLoading &&
+                users.map((u, id) => (
+                  <tr key={id}>
+                    <td
+                      className="flex cursor-pointer  items-center gap-3"
+                      onClick={() => {
+                        setSelectedUser(u);
+                        setModal(null);
+                      }}
+                    >
+                      <ProfilePhoto src={u.gambar} alt={u.name} size="sm" />
+                      <span className="font-medium w-[10ch]">{u.name}</span>
+                    </td>
+                    <td className="text-center">
+                      <span
+                        className="bg-primary/10 text-primary rounded-full px-3
+                          py-1 text-xs font-semibold"
+                      >
+                        {u.role}
+                      </span>
+                    </td>
+                    <td className="text-center">{u.email}</td>
+                    <td className="text-right">
+                      <Popover>
+                        <PopoverTrigger
+                          className="bg-surface hover:bg-overlay-sm rounded-lg
+                            px-3 py-1"
+                        >
+                          •••
+                        </PopoverTrigger>
+                        <PopoverPortal>
+                          <PopoverContent className="popover-content">
+                            <button
+                              className="popover-button"
+                              onClick={() => {
+                                setModal("edit");
+                                setSelectedUser(u);
+                              }}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="popover-button text-red"
+                              onClick={() => {
+                                setModal("delete");
+                                setSelectedUser(u);
+                              }}
+                            >
+                              Hapus
+                            </button>
+                          </PopoverContent>
+                        </PopoverPortal>
+                      </Popover>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* READ PROFILE */}
@@ -296,7 +299,7 @@ export default function UserManagement() {
       )}
 
       {/* PAGINATION */}
-      <section className="mt-6 max-md:mb-18 flex items-center justify-center">
+      <section className="mt-6 flex items-center justify-center max-md:mb-14">
         <ReactPaginate
           previousLabel={<ChevronLeft className="h-5 w-5" />}
           nextLabel={<ChevronRight className="h-5 w-5" />}
@@ -325,12 +328,13 @@ export default function UserManagement() {
           setSelectedUser(null);
           setModal("create");
         }}
-        className="button-primary fixed right-6 bottom-6 z-40 flex h-14 w-14
+        className="button-primary fixed right-4 bottom-4 z-40 flex h-12 w-12
           items-center justify-center rounded-full p-3 shadow-lg transition-all
-          hover:scale-110 hover:shadow-xl"
+          hover:scale-110 hover:shadow-xl md:right-6 md:bottom-6 md:h-14 md:w-14
+          md:p-3"
         aria-label="Tambah Pengguna"
       >
-        <Add className="h-6 w-6" />
+        <Add className="h-5 w-5 md:h-6 md:w-6" />
       </button>
 
       <Dialog
@@ -377,22 +381,5 @@ export default function UserManagement() {
         </DialogPortal>
       </Dialog>
     </section>
-  );
-}
-
-function DeleteConfirm({ onDelete, onClose }) {
-  return (
-    <DialogContent className="dialog-content space-y-4 text-center">
-      <Warning className="mx-auto h-16 w-16" />
-      <DialogTitle>Apakah anda yakin ingin menghapus data ini?</DialogTitle>
-      <div className="flex justify-center gap-3">
-        <button onClick={onDelete} className="button button-danger">
-          Hapus
-        </button>
-        <button onClick={onClose} className="button button-primary">
-          Batalkan
-        </button>
-      </div>
-    </DialogContent>
   );
 }
