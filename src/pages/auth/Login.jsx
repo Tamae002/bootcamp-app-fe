@@ -77,11 +77,17 @@ export default function Login() {
   return (
     <>
       <title>Login - Geeksfarm</title>
-      <main className="scrollbar-hidden flex min-h-svh w-full flex-col-reverse overflow-y-scroll md:flex-row">
+      <main
+        className="scrollbar-hidden flex min-h-svh w-full flex-col-reverse
+          overflow-y-scroll md:flex-row"
+      >
         <form
           noValidate
           onSubmit={handleLogin}
-          className="md:py-auto scrollbar-hidden flex flex-1 flex-col items-stretch justify-center gap-9 overflow-y-scroll px-6 py-20 max-md:m-auto max-md:max-w-120 max-md:-translate-y-24 md:h-svh md:min-w-140 md:px-28 lg:px-20"
+          className="md:py-auto scrollbar-hidden flex flex-1 flex-col
+            items-stretch justify-center gap-9 overflow-y-scroll px-6 py-0
+            max-md:m-auto max-md:w-full max-md:max-w-120 max-md:-translate-y-24
+            md:h-svh md:min-w-140 md:px-28 lg:px-20"
         >
           <img
             className="max-md:hidden"
@@ -108,7 +114,10 @@ export default function Login() {
             name="password"
             error={errors?.password}
           />
-          <div className="text-primary-contrast flex justify-between text-sm font-semibold">
+          <div
+            className="text-primary-contrast flex justify-between text-sm
+              font-semibold"
+          >
             <Link to="/forgot-password">Lupa Password?</Link>
           </div>
           <button type="submit" className="button button-primary font-bold">
@@ -118,11 +127,20 @@ export default function Login() {
         </form>
 
         <aside className="flex-2">
-          <div className="bg-primary flex h-full w-full flex-col justify-center gap-4 px-5 pt-20 pb-32 md:px-20 md:py-0">
-            <h1 className="text-6xl text-white lg:text-7xl xl:text-8xl 2xl:text-9xl">
+          <div
+            className="bg-primary flex h-full w-full flex-col justify-center
+              gap-4 px-5 pt-20 pb-32 md:px-20 md:py-0"
+          >
+            <h1
+              className="text-6xl text-white lg:text-7xl xl:text-8xl
+                2xl:text-9xl"
+            >
               Bootcamp Platform
             </h1>
-            <p className="font-light text-pretty text-white md:text-2xl xl:text-3xl 2xl:text-4xl">
+            <p
+              className="font-light text-pretty text-white md:text-2xl
+                xl:text-3xl 2xl:text-4xl"
+            >
               Platform terpadu untuk mengakses kelas, pertemuan, dan tugas
               dengan efisien.
             </p>

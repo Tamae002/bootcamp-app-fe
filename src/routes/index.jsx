@@ -7,6 +7,7 @@ import { Navigate, Route, Routes } from "react-router";
 import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
 import Loading from "@/pages/misc/Loading";
+import NotFound from "@/pages/misc/NotFound";
 
 const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
 const StudentDashboard = lazy(() => import("@/pages/student/Dashboard"));
@@ -19,6 +20,7 @@ export default function AppRoutes() {
       {AuthRoutes()}
       {AdminRoutes()}
       {StudentRoutes()}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

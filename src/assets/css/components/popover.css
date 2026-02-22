@@ -1,5 +1,5 @@
 .popover-content {
-    @apply bg-background rounded-lg p-1 shadow-md;
+    @apply bg-background rounded-lg p-1 shadow-md z-100;
 }
 
 .popover-button {

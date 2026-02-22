@@ -109,8 +109,12 @@
         @apply m-auto max-w-6xl p-8;
     }
 
+    .input-container {
+        @apply min-w-0;
+    }
+
     .input {
-        @apply bg-surface! text-foreground relative flex h-13 w-full items-center gap-4 rounded-xl! p-4 text-sm *:outline-none;
+        @apply bg-surface! text-foreground relative flex h-13 w-full min-w-0 items-center gap-4 rounded-xl! p-4 text-sm *:outline-none;
 
         &:has(textarea) {
             @apply h-fit;
@@ -119,7 +123,7 @@
         input,
         select,
         textarea {
-            @apply flex-1 transition-all;
+            @apply min-w-0 flex-1 transition-all;
         }
 
         &:has(label) {

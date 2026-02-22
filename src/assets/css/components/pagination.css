@@ -1,39 +1,39 @@
 .pagination-container {
-  @apply flex items-center gap-2;
+    @apply flex items-center gap-1 md:gap-2;
 }
 
 .pagination-page,
 .pagination-previous,
 .pagination-next,
 .pagination-break {
-  @apply flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl transition-all;
+    @apply flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg transition-all md:h-10 md:w-10 md:rounded-xl;
 }
 
 .pagination-page > a,
 .pagination-previous > a,
 .pagination-next > a,
 .pagination-break > a {
-  @apply flex h-full w-full items-center justify-center;
+    @apply flex h-full w-full items-center justify-center;
 }
 
 .pagination-page {
-  @apply bg-surface hover:bg-surface-subtle;
+    @apply bg-surface hover:bg-surface-subtle;
 }
 
 .pagination-page.selected {
-  @apply bg-primary hover:bg-primary/80 text-white;
+    @apply bg-primary hover:bg-primary/80 text-white;
 }
 
 .pagination-previous,
 .pagination-next {
-  @apply bg-primary hover:bg-primary/80 text-white;
+    @apply bg-primary hover:bg-primary/80 text-white;
 }
 
 .pagination-previous.disabled,
 .pagination-next.disabled {
-  @apply cursor-not-allowed opacity-50;
+    @apply cursor-not-allowed opacity-50;
 }
 
 .pagination-break {
-  @apply text-foreground cursor-default;
+    @apply text-foreground cursor-default;
 }

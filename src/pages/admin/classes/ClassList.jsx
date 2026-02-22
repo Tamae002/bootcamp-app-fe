@@ -94,17 +94,18 @@ export default function ClassList() {
         </section>
 
         <section
-          className="bg-surface-subtle fixed right-8 bottom-8 left-8 z-20 flex
-            flex-wrap items-center justify-between gap-4 rounded-xl p-3
-            shadow-2xl md:left-auto md:w-fit"
+          className="bg-surface-subtle fixed right-4 bottom-4 z-20 flex
+            flex-wrap items-center justify-center gap-2 rounded-xl p-3
+            shadow-2xl max-md:right-4 max-md:left-18 md:right-4 md:bottom-8
+            md:left-auto md:w-fit md:gap-4 md:p-3"
         >
           <ReactPaginate
-            previousLabel={<ChevronLeft className="h-5 w-5" />}
-            nextLabel={<ChevronRight className="h-5 w-5" />}
+            previousLabel={<ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />}
+            nextLabel={<ChevronRight className="h-4 w-4 md:h-5 md:w-5" />}
             breakLabel="..."
             pageCount={totalPage}
             marginPagesDisplayed={1}
-            pageRangeDisplayed={2}
+            pageRangeDisplayed={1}
             onPageChange={({ selected }) => {
               navigate(`?page=${selected + 1}`);
             }}
@@ -118,16 +119,17 @@ export default function ClassList() {
             renderOnZeroPageCount={null}
           />
 
-          <div className="bg-surface h-8 w-px" />
+          <div className="bg-surface h-6 w-px md:mx-2 md:h-8" />
 
           <Link
             to="create"
-            className="button-primary flex items-center gap-2 rounded-xl px-5
-              py-2.5 text-sm font-medium transition-all hover:scale-105
-              hover:shadow-lg"
+            className="button-primary flex items-center gap-1 rounded-xl px-3
+              py-2 text-xs font-medium transition-all hover:scale-105
+              hover:shadow-lg md:gap-2 md:px-5 md:py-2.5 md:text-sm"
           >
-            <Add className="h-5 w-5" />
-            <span>Tambah Kelas</span>
+            <Add className="h-4 w-4 md:h-5 md:w-5" />
+            <span className="md:hidden">Tambah</span>
+            <span className="hidden md:inline">Tambah Kelas</span>
           </Link>
         </section>
       </div>

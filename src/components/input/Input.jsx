@@ -26,7 +26,7 @@ export default function Input({
   ...props
 }) {
   return (
-    <div className={containerClassName}>
+    <div className={`input-container ${containerClassName}`}>
       <fieldset className={`input ${error ? "error" : ""} ${fieldsetClassName}`}>
         <input
           type={props.type}

@@ -41,7 +41,7 @@ export default function UserManagement() {
     queryFn: () =>
       userApi.getAll({
         page,
-        limit: 10,
+        limit: 8,
         search,
       }),
   });
@@ -296,7 +296,7 @@ export default function UserManagement() {
       )}
 
       {/* PAGINATION */}
-      <section className="mt-6 flex items-center justify-center">
+      <section className="mt-6 max-md:mb-18 flex items-center justify-center">
         <ReactPaginate
           previousLabel={<ChevronLeft className="h-5 w-5" />}
           nextLabel={<ChevronRight className="h-5 w-5" />}
