@@ -31,14 +31,14 @@ export default function ClassDetailLayout({ prefix = "" }) {
 
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-60 bg-black/50 md:hidden"
+          className="fixed inset-0 z-30 bg-black/50 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       <aside
         className={`scrollbar-hidden bg-surface-subtle fixed top-[72px] right-0
-          z-70 h-[calc(100vh-72px)] w-80 pb-24 transition-all duration-300
+          z-40 h-[calc(100vh-72px)] w-80 pb-24 transition-all duration-300
           md:fixed md:top-[72px] md:right-0 md:h-[calc(100vh-72px)] md:w-80
           md:translate-x-0 md:overflow-y-auto ${
             sidebarOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"
