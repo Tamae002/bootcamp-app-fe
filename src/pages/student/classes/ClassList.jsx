@@ -1,50 +1,32 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/auth";
-import { getHomeData } from "@/apis/home.api";
+import homeApi from "@/apis/home.api";
 import ClassCard from "@/components/class/ClassCard";
 import footerLogo from "@/assets/images/logo/Logo_Footer.png";
+import Throbber from "@/components/misc/Throbber";
 
-export default function Kelas() {
+export default function ClassList() {
   const { user } = useAuth();
 
-  const [classes, setClasses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data: response,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["homeData"],
+    queryFn: () => homeApi.getHomeData(),
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  const classes = response?.data?.data?.kelas_terdaftar ?? [];
 
-        const response = await getHomeData();
-
-        // ✅ Sesuaikan dengan struktur API yang sebenarnya (SAMA DENGAN DASHBOARD)
-        if (response.success && response.data) {
-          setClasses(response.data.kelas_terdaftar || []);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Gagal memuat data. Silakan coba lagi.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div
         className="bg-background flex min-h-screen items-center justify-center"
       >
         <div className="text-center">
-          <div
-            className="border-primary mx-auto h-16 w-16 animate-spin
-              rounded-full border-b-4"
-          ></div>
-          <p className="text-foreground/70 mt-4 text-lg">Memuat data...</p>
+          <Throbber size="64px" />
         </div>
       </div>
     );
@@ -53,11 +35,11 @@ export default function Kelas() {
   return (
     <div className="bg-background min-h-screen">
       {/* Error Alert */}
-      {error && (
+      {isError && (
         <div className="mx-auto max-w-7xl px-6 pt-4">
           <div className="rounded border-l-4 border-red-500 bg-red-500/10 p-4">
             <div className="flex">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <svg
                   className="h-5 w-5 text-red-500"
                   viewBox="0 0 20 20"
@@ -71,7 +53,10 @@ export default function Kelas() {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm text-red-500">{error}</p>
+                <p className="text-sm text-red-500">
+                  {error?.response?.data?.message ||
+                    "Gagal memuat data. Silakan coba lagi."}
+                </p>
               </div>
             </div>
           </div>

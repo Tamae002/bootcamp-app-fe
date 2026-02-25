@@ -1,12 +1,8 @@
-import client from './client.js'
-import API_ENDPOINTS from './endpoints.js'
+import api from "./client";
+import API_ENDPOINTS from "./endpoints";
 
-export const getHomeData = async () => {
-  try {
-    const response = await client.get(API_ENDPOINTS.HOME.GET)
-    return response.data
-  } catch (error) {
-    console.error('Error fetching home data:', error)
-    throw error
-  }
-}
+const homeApi = {
+  getHomeData: () => api.get(API_ENDPOINTS.HOME.GET),
+};
+
+export default homeApi;

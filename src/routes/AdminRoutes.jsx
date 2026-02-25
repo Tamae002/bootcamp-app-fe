@@ -20,47 +20,86 @@ export default function AdminRoutes() {
       <Route element={<AdminLayout />}>
         <Route
           path="dashboard"
-          element={<LazyComponent component={Dashboard} />}
+          element={
+            <LazyComponent>
+              <Dashboard />
+            </LazyComponent>
+          }
         />
 
         <Route path="classes">
-          <Route index element={<LazyComponent component={ClassList} />} />
+          <Route
+            index
+            element={
+              <LazyComponent>
+                <ClassList />
+              </LazyComponent>
+            }
+          />
           <Route
             path="create"
-            element={<LazyComponent component={ClassForm} />}
+            element={
+              <LazyComponent>
+                <ClassForm />
+              </LazyComponent>
+            }
           />
 
           <Route element={<ClassProviderLayout />}>
-            <Route path=":id" element={<ClassDetailLayout />}>
+            <Route path=":id" element={<ClassDetailLayout prefix="/admin" />}>
               <Route
                 index
-                element={<LazyComponent component={ClassDetail} prefix="/admin" />}
+                element={
+                  <LazyComponent>
+                    <ClassDetail prefix="/admin" />
+                  </LazyComponent>
+                }
               />
               <Route
                 path="meet/:meetId"
-                element={<LazyComponent component={MeetDetail} prefix="/admin" />}
+                element={
+                  <LazyComponent>
+                    <MeetDetail prefix="/admin" />
+                  </LazyComponent>
+                }
               />
             </Route>
 
             <Route
               path=":id/edit"
-              element={<LazyComponent component={ClassForm} edit />}
+              element={
+                <LazyComponent>
+                  <ClassForm edit />
+                </LazyComponent>
+              }
             />
 
             <Route
               path=":id/meet/create"
-              element={<LazyComponent component={MeetForm} />}
+              element={
+                <LazyComponent>
+                  <MeetForm />
+                </LazyComponent>
+              }
             />
             <Route
               path=":id/meet/:meetId/edit"
-              element={<LazyComponent component={MeetForm} edit />}
+              element={
+                <LazyComponent>
+                  <MeetForm edit />
+                </LazyComponent>
+              }
             />
           </Route>
         </Route>
 
         <Route
           path="users"
-          element={<LazyComponent component={UserManagement} />}
+          element={
+            <LazyComponent>
+              <UserManagement />
+            </LazyComponent>
+          }
         />
       </Route>
     </Route>

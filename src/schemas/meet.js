@@ -14,7 +14,7 @@ const meetSchema = {
   tanggal: "",
   deskripsi_tugas: "",
   link_lampiran: "",
-  jawaban: ""
-}
+  jawaban: "",
+};
 
 export default meetSchema;

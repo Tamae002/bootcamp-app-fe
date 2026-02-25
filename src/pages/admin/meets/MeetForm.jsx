@@ -102,7 +102,7 @@ export default function MeetForm({ edit = false }) {
       judul: data.judul,
       tanggal: data.tanggal ? data.tanggal.toISOString() : null,
       deskripsi_tugas: descriptionInput.current?.getMarkdown() || "",
-      link_lampiran: data.link_lampiran,
+      link_lampiran: data.link_lampiran || null,
     };
 
     if (edit) {

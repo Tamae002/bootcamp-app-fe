@@ -7,6 +7,7 @@ import PasswordInput from "@/components/input/PasswordInput";
 import SelectInput from "@/components/input/SelectInput";
 import Throbber from "@/components/misc/Throbber";
 import { API_BASE_URL } from "@/constants";
+import { useAuth } from "@/contexts/auth";
 import userSchema from "@/schemas/user";
 import {
   createUserSchema,
@@ -25,8 +26,10 @@ export default function UserForm({
   error = null,
   isLoading = false,
 }) {
+  const { user } = useAuth();
+
   const roleOptions = [
-    { value: "admin", label: "Admin" },
+    ...(user.role == "admin" ? [{ value: "admin", label: "Admin" }] : []),
     { value: "mentor", label: "Mentor" },
     { value: "user", label: "Siswa" },
   ];
@@ -89,7 +92,7 @@ export default function UserForm({
 
     const photoFile = photoInput.current?.files?.[0];
     if (photoFile) {
-      const uploadResponse = await fileApi.upload({
+      const uploadResponse = await fileApi.uploadImage({
         files: photoFile,
         nama: `user-photo-${data.user_id || Date.now()}`,
       });

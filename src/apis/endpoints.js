@@ -38,7 +38,8 @@ const API_ENDPOINTS = {
     GET: "/home",
   },
   FILE: {
-    UPLOAD: "/api/file/upload",
+    UPLOAD_IMAGE: "/api/file/upload",
+    UPLOAD: "/api/file/upload-task",
     GET: (id) => `/api/file/${id}`,
   },
   LINK_PREVIEW: {

@@ -147,11 +147,7 @@ export default function StudentLayout() {
           <div className="flex items-center gap-2">
             <Popover>
               <PopoverTrigger>
-                  <ProfilePhoto
-                    src={user.gambar}
-                    alt={user.name}
-                    size="md"
-                  />
+                <ProfilePhoto src={user.gambar} alt={user.name} size="md" />
               </PopoverTrigger>
               <ProfilePopoverContent
                 logoutLoading={logoutLoading}
@@ -165,7 +161,7 @@ export default function StudentLayout() {
         </div>
       </header>
 
-      <main className="bg-background flex-1">
+      <main className="bg-background flex flex-1 flex-col">
         <Outlet />
       </main>
 

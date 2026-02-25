@@ -54,7 +54,7 @@ export default function Login() {
             key: "form",
             value: "Email atau password salah.",
           });
-        else if (err.status)
+        else if (err.status < 500)
           dispatchErrors({
             type: "set",
             key: "form",

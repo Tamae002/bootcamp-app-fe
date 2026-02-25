@@ -35,13 +35,27 @@ function IndexRoute(authContext) {
   if (["admin", "mentor"].includes(user.role))
     return (
       <Route element={<AdminLayout />}>
-        <Route index element={<LazyComponent component={AdminDashboard} />} />
+        <Route
+          index
+          element={
+            <LazyComponent>
+              <AdminDashboard />
+            </LazyComponent>
+          }
+        />
       </Route>
     );
   else if (user.role == "user")
     return (
       <Route element={<StudentLayout />}>
-        <Route index element={<LazyComponent component={StudentDashboard} />} />
+        <Route
+          index
+          element={
+            <LazyComponent>
+              <StudentDashboard />
+            </LazyComponent>
+          }
+        />
       </Route>
     );
 }

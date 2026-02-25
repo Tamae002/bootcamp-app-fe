@@ -1,53 +1,35 @@
-import { useState, useEffect } from "react";
-import { useAuth } from "@/contexts/auth";
-import { getHomeData } from "@/apis/home.api";
-import ClassCard from "@/components/class/ClassCard";
+import homeApi from "@/apis/home.api";
+import { Link } from "react-router";
 import headerImg from "@/assets/images/H_UserHomepage.jpg";
 import footerLogo from "@/assets/images/logo/Logo_Footer.png";
+import ClassCard from "@/components/class/ClassCard";
+import Throbber from "@/components/misc/Throbber";
+import { useAuth } from "@/contexts/auth";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
   const { user } = useAuth();
 
-  const [upcomingCourses, setUpcomingCourses] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data: response,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["homeData"],
+    queryFn: () => homeApi.getHomeData(),
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  const upcomingCourses = response?.data?.data?.pertemuan_mendatang ?? [];
+  const classes = response?.data?.data?.kelas_terdaftar ?? [];
 
-        const response = await getHomeData();
-
-        // ✅ Sesuaikan dengan struktur API yang sebenarnya
-        if (response.success && response.data) {
-          setUpcomingCourses(response.data.pertemuan_mendatang || []);
-          setClasses(response.data.kelas_terdaftar || []);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Gagal memuat data. Silakan coba lagi.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div
         className="bg-background flex min-h-screen items-center justify-center"
       >
         <div className="text-center">
-          <div
-            className="border-primary mx-auto h-16 w-16 animate-spin
-              rounded-full border-b-4"
-          ></div>
-          <p className="text-foreground/70 mt-4 text-lg">Memuat data...</p>
+          <Throbber size="64px" />
         </div>
       </div>
     );
@@ -56,11 +38,11 @@ export default function Dashboard() {
   return (
     <div className="bg-background min-h-screen">
       {/* Error Alert */}
-      {error && (
+      {isError && (
         <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6 lg:px-8">
           <div className="rounded border-l-4 border-red-500 bg-red-500/10 p-4">
             <div className="flex">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <svg
                   className="h-5 w-5 text-red-500"
                   viewBox="0 0 20 20"
@@ -74,7 +56,10 @@ export default function Dashboard() {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm text-red-500">{error}</p>
+                <p className="text-sm text-red-500">
+                  {error?.response?.data?.message ||
+                    "Gagal memuat data. Silakan coba lagi."}
+                </p>
               </div>
             </div>
           </div>
@@ -114,7 +99,7 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              <div className="bg-surface-subtle min-h-28 px-8 pt-10 pb-10"></div>
+              <div className="min-h-28 px-8 pt-10 pb-10"></div>
             </div>
             <div className="absolute top-35 left-10">
               <div
@@ -145,44 +130,53 @@ export default function Dashboard() {
                 );
 
                 return (
-                  <div
-                    key={course.pertemuan_id || index}
-                    className="border-foreground/20 bg-surface-subtle flex
-                      items-center justify-between rounded-md border px-4 py-3"
+                  <Link
+                    key={index}
+                    to={`/classes/${course.kelas_id}/meet/${course.pertemuan_id}`}
+                    className="block after:absolute after:inset-0 after:z-1"
                   >
-                    <div className="flex-1 pr-4">
-                      {/* Nama Kelas */}
-                      <div className="text-foreground text-sm">
-                        {kelasInfo?.nama_kelas || "Pertemuan"} :
+                    <div
+                      className="border-foreground/20 bg-surface flex
+                        items-center justify-between rounded-md border px-4
+                        py-3"
+                    >
+                      <div className="flex-1 pr-4">
+                        {/* Nama Kelas */}
+                        <div className="text-foreground text-sm">
+                          {kelasInfo?.nama_kelas || "Pertemuan"} :
+                        </div>
+                        {/* Judul Pertemuan */}
+                        <div className="text-foreground mt-1 text-xs">
+                          {course.judul || "Tidak ada judul"}
+                        </div>
                       </div>
-                      {/* Judul Pertemuan */}
-                      <div className="text-foreground mt-1 text-xs">
-                        {course.judul || "Tidak ada judul"}
+                      {/* Tanggal */}
+                      <div className="text-foreground text-right text-sm">
+                        {course.tanggal
+                          ? new Date(course.tanggal).toLocaleDateString(
+                              "id-ID",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              },
+                            )
+                          : "-"}
                       </div>
                     </div>
-                    {/* Tanggal */}
-                    <div className="text-foreground text-right text-sm">
-                      {course.tanggal
-                        ? new Date(course.tanggal).toLocaleDateString("id-ID", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                          })
-                        : "-"}
-                    </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
           ) : (
-            <div className="bg-surface-subtle rounded-lg py-8 text-center">
+            <div className="rounded-lg py-8 text-center">
               <p className="text-grey">Tidak ada pertemuan mendatang</p>
             </div>
           )}
         </div>
 
         {/* Classes Section */}
-        <div className="mb-12">
+        <div>
           <h2 className="text-foreground mb-6 text-xl">Kelas</h2>
           {classes.length > 0 ? (
             <div
@@ -214,7 +208,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div
-          className="bg-gradient-to-b from-purple-600 to-purple-800 text-white"
+          className="bg-linear-to-b from-purple-600 to-purple-800 text-white"
         >
           <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 gap-12 md:grid-cols-2">

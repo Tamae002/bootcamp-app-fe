@@ -133,7 +133,7 @@ export default function ClassForm({ edit = false }) {
 
     const bannerFile = bannerInput.current?.files?.[0];
     if (bannerFile) {
-      const uploadResponse = await fileApi.upload({
+      const uploadResponse = await fileApi.uploadImage({
         files: bannerFile,
         nama: `class-banner-${classId}`,
       });
