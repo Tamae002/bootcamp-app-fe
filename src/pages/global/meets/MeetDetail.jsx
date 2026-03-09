@@ -185,7 +185,7 @@ export default function MeetDetail({ prefix = "" }) {
                 </button>
                 {["mentor"].includes(user.role) && (
                   <>
-                    <Link to="edit" className="-button">
+                    <Link to="edit" className="popover-button">
                       Edit
                     </Link>
                     <button

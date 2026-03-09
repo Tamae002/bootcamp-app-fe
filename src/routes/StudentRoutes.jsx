@@ -25,7 +25,7 @@ export default function StudentRoutes() {
           />
 
           <Route element={<ClassProviderLayout />}>
-            <Route path=":id" element={<ClassDetailLayout />}>
+            <Route path=":id" element={<ClassDetailLayout topOffset="72px" />}>
               <Route
                 index
                 element={

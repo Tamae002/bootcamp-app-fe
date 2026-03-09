@@ -4,7 +4,7 @@ import { useClass } from "@/contexts/class";
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router";
 
-export default function ClassDetailLayout({ prefix = "" }) {
+export default function ClassDetailLayout({ prefix = "", topOffset = "0px" }) {
   const { user } = useAuth();
   const { class: class_ } = useClass();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,12 +37,15 @@ export default function ClassDetailLayout({ prefix = "" }) {
       )}
 
       <aside
-        className={`scrollbar-hidden bg-surface-subtle fixed top-[72px] right-0
-          z-40 h-[calc(100vh-72px)] w-80 pb-24 transition-all duration-300
-          md:fixed md:top-[72px] md:right-0 md:h-[calc(100vh-72px)] md:w-80
+        className={`scrollbar-hidden bg-surface-subtle fixed right-0 z-40 w-80
+          pb-24 transition-all duration-300 md:fixed md:right-0 md:w-80
           md:translate-x-0 md:overflow-y-auto ${
             sidebarOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"
           }`}
+        style={{
+          top: topOffset,
+          height: `calc(100vh - ${topOffset})`,
+        }}
       >
         <div className="flex w-full flex-col">
           <NavLink
@@ -71,7 +74,7 @@ export default function ClassDetailLayout({ prefix = "" }) {
         <Link
           to={`${prefix}/classes/${class_?.kelas_id}/meet/create`}
           className="button button-primary border-overlay-md fixed right-4
-            bottom-4 w-72 rounded-sm border-t-3 px-2 py-4 text-center text-white
+            bottom-4 w-72 z-50 rounded-sm border-t-3 px-2 py-4 text-center text-white
             shadow-lg"
         >
           + Tambah Pertemuan
