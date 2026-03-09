@@ -29,7 +29,7 @@ export default function UserForm({
   const { user } = useAuth();
 
   const roleOptions = [
-    ...(user.role == "admin" ? [{ value: "admin", label: "Admin" }] : []),
+    ...(["superadmin", "admin"].includes(user.role) ? [{ value: "admin", label: "Admin" }] : []),
     { value: "mentor", label: "Mentor" },
     { value: "user", label: "Siswa" },
   ];

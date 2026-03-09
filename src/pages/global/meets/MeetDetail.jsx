@@ -11,7 +11,7 @@ import DeleteConfirm from "@/components/dialog/DeleteConfirm";
 import GradeDialog from "@/components/dialog/GradeDialog";
 import { useAuth } from "@/contexts/auth";
 import { useClass } from "@/contexts/class";
-import { API_BASE_URL } from "@/constants";
+import { ADMIN_PAGE_ROLES, API_BASE_URL } from "@/constants";
 import formatDate from "@/lib/formatDate";
 import {
   Popover,
@@ -296,7 +296,7 @@ export default function MeetDetail({ prefix = "" }) {
         )}
       </header>
 
-      {!["mentor", "admin"].includes(user.role) && (
+      {!ADMIN_PAGE_ROLES.includes(user.role) && (
         <section className="mt-6">
           <h2 className="border-surface border-b-3 pb-2 text-3xl max-md:text-xl">
             Jawaban Saya
@@ -414,7 +414,7 @@ export default function MeetDetail({ prefix = "" }) {
         </section>
       )}
 
-      {["mentor", "admin"].includes(user.role) && (
+      {ADMIN_PAGE_ROLES.includes(user.role) && (
         <section>
           <h2 className="border-surface border-b-3 pb-2 text-3xl max-md:text-xl">
             Tugas

@@ -54,10 +54,10 @@ export default function UserManagement() {
     // @ts-ignore
     mutationFn: ({ name, email, password, role }) =>
       userApi.createUser({
-        name: name,
-        email: email,
-        password: password,
-        role: role || "admin",
+        name,
+        email,
+        password,
+        role,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });

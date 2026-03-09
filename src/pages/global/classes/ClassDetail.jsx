@@ -3,7 +3,7 @@ import Calendar from "@/assets/icons/Calendar";
 import KebabMenu from "@/assets/icons/KebabMenu";
 import UserList from "@/components/class/UserList";
 import DeleteConfirm from "@/components/dialog/DeleteConfirm";
-import { API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
+import { ADMIN_PAGE_ROLES, API_BASE_URL, DEFAULT_CLASS_IMAGE } from "@/constants";
 import { useAuth } from "@/contexts/auth";
 import { useClass } from "@/contexts/class";
 import formatDate from "@/lib/formatDate";
@@ -78,7 +78,7 @@ export default function ClassDetail({ prefix = "" }) {
                   {copied ? "Tersalin" : "Salin link"}
                 </button>
 
-                {["admin", "mentor"].includes(user.role) && (
+                {ADMIN_PAGE_ROLES.includes(user.role) && (
                   <>
                     <Link to="edit" className="popover-button">
                       Edit

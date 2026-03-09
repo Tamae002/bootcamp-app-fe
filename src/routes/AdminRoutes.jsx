@@ -1,4 +1,5 @@
 import LazyComponent from "@/components/misc/LazyComponent";
+import { ADMIN_PAGE_ROLES } from "@/constants";
 import ClassProviderLayout from "@/contexts/class/ClassProviderLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 import ClassDetailLayout from "@/layouts/ClassDetailLayout";
@@ -16,7 +17,7 @@ const UserManagement = lazy(() => import("@/pages/admin/users/UserList"));
 
 export default function AdminRoutes() {
   return (
-    <Route path="admin" element={<ProtectedRoute role={["admin", "mentor"]} />}>
+    <Route path="admin" element={<ProtectedRoute role={ADMIN_PAGE_ROLES} />}>
       <Route element={<AdminLayout />}>
         <Route
           path="dashboard"

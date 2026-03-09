@@ -12,6 +12,7 @@ import NotFound from "@/pages/misc/NotFound";
 const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
 const StudentDashboard = lazy(() => import("@/pages/student/Dashboard"));
 import StudentRoutes from "./StudentRoutes";
+import { ADMIN_PAGE_ROLES } from "@/constants";
 
 export default function AppRoutes() {
   return (
@@ -32,7 +33,7 @@ function IndexRoute(authContext) {
   if (!isAuthenticated)
     return <Route index element={<Navigate to="/login" replace />} />;
 
-  if (["admin", "mentor"].includes(user.role))
+  if (ADMIN_PAGE_ROLES.includes(user.role))
     return (
       <Route element={<AdminLayout />}>
         <Route
