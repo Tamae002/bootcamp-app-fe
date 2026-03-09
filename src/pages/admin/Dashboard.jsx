@@ -7,20 +7,20 @@ import PageTitle from "@/components/typography/PageTitle";
 export default function Dashboard() {
   const { user } = useAuth();
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data: response, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["statistics"],
     queryFn: () => statisticsApi.getStatistics(),
   });
 
   const stats = [
-    { label: "Total Peserta", value: data?.jumlah_peserta || 0 },
-    { label: "Total Mentor", value: data?.jumlah_mentor || 0 },
-    { label: "Total kelas", value: data?.jumlah_kelas || 0 },
-    { label: "Pertemuan Mendatang", value: data?.jumlah_pertemuan || 0 },
+    { label: "Total Peserta", value: response?.data.jumlah_peserta || 0 },
+    { label: "Total Mentor", value: response?.data.jumlah_mentor || 0 },
+    { label: "Total kelas", value: response?.data.jumlah_kelas || 0 },
+    { label: "Pertemuan Mendatang", value: response?.data.jumlah_pertemuan || 0 },
   ];
 
   const classes =
-    data?.kelas_aktif?.map((kelas) => ({
+    response?.data.kelas_aktif?.map((kelas) => ({
       id: kelas.kelas_id,
       title: kelas.nama_kelas,
       mentor: "-",
