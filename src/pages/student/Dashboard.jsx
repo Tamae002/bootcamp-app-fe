@@ -130,41 +130,37 @@ export default function Dashboard() {
                 );
 
                 return (
-                  <Link
+                  <div
                     key={index}
-                    to={`/classes/${course.kelas_id}/meet/${course.pertemuan_id}`}
-                    className="block after:absolute after:inset-0 after:z-1"
+                    className="border-foreground/20 bg-surface relative flex
+                      items-center justify-between rounded-md border px-4 py-3"
                   >
-                    <div
-                      className="border-foreground/20 bg-surface flex
-                        items-center justify-between rounded-md border px-4
-                        py-3"
-                    >
-                      <div className="flex-1 pr-4">
-                        {/* Nama Kelas */}
-                        <div className="text-foreground text-sm">
+                    <div className="flex-1 pr-4">
+                      {/* Nama Kelas */}
+                      <div className="text-foreground text-sm">
+                        <Link
+                          to={`/classes/${course.kelas_id}/meet/${course.pertemuan_id}`}
+                          className="after:absolute after:inset-0 after:z-1"
+                        >
                           {kelasInfo?.nama_kelas || "Pertemuan"} :
-                        </div>
-                        {/* Judul Pertemuan */}
-                        <div className="text-foreground mt-1 text-xs">
-                          {course.judul || "Tidak ada judul"}
-                        </div>
+                        </Link>
                       </div>
-                      {/* Tanggal */}
-                      <div className="text-foreground text-right text-sm">
-                        {course.tanggal
-                          ? new Date(course.tanggal).toLocaleDateString(
-                              "id-ID",
-                              {
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric",
-                              },
-                            )
-                          : "-"}
+                      {/* Judul Pertemuan */}
+                      <div className="text-foreground mt-1 text-xs">
+                        {course.judul || "Tidak ada judul"}
                       </div>
                     </div>
-                  </Link>
+                    {/* Tanggal */}
+                    <div className="text-foreground text-right text-sm">
+                      {course.tanggal
+                        ? new Date(course.tanggal).toLocaleDateString("id-ID", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          })
+                        : "-"}
+                    </div>
+                  </div>
                 );
               })}
             </div>
@@ -207,9 +203,7 @@ export default function Dashboard() {
             </p>
           </div>
         </div>
-        <div
-          className="bg-linear-to-b from-purple-600 to-purple-800 text-white"
-        >
+        <div className="bg-linear-to-b from-purple-600 to-purple-800 text-white">
           <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
               <div>

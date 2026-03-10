@@ -138,6 +138,7 @@ export default function MeetForm({ edit = false }) {
                 label="Tanggal & Waktu"
                 selected={field.value}
                 onChange={field.onChange}
+                minDate={new Date()}
                 timeInputLabel="Waktu"
                 showTimeInput
                 error={errors.tanggal?.message}

@@ -64,7 +64,7 @@ export default function ClassList() {
       )}
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-6 py-8">
+      <div className="mx-auto max-w-6xl px-6 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
           <p className="text-foreground/70 mb-1 text-sm">
