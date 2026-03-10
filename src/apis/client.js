@@ -10,8 +10,7 @@ api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (
-      err?.response?.status == 401 &&
-      !err.config?.url?.includes("/user/me")
+      err?.response?.status == 401
     ) {
       if (window.location.pathname != "/login") {
         window.location.replace("/login");

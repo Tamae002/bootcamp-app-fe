@@ -75,8 +75,7 @@ export default function Sidebar({ navItems }) {
     } catch (err) {
       if (import.meta.env.VITE_ENV == "development") console.error(err);
     } finally {
-      refetchAuthStatus();
-      navigate("/");
+      await refetchAuthStatus();
       setLogoutLoading(false);
     }
   };
