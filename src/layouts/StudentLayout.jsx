@@ -1,5 +1,6 @@
 import authApi from "@/apis/auth.api";
 import userApi from "@/apis/user.api";
+import Footer from "@/components/misc/Footer";
 import ProfilePhoto from "@/components/misc/ProfilePhoto";
 import Throbber from "@/components/misc/Throbber";
 import { useAuth } from "@/contexts/auth";
@@ -163,6 +164,8 @@ export default function StudentLayout() {
       <main className="bg-background flex flex-1 flex-col">
         <Outlet />
       </main>
+
+      <Footer />
 
       <Dialog
         open={isProfileDialogOpen}
