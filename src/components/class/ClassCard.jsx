@@ -5,7 +5,7 @@ export default function ClassCard({ classItem, to }) {
   return (
     <article
       className="bg-surface relative m-auto h-80 w-full max-w-140 rounded-3xl
-        p-2 shadow-sm transition-all hover:scale-105 hover:shadow-md"
+        p-2 shadow-sm transition-all hover:scale-105 hover:shadow-md flex flex-col"
     >
       <figure>
         <img
@@ -17,13 +17,13 @@ export default function ClassCard({ classItem, to }) {
           }}
         />
       </figure>
-      <div className="p-3 text-pretty">
+      <div className="p-3 text-pretty flex-">
         <h3 className="text-xl">
           <Link to={to} className="after:absolute after:inset-0 after:z-1">
             {classItem?.nama_kelas}
           </Link>
         </h3>
-        <p className="text-justify text-xs">{classItem?.deskripsi}</p>
+        <p className="text-justify text-xs text-ellipsis max-h-24 overflow-hidden">{classItem?.deskripsi}</p>
       </div>
     </article>
   );
