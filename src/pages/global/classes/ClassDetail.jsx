@@ -14,6 +14,7 @@ import {
   PopoverPortal,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -25,6 +26,7 @@ export default function ClassDetail({ prefix = "" }) {
   }, []);
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const { class: class_ } = useClass();
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -43,6 +45,7 @@ export default function ClassDetail({ prefix = "" }) {
     const response = await classApi.delete(class_?.kelas_id);
     setDeleteLoading(false);
     setIsDeleteDialogOpen(false);
+    queryClient.invalidateQueries({ queryKey: ["classes"] });
     if (response.status == 200) navigate(`${prefix}/classes`);
   };
 

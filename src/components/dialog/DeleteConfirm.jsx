@@ -11,7 +11,7 @@ export default function DeleteConfirm({
     <DialogContent className="dialog-content space-y-4 text-center">
       <Warning className="mx-auto h-16 w-16" />
       <DialogTitle>Apakah anda yakin ingin menghapus data ini?</DialogTitle>
-      <div className="flex flex-col gap-3 md:flex-row">
+      <div className="flex flex-col gap-3 justify-center md:flex-row">
         <button
           onClick={onDelete}
           disabled={isLoading}
