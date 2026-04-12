@@ -129,7 +129,7 @@ export default function ClassForm({ edit = false }) {
   const onSubmit = async (data) => {
     setError("");
 
-    let uploadedImageUrl = class_.gambar || "";
+    let uploadedImageUrl = class_?.gambar || "";
 
     const bannerFile = bannerInput.current?.files?.[0];
     if (bannerFile) {
