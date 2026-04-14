@@ -1,9 +1,14 @@
 import { createContext } from "react";
-import classSchema from "@/schemas/class";
+/** @import React from "react" */
+/** @import { Class } from "@/schemas/class" */
 
-export const ClassContext = createContext({
-  class: classSchema,
-  isLoading: false,
-  isError: false,
-  error: null,
-});
+/**
+ * @typedef ClassContextValue
+ * @prop {Class} class
+ * @prop {boolean} isLoading
+ * @prop {boolean} isError
+ * @prop {Error} error
+ */
+
+/** @type {React.Context<ClassContextValue>} */
+export const ClassContext = createContext({});

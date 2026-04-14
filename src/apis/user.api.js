@@ -20,10 +20,11 @@ const userApi = {
       gambar,
     }),
 
-  updateUser: async (id, { name, email }) =>
+  updateUser: async (id, { name, email, gambar }) =>
     api.put(API_ENDPOINTS.USER.UPDATE(id), {
       name,
       email,
+      gambar,
     }),
 
   deleteUser: async (id) => api.delete(API_ENDPOINTS.USER.DELETE(id)),

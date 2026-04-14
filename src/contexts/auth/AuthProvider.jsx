@@ -1,45 +1,30 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { AuthContext } from "./AuthContext";
 import userApi from "@/apis/user.api";
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchAuthStatus = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
+  const {
+    data: user,
+    isLoading,
+    error,
+    refetch: refetchAuthStatus,
+  } = useQuery({
+    queryKey: ["auth", "me"],
+    queryFn: async () => {
       const response = await userApi.getMyself();
-
-      setUser(response.data);
-      setIsAuthenticated(true);
-    } catch (err) {
-      if (import.meta.env.VITE_ENV == "development") console.error(err);
-
-      setUser(null);
-      setIsAuthenticated(false);
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAuthStatus();
-  }, []);
-
-  const refetchAuthStatus = () => fetchAuthStatus();
+      return response.data;
+    },
+    retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 
   const contextValue = {
-    user,
-    isAuthenticated,
+    user: user ?? null,
+    isAuthenticated: !!user,
     isLoading,
     error,
     refetchAuthStatus,
   };
 
   return <AuthContext value={contextValue}>{children}</AuthContext>;
-};
+}

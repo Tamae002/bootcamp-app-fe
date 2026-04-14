@@ -1,13 +1,18 @@
+import { lazy } from "react";
+import LazyComponent from "@/components/misc/LazyComponent";
 import { useAuth } from "@/contexts/auth";
 import AdminLayout from "@/layouts/AdminLayout";
 import StudentLayout from "@/layouts/StudentLayout";
-import AdminDashboard from "@/pages/admin/Dashboard";
-import Loading from "@/pages/misc/Loading";
-import StudentDashboard from "@/pages/student/Dashboard";
 import { Navigate, Route, Routes } from "react-router";
 import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
-import { useEffect } from "react";
+import Loading from "@/pages/misc/Loading";
+import NotFound from "@/pages/misc/NotFound";
+
+const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
+const StudentDashboard = lazy(() => import("@/pages/student/Dashboard"));
+import StudentRoutes from "./StudentRoutes";
+import { ADMIN_PAGE_ROLES } from "@/constants";
 
 export default function AppRoutes() {
   return (
@@ -15,6 +20,8 @@ export default function AppRoutes() {
       {IndexRoute(useAuth())}
       {AuthRoutes()}
       {AdminRoutes()}
+      {StudentRoutes()}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
@@ -26,16 +33,30 @@ function IndexRoute(authContext) {
   if (!isAuthenticated)
     return <Route index element={<Navigate to="/login" replace />} />;
 
-  if (["admin", "mentor"].includes(user.role))
+  if (ADMIN_PAGE_ROLES.includes(user.role))
     return (
       <Route element={<AdminLayout />}>
-        <Route index element={<AdminDashboard />} />
+        <Route
+          index
+          element={
+            <LazyComponent>
+              <AdminDashboard />
+            </LazyComponent>
+          }
+        />
       </Route>
     );
   else if (user.role == "user")
     return (
       <Route element={<StudentLayout />}>
-        <Route index element={<StudentDashboard />} />
+        <Route
+          index
+          element={
+            <LazyComponent>
+              <StudentDashboard />
+            </LazyComponent>
+          }
+        />
       </Route>
     );
 }

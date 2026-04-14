@@ -1,34 +1,40 @@
 import userApi from "@/apis/user.api";
 import Add from "@/assets/icons/Add";
+import ChevronLeft from "@/assets/icons/ChevronLeft";
+import ChevronRight from "@/assets/icons/ChevronRight";
 import People from "@/assets/icons/People";
 import Person from "@/assets/icons/Person";
 import Warning from "@/assets/icons/Warning";
 import SearchBar from "@/components/input/SearchBar";
+import ProfilePhoto from "@/components/misc/ProfilePhoto";
 import Throbber from "@/components/misc/Throbber";
 import PageTitle from "@/components/typography/PageTitle";
 import {
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogPortal,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
 } from "@radix-ui/react-dialog";
 import {
-    Popover,
-    PopoverContent,
-    PopoverPortal,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverPortal,
+  PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";
+import ReactPaginate from "react-paginate";
 import UserForm from "./UserForm";
+import DeleteConfirm from "@/components/dialog/DeleteConfirm";
 
 export default function UserManagement() {
   const [modal, setModal] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [formError, setFormError] = useState(null);
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
@@ -42,36 +48,52 @@ export default function UserManagement() {
   });
 
   const users = data?.data?.data || data?.data?.users || data?.data || [];
+  const totalPage = data?.data?.meta?.totalPages ?? 0;
 
   const createUserMutation = useMutation({
     // @ts-ignore
     mutationFn: ({ name, email, password, role }) =>
       userApi.createUser({
-        name: name,
-        email: email,
-        password: password,
-        role: role || "admin",
+        name,
+        email,
+        password,
+        role,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      setFormError(null);
+      setModal(null);
+      setSelectedUser(null);
     },
-    onError: () => {
-      alert("Gagal menambahkan user");
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        setFormError(err.response?.data?.message || "Gagal menambahkan user");
+      } else {
+        setFormError("Gagal menambahkan user");
+      }
     },
   });
 
   const updateUserMutation = useMutation({
     // @ts-ignore
-    mutationFn: ({ name, email }) =>
+    mutationFn: ({ name, email, gambar }) =>
       userApi.updateUser(selectedUser.user_id, {
         name,
         email,
+        gambar,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      setFormError(null);
+      setModal(null);
+      setSelectedUser(null);
     },
-    onError: () => {
-      alert("Gagal update user");
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        setFormError(err.response?.data?.message || "Gagal update user");
+      } else {
+        setFormError("Gagal update user");
+      }
     },
   });
 
@@ -116,101 +138,111 @@ export default function UserManagement() {
         />
 
         {error instanceof AxiosError && (
-          <div className="mb-3 rounded-xl bg-red-100 p-3 text-sm text-red-600 dark:bg-red-900/40 dark:text-red-300">
+          <div
+            className="mb-3 rounded-xl bg-red-100 p-3 text-sm text-red-600
+              dark:bg-red-900/40 dark:text-red-300"
+          >
             {error.response.data.message}
           </div>
         )}
 
-        <table className="table">
-          <thead>
-            <tr>
-              <th className="text-left">Nama</th>
-              <th className="text-center">Role</th>
-              <th className="text-center">Email</th>
-              <th className="text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading && (
+        <div className="overflow-x-auto">
+          <table className="table min-w-90">
+            <thead>
               <tr>
-                <td colSpan={4} className="">
-                  <Throbber size="32px" className="m-auto" />
-                </td>
+                <th className="text-left">Nama</th>
+                <th className="text-center">Role</th>
+                <th className="text-center">Email</th>
+                <th className="text-right">Action</th>
               </tr>
-            )}
-
-            {!isLoading && users.length === 0 && (
-              <tr>
-                <td
-                  colSpan={4}
-                  className="text-center text-gray-500 dark:text-gray-400"
-                >
-                  Tidak ada data
-                </td>
-              </tr>
-            )}
-
-            {!isLoading &&
-              users.map((u, id) => (
-                <tr key={id}>
-                  <td
-                    className="flex cursor-pointer items-center gap-3"
-                    onClick={() => {
-                      setSelectedUser(u);
-                      setModal(null);
-                    }}
-                  >
-                    {u.gambar ? (
-                      <img src={u.gambar} className="size-8 rounded-full" />
-                    ) : (
-                      <Person className="size-8" />
-                    )}
-                    <span className="font-medium">{u.name}</span>
-                  </td>
-                  <td className="text-center">
-                    <span className="bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-semibold">
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="text-center">{u.email}</td>
-                  <td className="text-right">
-                    <Popover>
-                      <PopoverTrigger className="bg-surface hover:bg-overlay-sm rounded-lg px-3 py-1">
-                        •••
-                      </PopoverTrigger>
-                      <PopoverPortal>
-                        <PopoverContent className="popover-content">
-                          <button
-                            className="popover-button"
-                            onClick={() => {
-                              setModal("edit");
-                              setSelectedUser(u);
-                            }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="popover-button text-red"
-                            onClick={() => {
-                              setModal("delete");
-                              setSelectedUser(u);
-                            }}
-                          >
-                            Hapus
-                          </button>
-                        </PopoverContent>
-                      </PopoverPortal>
-                    </Popover>
+            </thead>
+            <tbody>
+              {isLoading && (
+                <tr>
+                  <td colSpan={4} className="">
+                    <Throbber size="32px" className="m-auto" />
                   </td>
                 </tr>
-              ))}
-          </tbody>
-        </table>
+              )}
+
+              {!isLoading && users.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="text-center text-gray-500 dark:text-gray-400"
+                  >
+                    Tidak ada data
+                  </td>
+                </tr>
+              )}
+
+              {!isLoading &&
+                users.map((u, id) => (
+                  <tr key={id}>
+                    <td
+                      className="flex cursor-pointer  items-center gap-3"
+                      onClick={() => {
+                        setSelectedUser(u);
+                        setModal(null);
+                      }}
+                    >
+                      <ProfilePhoto src={u.gambar} alt={u.name} size="sm" />
+                      <span className="font-medium w-[10ch]">{u.name}</span>
+                    </td>
+                    <td className="text-center">
+                      <span
+                        className="bg-primary/10 text-primary rounded-full px-3
+                          py-1 text-xs font-semibold"
+                      >
+                        {u.role}
+                      </span>
+                    </td>
+                    <td className="text-center">{u.email}</td>
+                    <td className="text-right">
+                      <Popover>
+                        <PopoverTrigger
+                          className="bg-surface hover:bg-overlay-sm rounded-lg
+                            px-3 py-1"
+                        >
+                          •••
+                        </PopoverTrigger>
+                        <PopoverPortal>
+                          <PopoverContent className="popover-content">
+                            <button
+                              className="popover-button"
+                              onClick={() => {
+                                setModal("edit");
+                                setSelectedUser(u);
+                              }}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="popover-button text-red"
+                              onClick={() => {
+                                setModal("delete");
+                                setSelectedUser(u);
+                              }}
+                            >
+                              Hapus
+                            </button>
+                          </PopoverContent>
+                        </PopoverPortal>
+                      </Popover>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* READ PROFILE */}
       {selectedUser && !modal && (
-        <aside className="fixed top-14 right-6 z-30 w-80 rounded-3xl border bg-white p-5 shadow-xl dark:border-gray-800 dark:bg-gray-900">
+        <aside
+          className="fixed top-14 right-6 z-30 w-80 rounded-3xl border bg-white
+            p-5 shadow-xl dark:border-gray-800 dark:bg-gray-900"
+        >
           <button
             onClick={() => setSelectedUser(null)}
             className="absolute top-4 right-4 dark:text-white"
@@ -222,12 +254,16 @@ export default function UserManagement() {
             Foto Profil
           </p>
 
-          <div className="mx-auto mb-4 flex h-32 w-32 items-center justify-center rounded-2xl bg-gray-100 dark:bg-gray-800">
-            {selectedUser.gambar ? (
-              <img src={selectedUser.gambar} className="size-24 rounded-full" />
-            ) : (
-              <Person className="size-24" />
-            )}
+          <div
+            className="mx-auto mb-4 flex h-32 w-32 items-center justify-center
+              rounded-2xl bg-gray-100 dark:bg-gray-800"
+          >
+            <ProfilePhoto
+              src={selectedUser.gambar}
+              alt={selectedUser.name}
+              size="xl"
+              useApiBaseUrl={false}
+            />
           </div>
 
           <div className="space-y-3">
@@ -240,7 +276,10 @@ export default function UserManagement() {
                 <label className="text-xs dark:text-gray-300">
                   {item.label}
                 </label>
-                <div className="mt-1 rounded-xl bg-gray-200 px-4 py-2 text-center font-medium dark:bg-gray-800 dark:text-white">
+                <div
+                  className="mt-1 rounded-xl bg-gray-200 px-4 py-2 text-center
+                    font-medium dark:bg-gray-800 dark:text-white"
+                >
                   {selectedUser[item.key]}
                 </div>
               </div>
@@ -248,7 +287,10 @@ export default function UserManagement() {
 
             <div>
               <label className="text-xs dark:text-gray-300">Badge</label>
-              <div className="mt-1 rounded-xl bg-gray-200 px-4 py-2 text-center font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+              <div
+                className="mt-1 rounded-xl bg-gray-200 px-4 py-2 text-center
+                  font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+              >
                 {selectedUser.role}
               </div>
             </div>
@@ -256,15 +298,43 @@ export default function UserManagement() {
         </aside>
       )}
 
-      {/* ADD */}
+      {/* PAGINATION */}
+      <section className="mt-6 flex items-center justify-center max-md:mb-14">
+        <ReactPaginate
+          previousLabel={<ChevronLeft className="h-5 w-5" />}
+          nextLabel={<ChevronRight className="h-5 w-5" />}
+          breakLabel="..."
+          pageCount={totalPage}
+          marginPagesDisplayed={1}
+          pageRangeDisplayed={2}
+          onPageChange={({ selected }) => {
+            setPage(selected + 1);
+          }}
+          forcePage={page - 1}
+          containerClassName="pagination-container"
+          pageClassName="pagination-page"
+          previousClassName="pagination-previous"
+          nextClassName="pagination-next"
+          breakClassName="pagination-break"
+          activeClassName="selected"
+          disabledClassName="disabled"
+          renderOnZeroPageCount={null}
+        />
+      </section>
+
+      {/* ADD BUTTON - FAB */}
       <button
         onClick={() => {
           setSelectedUser(null);
           setModal("create");
         }}
-        className="button-primary fixed right-6 bottom-6 z-40 h-14 w-14 rounded-full p-3"
+        className="button-primary fixed right-4 bottom-4 z-40 flex h-12 w-12
+          items-center justify-center rounded-full p-3 shadow-lg transition-all
+          hover:scale-110 hover:shadow-xl md:right-6 md:bottom-6 md:h-14 md:w-14
+          md:p-3"
+        aria-label="Tambah Pengguna"
       >
-        <Add />
+        <Add className="h-5 w-5 md:h-6 md:w-6" />
       </button>
 
       <Dialog
@@ -273,6 +343,7 @@ export default function UserManagement() {
           if (!open) {
             setModal(null);
             setSelectedUser(null);
+            setFormError(null);
           }
         }}
       >
@@ -283,14 +354,17 @@ export default function UserManagement() {
                 initial={modal === "edit" ? selectedUser : null}
                 onSubmit={(data) => {
                   modal === "edit" ? updateUser(data) : createUser(data);
-                  setModal(null);
-                  setSelectedUser(null);
                 }}
                 onClose={() => {
                   setModal(null);
                   setSelectedUser(null);
+                  setFormError(null);
                 }}
                 isEdit={modal === "edit"}
+                error={formError}
+                isLoading={
+                  createUserMutation.isPending || updateUserMutation.isPending
+                }
               />
             )}
 
@@ -307,25 +381,5 @@ export default function UserManagement() {
         </DialogPortal>
       </Dialog>
     </section>
-  );
-}
-
-function DeleteConfirm({ onDelete, onClose }) {
-  return (
-    <DialogContent className="dialog-content space-y-4 text-center dark:text-white">
-      <Warning className="mx-auto h-16 w-16" />
-      <DialogTitle>Apakah anda yakin ingin menghapus data ini?</DialogTitle>
-      <div className="bg-op flex justify-center gap-3">
-        <button onClick={onDelete} className="button button-danger">
-          Hapus
-        </button>
-        <button
-          onClick={onClose}
-          className="button button-primary"
-        >
-          Batalkan
-        </button>
-      </div>
-    </DialogContent>
   );
 }

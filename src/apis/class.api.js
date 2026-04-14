@@ -2,7 +2,8 @@ import api from "./client";
 import API_ENDPOINTS from "./endpoints";
 
 const classApi = {
-  getAll: ({ page = 1, limit = 10 }) => api.get(API_ENDPOINTS.CLASS.GET_ALL, { params: { page, limit }}),
+  getAll: ({ page = 1, limit = 10, search = "" }) =>
+    api.get(API_ENDPOINTS.CLASS.GET_ALL, { params: { page, limit, search } }),
 
   getById: (id) => api.get(API_ENDPOINTS.CLASS.GET_BY_ID(id)),
 
@@ -36,15 +37,16 @@ const classApi = {
       added_users = [],
       removed_users = [],
     },
-  ) => api.patch(API_ENDPOINTS.CLASS.UPDATE(id), {
-    nama_kelas,
-    deskripsi,
-    gambar,
-    tanggal_mulai,
-    tanggal_berakhir,
-    added_users,
-    removed_users,
-  }),
+  ) =>
+    api.patch(API_ENDPOINTS.CLASS.UPDATE(id), {
+      nama_kelas,
+      deskripsi,
+      gambar,
+      tanggal_mulai,
+      tanggal_berakhir,
+      added_users,
+      removed_users,
+    }),
 };
 
 export default classApi;

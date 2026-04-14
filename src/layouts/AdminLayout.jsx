@@ -1,4 +1,3 @@
-import Gear from "@/assets/icons/Gear";
 import People from "@/assets/icons/People";
 import SchoolHat from "@/assets/icons/SchoolHat";
 import Tiles from "@/assets/icons/Tiles";
@@ -8,9 +7,8 @@ import { Outlet } from "react-router";
 export default function AdminLayout() {
   const navItems = [
     { to: "/", label: "Beranda", icon: <Tiles /> },
-    { to: "/classes", label: "Manajemen Kelas", icon: <SchoolHat /> },
-    { to: "/users", label: "Manajemen Pengguna", icon: <People /> },
-    { to: "/settings", label: "Pengaturan", icon: <Gear /> },
+    { to: "/admin/classes", label: "Manajemen Kelas", icon: <SchoolHat /> },
+    { to: "/admin/users", label: "Manajemen Pengguna", icon: <People /> },
   ];
 
   return (

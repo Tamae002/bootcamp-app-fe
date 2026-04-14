@@ -14,6 +14,7 @@ const API_ENDPOINTS = {
     ME: "/user/me",
   },
   ANSWER: {
+    CREATE: (meetId) => `/jawaban/${meetId}`,
     GRADE: (id) => `/jawaban/${id}/nilai`,
   },
   CLASS: {
@@ -31,10 +32,14 @@ const API_ENDPOINTS = {
     DELETE: (id) => `/pertemuan/${id}`,
   },
   STATISTICS: {
-    GET: "/dashboard/stats", // ← INI YANG BENAR!
+    GET: "/dashboard",
+  },
+  HOME: {
+    GET: "/home",
   },
   FILE: {
-    UPLOAD: "/api/file/upload",
+    UPLOAD_IMAGE: "/api/file/upload",
+    UPLOAD: "/api/file/upload-task",
     GET: (id) => `/api/file/${id}`,
   },
   LINK_PREVIEW: {

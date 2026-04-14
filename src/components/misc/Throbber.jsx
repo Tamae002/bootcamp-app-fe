@@ -1,9 +1,7 @@
 export default function Throbber({
   size = "16px",
-
-  color = "var(--foreground)",
-  backgroundColor = "var(--surface)",
-  lineWidth = "3px",
+  color = "var(--primary)",
+  lineWidth = "4px",
   className = "",
   ...props
 }) {
@@ -12,11 +10,8 @@ export default function Throbber({
       style={{
         width: size,
         height: size,
-        borderWidth: lineWidth,
+        borderRightWidth: lineWidth,
         borderRightColor: color,
-        borderTopColor: color,
-        borderLeftColor: backgroundColor,
-        borderBottomColor: backgroundColor,
       }}
       className={`aspect-square rounded-full animate-spin ${className}`}
       {...props}

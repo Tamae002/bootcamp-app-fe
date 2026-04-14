@@ -3,9 +3,13 @@
 
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@import "@mdxeditor/editor/style.css";
 @import "./assets/css/themes";
 
 @layer base {
+    @import "react-datepicker/dist/react-datepicker.css";
+    @import "react-loading-skeleton/dist/skeleton.css";
+
     * {
         margin: 0;
         padding: 0;
@@ -68,6 +72,8 @@
     @import "./assets/css/components/popover.css";
     @import "./assets/css/components/dialog.css";
     @import "./assets/css/components/button.css";
+    @import "./assets/css/components/pagination.css";
+    @import "./assets/css/components/datepicker.css";
 
     .navlink.active {
         @apply bg-primary hover:bg-primary/80 text-white;
@@ -103,8 +109,12 @@
         @apply m-auto max-w-6xl p-8;
     }
 
+    .input-container {
+        @apply min-w-0;
+    }
+
     .input {
-        @apply bg-surface! text-foreground relative flex h-13 w-full items-center gap-4 rounded-xl! p-4 text-sm *:outline-none;
+        @apply bg-surface! text-foreground relative flex h-13 w-full min-w-0 items-center gap-2 rounded-xl! p-3 md:p-4 text-sm *:outline-none md:gap-4;
 
         &:has(textarea) {
             @apply h-fit;
@@ -113,7 +123,7 @@
         input,
         select,
         textarea {
-            @apply flex-1 transition-all;
+            @apply min-w-0 flex-1 transition-all;
         }
 
         &:has(label) {
@@ -135,8 +145,12 @@
             @apply bg-red;
         }
 
-        & > .icon {
+        .icon {
             @apply h-5;
+        }
+
+        & + .error-message {
+            @apply text-red px-4 pt-1 text-sm;
         }
     }
 
@@ -158,14 +172,14 @@
     }
 
     .table {
-        @apply w-full text-sm;
+        @apply w-full min-w-90 text-sm;
 
         thead {
             @apply bg-primary text-white;
         }
 
         th {
-            @apply p-4;
+            @apply p-2 md:p-4;
         }
 
         tr {
@@ -195,7 +209,7 @@
         }
 
         td {
-            @apply p-4;
+            @apply p-2 md:p-4;
         }
     }
 }

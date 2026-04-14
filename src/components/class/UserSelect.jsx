@@ -1,31 +1,25 @@
 import userApi from "@/apis/user.api";
 import ArrayReducer from "@/reducers/ArrayReducer";
-import { useImperativeHandle, useMemo, useReducer, useState } from "react";
+import { useMemo, useReducer, useState } from "react";
 import SearchBar from "../input/SearchBar";
 import Throbber from "../misc/Throbber";
 import { useCallback } from "react";
 
-export default function UserSelect({ ref = null, role, defaultUsers = [] }) {
+export default function UserSelect({
+  role,
+  error = null,
+  defaultUsers = [],
+  addedUsers = [],
+  removedUsers = [],
+  onAddedUsersChange,
+  onRemovedUsersChange,
+}) {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  // eslint-disable-next-line no-unused-vars
-  const [error, setError] = useState("");
+  const [tableError, setTableError] = useState("");
   const [data, setData] = useState([]);
-  const [addedUsers, dispatchAddedUsers] = useReducer(ArrayReducer, []);
-  const [removedUsers, dispatchRemovedUsers] = useReducer(ArrayReducer, []);
   const [cachedUsers, dispatchCachedUsers] = useReducer(ArrayReducer, []);
   const [search, setSearch] = useState("");
-
-  useImperativeHandle(ref, () => {
-    return {
-      getAddedUsers() {
-        return addedUsers;
-      },
-      getRemovedUsers() {
-        return removedUsers;
-      },
-    };
-  });
 
   const userSet = useMemo(
     () => new Set(defaultUsers.map((e) => e.user_id)),
@@ -49,7 +43,7 @@ export default function UserSelect({ ref = null, role, defaultUsers = [] }) {
         });
         setData(response.data.users);
       } catch {
-        setError("Failed to fetch data");
+        setTableError("Failed to fetch data");
       } finally {
         setLoading(false);
       }
@@ -62,15 +56,15 @@ export default function UserSelect({ ref = null, role, defaultUsers = [] }) {
 
     if (userSet.has(id)) {
       if (removedUsers.includes(id)) {
-        dispatchRemovedUsers({ type: "remove_by_value", data: id });
+        onRemovedUsersChange(removedUsers.filter((userId) => userId !== id));
       } else {
-        dispatchRemovedUsers({ type: "add", data: id });
+        onRemovedUsersChange([...removedUsers, id]);
       }
     } else if (addedUsers.includes(id)) {
-      dispatchAddedUsers({ type: "remove_by_value", data: id });
+      onAddedUsersChange(addedUsers.filter((userId) => userId !== id));
       dispatchCachedUsers({ type: "remove_by_value", data: user });
     } else {
-      dispatchAddedUsers({ type: "add", data: id });
+      onAddedUsersChange([...addedUsers, id]);
       dispatchCachedUsers({ type: "add", data: user });
     }
   };
@@ -83,6 +77,7 @@ export default function UserSelect({ ref = null, role, defaultUsers = [] }) {
         action={handleSearch}
         containerClassName="mb-4"
         placeholder="Ketik '%' untuk menampilkan semua user"
+        error={error}
       />
 
       {loading ? (
@@ -90,8 +85,8 @@ export default function UserSelect({ ref = null, role, defaultUsers = [] }) {
           <Throbber size="32px" />
         </div>
       ) : data.length == 0 ? (
-        <div className="h-24 text-center text-grey">
-            <p>{search ? "Pengguna tidak ditemukan" : "Tidak ada pengguna"}</p>
+        <div className="text-grey h-24 text-center">
+          <p>{tableError || search ? "Pengguna tidak ditemukan" : "Tidak ada pengguna"}</p>
         </div>
       ) : (
         <div className="user-select-container bg-surface rounded-xl p-4">
@@ -115,7 +110,8 @@ export default function UserSelect({ ref = null, role, defaultUsers = [] }) {
                     <td>{user.email}</td>
                     <td className="flex justify-end">
                       <button
-                        className={`button button-primary rounded-md px-2 py-1 font-semibold ${isAdded && "button-outline-primary"}`}
+                        className={`button button-primary rounded-md px-2 py-1
+                          font-semibold ${isAdded && "button-outline-primary"}`}
                         type="button"
                         onClick={() => handleUserChange(user)}
                       >
